@@ -9,14 +9,14 @@ public class CityMapper {
     public CityDto toDto(City city) {
         CityDto entity = new CityDto();
         entity.setId(city.getId());
-        entity.setCityName(city.getName());
+        entity.setCityName(city.getCityName());
         return entity;
     }
 
     public City toEntity(CityDto cityDto) {
         City entity = new City();
         entity.setId(cityDto.getId());
-        entity.setName(cityDto.getCityName());
+        entity.setCityName(cityDto.getCityName());
         return entity;
     }
 }
