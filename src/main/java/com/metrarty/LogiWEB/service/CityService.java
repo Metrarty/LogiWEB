@@ -34,4 +34,9 @@ public class CityService {
         }
         return result;
     }
+
+    public void deleteCityById(Long id) {
+        City entity = cityRepository.getOne(id);
+        cityRepository.deleteById(id);
+    }
 }

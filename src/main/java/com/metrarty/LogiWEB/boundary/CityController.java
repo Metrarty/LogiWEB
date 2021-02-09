@@ -29,15 +29,22 @@ public class CityController {
     }
 
     @PutMapping("/city/editbyid/{id}")
-    City editCity(@RequestBody City newCity, @PathVariable Long id) {
+    City editCity(@RequestBody CityDto newCityDto, @PathVariable Long id) {
         return cityRepository.findById(id)
                 .map(city -> {
-                    city.setCityName(city.getCityName());
+                    city.setCityName(newCityDto.getCityName());
                     return cityRepository.save(city);
                 })
                 .orElseGet(() -> {
-                    newCity.setId(id);
-                    return cityRepository.save(newCity);
+                    newCityDto.setId(id);
+                    City entity = cityMapper.toEntity(newCityDto);
+                    return cityRepository.save(entity);
                 });
+    }
+
+    @DeleteMapping("/city/deletebyid/{id}")
+    String deleteCityById(@PathVariable Long id) {
+        cityService.deleteCityById(id);
+        return "City with ID " + id + " is deleted";
     }
 }
