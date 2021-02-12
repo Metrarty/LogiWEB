@@ -25,7 +25,7 @@ public class CityController {
      * @return created city
      */
     @PostMapping("/city/create/")
-    public City createCity(@RequestBody CityDto cityDto) {
+    public CityDto createCity(@RequestBody CityDto cityDto) {
         log.info("CityController.createCity was called with {}", cityDto);
         return cityService.createCity(cityDto);
     }

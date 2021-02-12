@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 public class CityServiceTest {
 
     @InjectMocks
-    private CityService cityServiceMock;
+    private CityService cityService;
 
     @Mock
     private CityRepository cityRepositoryMock;
@@ -33,9 +33,9 @@ public class CityServiceTest {
         //prepare
         CityDto testCityDto = new CityDto();
         testCityDto.setId(1L);
-        City testCity = cityMapperMock.toEntity(testCityDto);
+        City testCity = cityMapperMock.toInitialEntity(testCityDto);
         //run
-        cityServiceMock.createCity(testCityDto);
+        cityService.createCity(testCityDto);
         //test
         verify(cityRepositoryMock, times(1)).save(testCity);
         verifyNoMoreInteractions(cityRepositoryMock);
@@ -43,7 +43,7 @@ public class CityServiceTest {
 
     @Test(expected = NullPointerException.class)
     public void testCreateCity_WhenInputIsNull() {
-        cityServiceMock.createCity(null);
+        cityService.createCity(null);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class CityServiceTest {
         CityDto expectedDto = new CityDto();
         expectedDto.setCityName("Ufa");
         //run
-        List<CityDto> actual = cityServiceMock.findAllCities();
+        List<CityDto> actual = cityService.findAllCities();
         //test
         Assert.assertEquals("Must be equal", 1, actual.size());
         Assert.assertEquals("Must be equal", expectedDto, actual.get(0));

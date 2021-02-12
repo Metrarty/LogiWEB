@@ -32,10 +32,11 @@ public class CityService {
      * @param cityDto City DTO
      * @return City
      */
-    public City createCity(@NonNull CityDto cityDto) {
-        City entity = cityMapper.toEntity(cityDto);
+    public CityDto createCity(@NonNull CityDto cityDto) {
+        City entity = cityMapper.toInitialEntity(cityDto);
+
         cityRepository.save(entity);
-        return entity;
+        return cityMapper.toDto(entity);
     }
 
     /**
@@ -56,16 +57,20 @@ public class CityService {
      *
      * @param cityDto
      * @param id
-     * @return
+     * @return Response ok if city with requested id is found,
      */
-    public ResponseEntity editCity(CityDto cityDto, Long id) {
+    public ResponseEntity<CityDto> editCity(CityDto cityDto, Long id) {
         Optional<City> entity = cityRepository.findById(id);
         if (entity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            // TODO metrarty 12.02.2021: move to rest exception handler (look at weather stat project)
         }
-        entity.get().setCityName(cityDto.getCityName());
-        cityRepository.save(entity.get());
-        return ResponseEntity.ok(entity.get());
+        City city = cityMapper.toUpdatedEntity(cityDto);
+        city.setCreatedAt(entity.get().getCreatedAt());
+        city.setId(entity.get().getId());
+        City saved = cityRepository.save(city);
+        return ResponseEntity.ok(cityMapper.toDto(saved));
+        // TODO metrarty 12.02.2021: move response entity to controller (service should return dto)
     }
 
     /**
