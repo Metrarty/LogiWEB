@@ -1,12 +1,10 @@
 package com.metrarty.LogiWEB.boundary;
 
 import com.metrarty.LogiWEB.boundary.model.CityDto;
-import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.service.CityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -47,7 +45,7 @@ public class CityController {
      * @return edited city or response "Not found", in case ID is not exist
      */
     @PutMapping("/city/editbyid/{id}")
-    public ResponseEntity editCity(@RequestBody CityDto cityDto, @PathVariable Long id) {
+    public CityDto editCity(@RequestBody CityDto cityDto, @PathVariable Long id) {
         log.info("CityController.editCity was called with {} {}", cityDto, id);
         return cityService.editCity(cityDto, id);
     }

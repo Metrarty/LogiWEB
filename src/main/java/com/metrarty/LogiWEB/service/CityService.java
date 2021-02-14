@@ -3,18 +3,16 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
+import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * City service.
@@ -54,23 +52,21 @@ public class CityService {
     }
 
     /**
-     *
-     * @param cityDto
-     * @param id
-     * @return Response ok if city with requested id is found,
+     * Edits city with exact ID.
+     * @param cityDto City DTO
+     * @param id City ID
+     * @return Edited city DTO
      */
-    public ResponseEntity<CityDto> editCity(CityDto cityDto, Long id) {
-        Optional<City> entity = cityRepository.findById(id);
-        if (entity.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            // TODO metrarty 12.02.2021: move to rest exception handler (look at weather stat project)
-        }
+    public CityDto editCity(CityDto cityDto, Long id) {
         City city = cityMapper.toUpdatedEntity(cityDto);
-        city.setCreatedAt(entity.get().getCreatedAt());
-        city.setId(entity.get().getId());
+
+        City entity = cityRepository.findById(id)
+                .orElseThrow(()-> new CityNotFoundException("City with ID " + id + " is not found"));
+
+        city.setCreatedAt(entity.getCreatedAt());
+        city.setId(entity.getId());
         City saved = cityRepository.save(city);
-        return ResponseEntity.ok(cityMapper.toDto(saved));
-        // TODO metrarty 12.02.2021: move response entity to controller (service should return dto)
+        return cityMapper.toDto(saved);
     }
 
     /**
