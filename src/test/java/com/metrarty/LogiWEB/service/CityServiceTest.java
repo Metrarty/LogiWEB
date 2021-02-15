@@ -4,6 +4,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
+//import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
 import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import org.junit.Assert;
@@ -12,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.Instant;
@@ -33,9 +33,6 @@ public class CityServiceTest {
 
     @Mock
     private CityMapper cityMapperMock;
-
-    @Mock
-    private  CityNotFoundException cityNotFoundException;
 
     private static final Instant NOW = Instant.now();
     private CityMapper cityMapper;
@@ -86,32 +83,46 @@ public class CityServiceTest {
     @Test
     public void testEditCity() {
         //prepare
-        CityDto cityDto = new CityDto();
-        cityDto.setCityName("Ufa");
+        CityDto input = new CityDto();
         City city = new City();
-        city.setCityName(cityDto.getCityName());
-        when(cityMapperMock.toUpdatedEntity(cityDto)).thenReturn(city);
+        when(cityMapperMock.toUpdatedEntity(input)).thenReturn(city);
 
         City foundCity = new City();
         foundCity.setId(1L);
-        foundCity.setCityName("Moscow");
+        foundCity.setCreatedAt(NOW);
         when(cityRepositoryMock.findById(1L)).thenReturn(java.util.Optional.of(foundCity));
-       // when(cityRepositoryMock.findById(2L)).thenThrow(cityNotFoundException);
 
-        City expected = new City();
-        expected.setId(foundCity.getId());
-        expected.setCityName(cityDto.getCityName());
-        expected.setChangedAt(NOW);
-
-        City actual = cityMapper.toUpdatedEntity(cityDto);
-        actual.setId(foundCity.getId());
-        actual.setChangedAt(NOW);
+        City saved = new City();
+        saved.setId(1L);
+        saved.setCreatedAt(NOW);
+        when(cityRepositoryMock.save(saved)).thenReturn(saved);
 
         //run
-        cityService.editCity(cityDto, foundCity.getId());
+        cityService.editCity(input, 1L);
 
         //test
-        Assert.assertEquals("Must be equals", expected, actual);
+        verify(cityMapperMock, times(1)).toUpdatedEntity(input);
+        verify(cityRepositoryMock, times(1)).findById(1L);
+        verify(cityRepositoryMock, times(1)).save(saved);
+        verify(cityMapperMock, times(1)).toDto(saved);
+    }
+
+    @Test(expected = CityNotFoundException.class)
+    public void testEditCity_whenOriginalNotFound() {
+        //prepare
+        CityDto input = new CityDto();
+        City city = new City();
+        when(cityMapperMock.toUpdatedEntity(input)).thenReturn(city);
+
+        City foundCity = new City();
+        foundCity.setId(1L);
+        foundCity.setCreatedAt(NOW);
+        when(cityRepositoryMock.findById(1L)).thenReturn(Optional.empty());
+
+        //run
+        cityService.editCity(input, 1L);
+
+        //test
     }
 
     @Test
