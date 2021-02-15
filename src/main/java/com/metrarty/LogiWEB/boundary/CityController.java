@@ -29,8 +29,8 @@ public class CityController {
     }
 
     /**
-     * Receives all cities.
-     * @return List of all cities
+     * Receives all cities DTO.
+     * @return List of all cities DTO
      */
     @GetMapping("/city/all/")
     public List<CityDto> All() {
@@ -39,10 +39,10 @@ public class CityController {
     }
 
     /**
-     * Edits exist city, selected by ID.
+     * Edits exist city DTO, selected by ID.
      * @param cityDto city DTO
      * @param id ID of city that should be edited
-     * @return edited city or response "Not found", in case ID is not exist
+     * @return edited city DTO
      */
     @PutMapping("/city/editbyid/{id}")
     public CityDto editCity(@RequestBody CityDto cityDto, @PathVariable Long id) {

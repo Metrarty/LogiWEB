@@ -29,7 +29,7 @@ public class CityServiceTest {
     private CityMapper cityMapperMock;
 
     @Test
-    public void testCreateUser() {
+    public void testCreateCity() {
         //prepare
         CityDto testCityDto = new CityDto();
         testCityDto.setId(1L);

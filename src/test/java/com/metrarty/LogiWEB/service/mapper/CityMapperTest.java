@@ -46,7 +46,7 @@ public class CityMapperTest {
     }
 
     @Test
-    public void testToEntity() {
+    public void testToInitialEntity() {
         //prepare
         CityDto cityDto = new CityDto();
         cityDto.setId(1L);
@@ -60,6 +60,26 @@ public class CityMapperTest {
 
         //run
         City actual = cityMapperSpy.toInitialEntity(cityDto);
+
+        //test
+        Assert.assertEquals("Must be equals", expected, actual);
+    }
+
+    @Test
+    public void testToUpdatedEntity() {
+        //prepare
+        CityDto cityDto = new CityDto();
+        cityDto.setId(1L);
+        cityDto.setCityName("Ufa");
+
+        City expected = new City();
+        expected.setId(cityDto.getId());
+        expected.setCityName(cityDto.getCityName());
+        expected.setChangedAt(NOW);
+        when(cityMapperSpy.getNow()).thenReturn(NOW);
+
+        //run
+        City actual = cityMapperSpy.toUpdatedEntity(cityDto);
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
