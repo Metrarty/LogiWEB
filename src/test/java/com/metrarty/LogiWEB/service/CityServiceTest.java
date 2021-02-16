@@ -4,11 +4,9 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
-//import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
 import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -35,12 +33,6 @@ public class CityServiceTest {
     private CityMapper cityMapperMock;
 
     private static final Instant NOW = Instant.now();
-    private CityMapper cityMapper;
-
-    @Before
-    public void init() {
-        cityMapper = new CityMapper();
-    }
 
     @Test
     public void testCreateCity() {
@@ -107,6 +99,7 @@ public class CityServiceTest {
         verify(cityMapperMock, times(1)).toDto(saved);
     }
 
+
     @Test(expected = CityNotFoundException.class)
     public void testEditCity_whenOriginalNotFound() {
         //prepare
@@ -121,12 +114,20 @@ public class CityServiceTest {
 
         //run
         cityService.editCity(input, 1L);
+    }
 
-        //test
+    @Test(expected = NullPointerException.class)
+    public void testEditCityById_WhenInputIsNull() {
+        cityService.editCity(null, null);
     }
 
     @Test
     public void testDeleteCityById() {
         cityService.deleteCityById(1L);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testDeleteCityById_WhenInputIsNull() {
+        cityService.deleteCityById(null);
     }
 }

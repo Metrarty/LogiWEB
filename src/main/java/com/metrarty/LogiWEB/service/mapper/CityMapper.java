@@ -31,8 +31,8 @@ public class CityMapper {
 
     /**
      * Creates city, transfers common fields from city DTO to city and sets createdAt time.
-     * @param cityDto
-     * @return
+     * @param cityDto city DTO
+     * @return city
      */
     public City toInitialEntity(@NonNull CityDto cityDto) {
         City entity = createEntityAndMapCommonFields(cityDto);
@@ -42,8 +42,8 @@ public class CityMapper {
 
     /**
      * Creates city, transfers common fields from city DTO to city and sets changedAt time.
-     * @param cityDto
-     * @return
+     * @param cityDto city DTO
+     * @return city
      */
     public City toUpdatedEntity(@NonNull CityDto cityDto) {
         City entity = createEntityAndMapCommonFields(cityDto);

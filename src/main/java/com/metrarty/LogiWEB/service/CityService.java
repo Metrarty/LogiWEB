@@ -57,7 +57,7 @@ public class CityService {
      * @param id City ID
      * @return Edited city DTO
      */
-    public CityDto editCity(CityDto cityDto, Long id) {
+    public CityDto editCity(@NonNull CityDto cityDto, @NonNull Long id) {
         City city = cityMapper.toUpdatedEntity(cityDto);
 
         City entity = cityRepository.findById(id)
@@ -73,7 +73,7 @@ public class CityService {
      * Deletes city, selected by id.
      * @param id city id.
      */
-    public void deleteCityById(Long id) {
+    public void deleteCityById(@NonNull Long id) {
         cityRepository.deleteById(id);
     }
 
