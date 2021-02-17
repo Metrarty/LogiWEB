@@ -3,11 +3,13 @@ package com.metrarty.LogiWEB.service.mapper;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.repository.entity.City;
 import lombok.NonNull;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
 @Component
+@Log4j2
 public class CityMapper {
     /**
      * Transfers data from city to city DTO
@@ -15,6 +17,7 @@ public class CityMapper {
      * @return city DTO
      */
     public CityDto toDto(@NonNull City city) {
+        log.info("CityMapper.toDto was called with {}", city);
         CityDto entity = new CityDto();
         entity.setId(city.getId());
         entity.setCityName(city.getCityName());
@@ -35,6 +38,7 @@ public class CityMapper {
      * @return city
      */
     public City toInitialEntity(@NonNull CityDto cityDto) {
+        log.info("CityMapper.toInitialEntity was called with {}", cityDto);
         City entity = createEntityAndMapCommonFields(cityDto);
         entity.setCreatedAt(getNow());
         return entity;
@@ -46,6 +50,7 @@ public class CityMapper {
      * @return city
      */
     public City toUpdatedEntity(@NonNull CityDto cityDto) {
+        log.info("CityMapper.toUpdatedEntity was called with {}", cityDto);
         City entity = createEntityAndMapCommonFields(cityDto);
         entity.setChangedAt(getNow());
         return entity;
