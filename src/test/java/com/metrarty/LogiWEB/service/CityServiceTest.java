@@ -121,6 +121,17 @@ public class CityServiceTest {
         cityService.editCity(null, null);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testEditCityById_WhenCityDtoIsNull() {
+        cityService.editCity(null, 1L);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testEditCityById_WhenCityIdIsNull() {
+        CityDto cityDto = new CityDto();
+        cityService.editCity(cityDto, null);
+    }
+
     @Test
     public void testDeleteCityById() {
         cityService.deleteCityById(1L);

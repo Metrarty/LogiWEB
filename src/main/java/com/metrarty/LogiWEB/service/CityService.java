@@ -31,6 +31,7 @@ public class CityService {
      * @return City
      */
     public CityDto createCity(@NonNull CityDto cityDto) {
+        log.info("CityService.createCity was called with {}", cityDto);
         City entity = cityMapper.toInitialEntity(cityDto);
 
         cityRepository.save(entity);
@@ -42,6 +43,7 @@ public class CityService {
      * @return List of cities DTO
      */
     public List<CityDto> findAllCities() {
+        log.info("CityService.findAllCities was called");
         List<City> entities = cityRepository.findAll();
         List<CityDto> result = new ArrayList<>();
         for (City city : entities) {
@@ -58,6 +60,7 @@ public class CityService {
      * @return Edited city DTO
      */
     public CityDto editCity(@NonNull CityDto cityDto, @NonNull Long id) {
+        log.info("CityService.editCity was called with {} {}", cityDto, id);
         City city = cityMapper.toUpdatedEntity(cityDto);
 
         City entity = cityRepository.findById(id)
@@ -74,6 +77,7 @@ public class CityService {
      * @param id city id.
      */
     public void deleteCityById(@NonNull Long id) {
+        log.info("CityService.deleteCityById was called with {}", id);
         cityRepository.deleteById(id);
     }
 
