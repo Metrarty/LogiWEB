@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS CITY;
 
 CREATE TABLE CITY (
  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  changed_at TIMESTAMP,
   city_name VARCHAR(250),
-  created_at TIMESTAMP
+  created_at TIMESTAMP NOT NULL,
+  changed_at TIMESTAMP
 );
 
