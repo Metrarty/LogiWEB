@@ -15,7 +15,7 @@ public class DistanceMapper {
         entity.setId(distance.getId());
         entity.setCity1(distance.getCity1());
         entity.setCity2(distance.getCity2());
-        entity.setDistance(entity.getDistance());
+        entity.setDistance(distance.getDistance());
         return entity;
     }
 
@@ -25,7 +25,7 @@ public class DistanceMapper {
         entity.setId(distanceDto.getId());
         entity.setCity1(distanceDto.getCity1());
         entity.setCity2(distanceDto.getCity2());
-        entity.setDistance(entity.getDistance());
+        entity.setDistance(distanceDto.getDistance());
         return entity;
     }
 }

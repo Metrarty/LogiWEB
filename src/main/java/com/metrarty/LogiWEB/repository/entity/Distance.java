@@ -11,9 +11,9 @@ public class Distance {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
-    private City city1;
+    private String city1;
     @Column
-    private City city2;
+    private String city2;
     @Column
     private Long distance;
 }
