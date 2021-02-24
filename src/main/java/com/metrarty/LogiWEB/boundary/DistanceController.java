@@ -18,16 +18,26 @@ public class DistanceController {
 
     @PostMapping("/distance/create/")
     public Distance createDistance(DistanceDto distanceDto) {
+        log.info("DistanceController.createDistance was called with {}", distanceDto);
         return distanceService.createDistance(distanceDto);
     }
 
     @GetMapping("/distance/all/")
     public List<DistanceDto> all() {
+        log.info("DistanceController.all was called");
         return distanceService.findAllDistances();
     }
 
     @PutMapping("/distance/editbyid/{id}/")
     public DistanceDto editDistance(@RequestBody DistanceDto distanceDto, @PathVariable Long id) {
+        log.info("DistanceController.editDistance was called with {} {}", distanceDto, id);
         return distanceService.editDistance(distanceDto, id);
+    }
+
+    @DeleteMapping("/distance/deletebyid/{id}/")
+    public String deleteDistanceById(@PathVariable Long id) {
+        log.info("DistanceController.deleteDistanceById was called with {}", id);
+        distanceService.deleteDistanceById(id);
+        return "Distance with ID " + id + " is deleted";
     }
 }
