@@ -16,9 +16,9 @@ import java.util.List;
 public class DistanceController {
     private final DistanceService distanceService;
 
-    @PostMapping("/distance/create/{idCity1}/{idCity2}/{distance}")
-    public Distance createDistance(@PathVariable("idCity1") Long idCity1, @PathVariable("idCity2") Long idCity2, @PathVariable("distance") Long distance) {
-        return distanceService.createDistance(idCity1, idCity2, distance);
+    @PostMapping("/distance/create/")
+    public Distance createDistance(DistanceDto distanceDto) {
+        return distanceService.createDistance(distanceDto);
     }
 
     @GetMapping("/distance/all")

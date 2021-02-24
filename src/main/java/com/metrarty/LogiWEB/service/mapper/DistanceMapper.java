@@ -13,8 +13,8 @@ public class DistanceMapper {
         log.info("DistanceMapper.toDto was called with {}", distance);
         DistanceDto entity = new DistanceDto();
         entity.setId(distance.getId());
-        entity.setCity1(distance.getCity1());
-        entity.setCity2(distance.getCity2());
+      //  entity.setCity1(distance.getCity1());
+      //  entity.setCity2(distance.getCity2());
         entity.setDistance(distance.getDistance());
         return entity;
     }
@@ -23,8 +23,8 @@ public class DistanceMapper {
         log.info("DistanceMapper.toEntity was called with {}", distanceDto);
         Distance entity = new Distance();
         entity.setId(distanceDto.getId());
-        entity.setCity1(distanceDto.getCity1());
-        entity.setCity2(distanceDto.getCity2());
+      //  entity.setCity1(distanceDto.getCity1());
+      //  entity.setCity2(distanceDto.getCity2());
         entity.setDistance(distanceDto.getDistance());
         return entity;
     }

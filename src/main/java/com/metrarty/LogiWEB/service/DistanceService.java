@@ -23,11 +23,11 @@ public class DistanceService {
     private final DistanceMapper distanceMapper;
     private final CityRepository cityRepository;
 
-    public Distance createDistance(Long idCity1, Long idCity2, Long distance) {
-        log.info("DistanceService.createDistance was called with {} {} {}", idCity1, idCity2, distance);
+    public Distance createDistance(DistanceDto distanceDto) {
+        log.info("DistanceService.createDistance was called with {}", distanceDto);
         Distance entity = new Distance();
-        entity.setCity1(cityRepository.getOne(idCity1).getCityName());
-        entity.setCity2(cityRepository.getOne(idCity2).getCityName());
+       // entity.setCity1(cityRepository.getOne(idCity1).getCityName());
+       // entity.setCity2(cityRepository.getOne(idCity2).getCityName());
         entity.setDistance(distance);
         distanceRepository.save(entity);
         return entity;
