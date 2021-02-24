@@ -21,10 +21,13 @@ public class DistanceController {
         return distanceService.createDistance(distanceDto);
     }
 
-    @GetMapping("/distance/all")
+    @GetMapping("/distance/all/")
     public List<DistanceDto> all() {
         return distanceService.findAllDistances();
     }
 
-
+    @PutMapping("/distance/editbyid/{id}/")
+    public DistanceDto editDistance(@RequestBody DistanceDto distanceDto, @PathVariable Long id) {
+        return distanceService.editDistance(distanceDto, id);
+    }
 }

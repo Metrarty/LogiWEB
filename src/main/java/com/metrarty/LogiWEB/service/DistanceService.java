@@ -6,6 +6,7 @@ import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Distance;
+import com.metrarty.LogiWEB.service.exception.DistanceNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,10 +26,7 @@ public class DistanceService {
 
     public Distance createDistance(DistanceDto distanceDto) {
         log.info("DistanceService.createDistance was called with {}", distanceDto);
-        Distance entity = new Distance();
-       // entity.setCity1(cityRepository.getOne(idCity1).getCityName());
-       // entity.setCity2(cityRepository.getOne(idCity2).getCityName());
-        entity.setDistance(distance);
+        Distance entity = distanceMapper.toEntity(distanceDto);
         distanceRepository.save(entity);
         return entity;
     }
@@ -42,5 +40,14 @@ public class DistanceService {
             result.add(distanceDto);
         }
         return result;
+    }
+
+    public DistanceDto editDistance(DistanceDto distanceDto, Long id) {
+        Distance distance = distanceMapper.toEntity(distanceDto);
+        Distance entity = distanceRepository.findById(id)
+                .orElseThrow(()-> new DistanceNotFoundException("Distance with ID " + id + " is not found"));
+        distance.setId(entity.getId());
+        Distance saved = distanceRepository.save(distance);
+        return distanceMapper.toDto(saved);
     }
 }
