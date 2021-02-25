@@ -8,7 +8,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
+/**
+ * Distance mapper.
+ */
 public class DistanceMapper {
+    /**
+     * Transfers data from distance to distance DTO
+     * @param distance distance
+     * @return distance DTO
+     */
     public DistanceDto toDto(@NonNull Distance distance) {
         log.info("DistanceMapper.toDto was called with {}", distance);
         DistanceDto entity = new DistanceDto();
@@ -19,6 +27,11 @@ public class DistanceMapper {
         return entity;
     }
 
+    /**
+     * Transfers data from distance DTO to distance
+     * @param distanceDto distance DTO
+     * @return distance
+     */
     public Distance toEntity(@NonNull DistanceDto distanceDto) {
         log.info("DistanceMapper.toEntity was called with {}", distanceDto);
         Distance entity = new Distance();

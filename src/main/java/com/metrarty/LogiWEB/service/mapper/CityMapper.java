@@ -10,6 +10,9 @@ import java.time.Instant;
 
 @Component
 @Log4j2
+/**
+ * City mapper.
+ */
 public class CityMapper {
     /**
      * Transfers data from city to city DTO
