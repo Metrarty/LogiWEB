@@ -5,6 +5,7 @@ import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.service.exception.DistanceNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class DistanceService {
      * @param distanceDto distance DTO
      * @return distance
      */
-    public Distance createDistance(DistanceDto distanceDto) {
+    public Distance createDistance(@NonNull DistanceDto distanceDto) {
         log.info("DistanceService.createDistance was called with {}", distanceDto);
         Distance entity = distanceMapper.toEntity(distanceDto);
         distanceRepository.save(entity);
