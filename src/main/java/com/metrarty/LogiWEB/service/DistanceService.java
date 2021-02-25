@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Distance service.
+ */
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
@@ -20,6 +23,11 @@ public class DistanceService {
     private final DistanceRepository distanceRepository;
     private final DistanceMapper distanceMapper;
 
+    /**
+     * Creates distance and saves into repository.
+     * @param distanceDto distance DTO
+     * @return distance
+     */
     public Distance createDistance(DistanceDto distanceDto) {
         log.info("DistanceService.createDistance was called with {}", distanceDto);
         Distance entity = distanceMapper.toEntity(distanceDto);
@@ -27,6 +35,10 @@ public class DistanceService {
         return entity;
     }
 
+    /**
+     * Finds all exist distances.
+     * @return List of distances DTO
+     */
     public List<DistanceDto> findAllDistances() {
         log.info("DistanceService.findAllDistances was called");
         List<Distance> entities = distanceRepository.findAll();
@@ -38,6 +50,12 @@ public class DistanceService {
         return result;
     }
 
+    /**
+     * Edits distance with exact ID.
+     * @param distanceDto distance DTO
+     * @param id distance ID
+     * @return edited distance DTO
+     */
     public DistanceDto editDistance(DistanceDto distanceDto, Long id) {
         log.info("DistanceService.editDistance was called with {}", id);
         Distance distance = distanceMapper.toEntity(distanceDto);
@@ -48,6 +66,10 @@ public class DistanceService {
         return distanceMapper.toDto(saved);
     }
 
+    /**
+     * Deletes distance, selected by id.
+     * @param id distance ID
+     */
     public void deleteDistanceById(Long id) {
         log.info("DistanceService.deleteDistanceById was called with {}", id);
         distanceRepository.deleteById(id);

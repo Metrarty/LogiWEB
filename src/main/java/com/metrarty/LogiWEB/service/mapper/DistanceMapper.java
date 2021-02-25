@@ -6,11 +6,11 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
-@Component
-@Log4j2
 /**
  * Distance mapper.
  */
+@Component
+@Log4j2
 public class DistanceMapper {
     /**
      * Transfers data from distance to distance DTO

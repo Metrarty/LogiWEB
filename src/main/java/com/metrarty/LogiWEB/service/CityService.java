@@ -74,7 +74,7 @@ public class CityService {
 
     /**
      * Deletes city, selected by id.
-     * @param id city id.
+     * @param id city id
      */
     public void deleteCityById(@NonNull Long id) {
         log.info("CityService.deleteCityById was called with {}", id);

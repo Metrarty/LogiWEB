@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
-@Component
-@Log4j2
 /**
  * City mapper.
  */
+@Component
+@Log4j2
 public class CityMapper {
     /**
      * Transfers data from city to city DTO

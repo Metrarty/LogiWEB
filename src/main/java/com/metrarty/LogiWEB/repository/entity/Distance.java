@@ -1,7 +1,6 @@
 package com.metrarty.LogiWEB.repository.entity;
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data
