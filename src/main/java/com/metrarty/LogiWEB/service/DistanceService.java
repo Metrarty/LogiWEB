@@ -57,7 +57,7 @@ public class DistanceService {
      * @param id distance ID
      * @return edited distance DTO
      */
-    public DistanceDto editDistance(DistanceDto distanceDto, Long id) {
+    public DistanceDto editDistance(@NonNull DistanceDto distanceDto, @NonNull Long id) {
         log.info("DistanceService.editDistance was called with {}", id);
         Distance distance = distanceMapper.toEntity(distanceDto);
         Distance entity = distanceRepository.findById(id)
@@ -71,7 +71,7 @@ public class DistanceService {
      * Deletes distance, selected by id.
      * @param id distance ID
      */
-    public void deleteDistanceById(Long id) {
+    public void deleteDistanceById(@NonNull Long id) {
         log.info("DistanceService.deleteDistanceById was called with {}", id);
         distanceRepository.deleteById(id);
     }

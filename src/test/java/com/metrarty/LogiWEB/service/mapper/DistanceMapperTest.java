@@ -1,6 +1,6 @@
 package com.metrarty.LogiWEB.service.mapper;
 
-import com.metrarty.LogiWEB.boundary.model.CityDto;
+
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Distance;
@@ -8,8 +8,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.mockito.Mockito.*;

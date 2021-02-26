@@ -35,13 +35,13 @@ public class DistanceControllerTest {
     @Test
     public void testEditDistanceById() {
         DistanceDto distanceDto = new DistanceDto();
-        distanceService.editDistance(distanceDto, 1L);
+        distanceController.editDistance(distanceDto, 1L);
         verify(distanceService, times(1)).editDistance(distanceDto, 1L);
     }
 
     @Test
     public void testDeleteDistanceById() {
-        distanceService.deleteDistanceById(1L);
+        distanceController.deleteDistanceById(1L);
         verify(distanceService, times(1)).deleteDistanceById(1L);
     }
 }
