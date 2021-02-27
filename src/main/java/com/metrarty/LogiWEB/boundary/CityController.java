@@ -33,7 +33,7 @@ public class CityController {
      * @return List of all cities DTO
      */
     @GetMapping("/city/all/")
-    public List<CityDto> all() {
+    public List<CityDto> findAll() {
         log.info("CityController.all was called");
         return cityService.findAllCities();
     }

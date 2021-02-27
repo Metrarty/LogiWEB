@@ -28,7 +28,7 @@ public class DistanceControllerTest {
 
     @Test
     public void testFindAllDistances() {
-        distanceController.all();
+        distanceController.findAll();
         verify(distanceService, times(1)).findAllDistances();
     }
 
