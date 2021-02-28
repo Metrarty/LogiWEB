@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class DistanceDto {
     private Long id;
-    private City city1;
-    private City city2;
+    private CityDto city1;
+    private CityDto city2;
     private Long distance;
 }

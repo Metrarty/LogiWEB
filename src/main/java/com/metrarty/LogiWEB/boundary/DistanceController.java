@@ -25,7 +25,7 @@ public class DistanceController {
      * @return created distance
      */
     @PostMapping("/distance/create/")
-    public Distance createDistance(DistanceDto distanceDto) {
+    public Distance createDistance(@RequestBody DistanceDto distanceDto) {
         log.info("DistanceController.createDistance was called with {}", distanceDto);
         return distanceService.createDistance(distanceDto);
     }

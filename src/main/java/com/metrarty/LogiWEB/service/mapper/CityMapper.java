@@ -28,7 +28,7 @@ public class CityMapper {
     }
 
 
-    private City createEntityAndMapCommonFields(CityDto cityDto) {
+    public City toEntity(CityDto cityDto) {
         City entity = new City();
         entity.setId(cityDto.getId());
         entity.setCityName(cityDto.getCityName());
@@ -40,9 +40,9 @@ public class CityMapper {
      * @param cityDto city DTO
      * @return city
      */
-    public City toInitialEntity(@NonNull CityDto cityDto) {
+    public City toEntityWithCreatedAt(@NonNull CityDto cityDto) {
         log.info("CityMapper.toInitialEntity was called with {}", cityDto);
-        City entity = createEntityAndMapCommonFields(cityDto);
+        City entity = toEntity(cityDto);
         entity.setCreatedAt(getNow());
         return entity;
     }
@@ -52,9 +52,9 @@ public class CityMapper {
      * @param cityDto city DTO
      * @return city
      */
-    public City toUpdatedEntity(@NonNull CityDto cityDto) {
+    public City toEntityWithChangedAt(@NonNull CityDto cityDto) {
         log.info("CityMapper.toUpdatedEntity was called with {}", cityDto);
-        City entity = createEntityAndMapCommonFields(cityDto);
+        City entity = toEntity(cityDto);
         entity.setChangedAt(getNow());
         return entity;
     }

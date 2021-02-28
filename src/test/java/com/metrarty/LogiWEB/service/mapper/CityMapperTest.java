@@ -58,7 +58,7 @@ public class CityMapperTest {
         when(cityMapperSpy.getNow()).thenReturn(NOW);
 
         //run
-        City actual = cityMapperSpy.toInitialEntity(cityDto);
+        City actual = cityMapperSpy.toEntityWithCreatedAt(cityDto);
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
@@ -78,7 +78,7 @@ public class CityMapperTest {
         when(cityMapperSpy.getNow()).thenReturn(NOW);
 
         //run
-        City actual = cityMapperSpy.toUpdatedEntity(cityDto);
+        City actual = cityMapperSpy.toEntityWithChangedAt(cityDto);
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
