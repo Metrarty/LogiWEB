@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 public class Distance {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
     private City city1;
