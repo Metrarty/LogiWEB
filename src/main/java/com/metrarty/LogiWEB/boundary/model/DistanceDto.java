@@ -1,6 +1,5 @@
 package com.metrarty.LogiWEB.boundary.model;
 
-import com.metrarty.LogiWEB.repository.entity.City;
 import lombok.Data;
 
 @Data

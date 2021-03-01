@@ -36,7 +36,7 @@ public class DistanceController {
      */
     @GetMapping("/distance/all/")
     public List<DistanceDto> findAll() {
-        log.info("DistanceController.all was called");
+        log.info("DistanceController.findAll was called");
         return distanceService.findAllDistances();
     }
 

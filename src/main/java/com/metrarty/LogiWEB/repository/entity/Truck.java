@@ -8,11 +8,11 @@ import javax.persistence.*;
 @Entity
 public class Truck {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
     private Long capacity;
-    @Column
+    @OneToOne
     private City location;
     @Column
     private Long distancePerDay;
