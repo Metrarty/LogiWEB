@@ -27,8 +27,8 @@ public class CityControllerTest {
     }
 
     @Test
-    public void testAll() {
-        cityController.All();
+    public void testFindAllCities() {
+        cityController.findAll();
         verify(cityService, times(1)).findAllCities();
     }
 

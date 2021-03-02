@@ -32,7 +32,7 @@ public class CityService {
      */
     public CityDto createCity(@NonNull CityDto cityDto) {
         log.info("CityService.createCity was called with {}", cityDto);
-        City entity = cityMapper.toInitialEntity(cityDto);
+        City entity = cityMapper.toEntityWithCreatedAt(cityDto);
 
         cityRepository.save(entity);
         return cityMapper.toDto(entity);
@@ -61,7 +61,7 @@ public class CityService {
      */
     public CityDto editCity(@NonNull CityDto cityDto, @NonNull Long id) {
         log.info("CityService.editCity was called with {} {}", cityDto, id);
-        City city = cityMapper.toUpdatedEntity(cityDto);
+        City city = cityMapper.toEntityWithChangedAt(cityDto);
 
         City entity = cityRepository.findById(id)
                 .orElseThrow(()-> new CityNotFoundException("City with ID " + id + " is not found"));
@@ -74,7 +74,7 @@ public class CityService {
 
     /**
      * Deletes city, selected by id.
-     * @param id city id.
+     * @param id city id
      */
     public void deleteCityById(@NonNull Long id) {
         log.info("CityService.deleteCityById was called with {}", id);
