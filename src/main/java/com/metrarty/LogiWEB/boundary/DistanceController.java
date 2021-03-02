@@ -21,7 +21,7 @@ public class DistanceController {
 
     /**
      * Creates distance between two cities.
-     * @param distanceDto distance DTO.
+     * @param distanceDto distance DTO
      * @return created distance
      */
     @PostMapping("/distance/create/")

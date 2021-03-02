@@ -1,11 +1,8 @@
 package com.metrarty.LogiWEB.service;
 
-import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
-import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.repository.entity.Truck;
-import com.metrarty.LogiWEB.service.exception.DistanceNotFoundException;
 import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import lombok.NonNull;
@@ -17,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Truck service.
+ */
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
@@ -25,6 +25,11 @@ public class TruckService {
     private final TruckRepository truckRepository;
     private final TruckMapper truckMapper;
 
+    /**
+     * Creates distance and saves into repository.
+     * @param truckDto truck DTO
+     * @return truck
+     */
     public Truck createTruck(@NonNull TruckDto truckDto) {
         log.info("TruckService.createTruck was called with {}", truckDto);
         Truck entity = truckMapper.toEntity(truckDto);
@@ -32,6 +37,10 @@ public class TruckService {
         return entity;
     }
 
+    /**
+     * Finds all exist trucks.
+     * @return List of trucks DTO
+     */
     public List<TruckDto> findAllTrucks() {
         log.info("TruckService.findAllTrucks was called");
         List<Truck> entities = truckRepository.findAll();
@@ -43,6 +52,12 @@ public class TruckService {
         return result;
     }
 
+    /**
+     * Edits truck with exact ID.
+     * @param truckDto truck DTO
+     * @param id truck ID
+     * @return edited truck DTO
+     */
     public TruckDto editTruck(@NonNull TruckDto truckDto, @NonNull Long id) {
         log.info("TruckService.editTruck was called with {}", id);
         Truck truck = truckMapper.toEntity(truckDto);
@@ -53,9 +68,12 @@ public class TruckService {
         return truckMapper.toDto(saved);
     }
 
+    /**
+     * Deletes truck, selected by id
+     * @param id truck ID
+     */
     public void deleteTruckById(@NonNull Long id) {
         log.info("TruckService.deleteTruckById was called with {}", id);
         truckRepository.deleteById(id);
-
     }
 }

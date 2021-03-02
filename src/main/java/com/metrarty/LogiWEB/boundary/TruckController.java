@@ -1,8 +1,6 @@
 package com.metrarty.LogiWEB.boundary;
 
-import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
-import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.TruckService;
 import lombok.RequiredArgsConstructor;
@@ -12,30 +10,53 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Truck controller.
+ */
 @RestController
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
 public class TruckController {
     private final TruckService truckService;
 
+    /**
+     * Creates new truck.
+     * @param truckDto truck DTO
+     * @return created truck
+     */
     @PostMapping("/truck/create/")
     public Truck createTruck(@RequestBody TruckDto truckDto) {
         log.info("TruckController.createTruck was called with {}", truckDto);
         return truckService.createTruck(truckDto);
     }
 
+    /**
+     * Receives all trucks DTO.
+     * @return list of all trucks DTO
+     */
     @GetMapping("/truck/all/")
     public List<TruckDto> findAll() {
         log.info("TruckController.findAll was called");
         return truckService.findAllTrucks();
     }
 
+    /**
+     * Edits exist truck DTO, selected by ID.
+     * @param truckDto truck DTO
+     * @param id ID of truck that should be edited
+     * @return edited truck DTO
+     */
     @PutMapping("/truck/editbyid/{id}/")
     public TruckDto editTruck(@RequestBody TruckDto truckDto, @PathVariable Long id) {
         log.info("truckController.editTruck was called with {} {}", truckDto, id);
         return truckService.editTruck(truckDto, id);
     }
 
+    /**
+     * Deletes exist truck, selected by ID.
+     * @param id truck ID.
+     * @return message with ID of deleted truck
+     */
     @DeleteMapping("/truck/deletebyid/{id}/")
     public String deleteTruckById(@PathVariable Long id) {
         log.info("TruckController.deleteTruckById was called with {}", id);

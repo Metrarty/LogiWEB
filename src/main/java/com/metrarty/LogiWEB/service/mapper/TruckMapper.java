@@ -1,14 +1,15 @@
 package com.metrarty.LogiWEB.service.mapper;
 
-import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
-import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * Truck mapper.
+ */
 @Component
 @Log4j2
 public class TruckMapper {
@@ -20,6 +21,11 @@ public class TruckMapper {
         this.cityMapper = cityMapper;
     }
 
+    /**
+     * Transfers data from truck to truck DTO.
+     * @param truck truck
+     * @return truck DTO
+     */
     public TruckDto toDto(@NonNull Truck truck) {
         log.info("TruckMapper.toDto was called with {}", truck);
         TruckDto dto = new TruckDto();
@@ -30,6 +36,11 @@ public class TruckMapper {
         return dto;
     }
 
+    /**
+     * Transfers data from truck DTO to truck
+     * @param truckDto truck DTO
+     * @return truck
+     */
     public Truck toEntity(@NonNull TruckDto truckDto) {
         log.info("TruckMapper.toEntity was called with {}", truckDto);
         Truck entity = new Truck();
