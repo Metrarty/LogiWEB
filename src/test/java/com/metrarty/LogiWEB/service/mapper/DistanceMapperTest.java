@@ -19,7 +19,6 @@ public class DistanceMapperTest {
 
     @InjectMocks
     private DistanceMapper distanceMapper;
-
 //    @Test
 //    public void testToDto() {
 //        //prepare
@@ -30,21 +29,21 @@ public class DistanceMapperTest {
 //        city2.setId(2L);
 //        city2.setCityName("Tomsk");
 //
-//        Distance distance = new Distance();
-//        distance.setId(3L);
-//        distance.setCity1(city1);
-//        distance.setCity2(city2);
-//        distance.setDistance(100L);
+//        DistanceDto distanceDto = new DistanceDto();
+//        distanceDto.setId(3L);
+//        distanceDto.setCity1(city1);
+//        distanceDto.setCity2(city2);
+//        distanceDto.setDistance(100L);
 //
 //        DistanceDto expected = new DistanceDto();
-//        expected.setId(distance.getId());
-//        expected.setCity1(distance.getCity1());
-//        expected.setCity2(distance.getCity2());
-//        expected.setDistance(distance.getDistance());
+//        expected.setId(distanceDto.getId());
+//        expected.setCity1(distanceDto.getCity1());
+//        expected.setCity2(distanceDto.getCity2());
+//        expected.setDistance(distanceDto.getDistance());
 //
 //
 //        //run
-//        DistanceDto actual = distanceMapper.toDto(distance);
+//        DistanceDto actual = distanceMapper.toDto(distanceDto);
 //
 //        //test
 //        Assert.assertEquals("Must be equals", expected, actual);
@@ -80,3 +79,4 @@ public class DistanceMapperTest {
 //        Assert.assertEquals("Must be equals", expected, actual);
 //    }
 }
+
