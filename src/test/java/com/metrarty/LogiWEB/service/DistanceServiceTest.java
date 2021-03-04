@@ -1,6 +1,5 @@
 package com.metrarty.LogiWEB.service;
 
-
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;

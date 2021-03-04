@@ -1,10 +1,8 @@
 package com.metrarty.LogiWEB.service.mapper;
 
 import com.metrarty.LogiWEB.boundary.model.CityDto;
-import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.entity.City;
-import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import org.junit.Assert;
 import org.junit.Test;

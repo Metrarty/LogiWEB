@@ -1,8 +1,6 @@
 package com.metrarty.LogiWEB.boundary;
 
-import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
-import com.metrarty.LogiWEB.service.DistanceService;
 import com.metrarty.LogiWEB.service.TruckService;
 import org.junit.Test;
 import org.junit.runner.RunWith;

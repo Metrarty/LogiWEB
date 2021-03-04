@@ -26,7 +26,7 @@ public class TruckService {
     private final TruckMapper truckMapper;
 
     /**
-     * Creates distance and saves into repository.
+     * Creates truck and saves into repository.
      * @param truckDto truck DTO
      * @return truck
      */
