@@ -97,6 +97,8 @@ public class CityServiceTest {
         verify(cityRepositoryMock, times(1)).findById(1L);
         verify(cityRepositoryMock, times(1)).save(saved);
         verify(cityMapperMock, times(1)).toDto(saved);
+        verifyNoMoreInteractions(cityRepositoryMock);
+        verifyNoMoreInteractions(cityMapperMock);
     }
 
 
@@ -134,7 +136,12 @@ public class CityServiceTest {
 
     @Test
     public void testDeleteCityById() {
+        //run
         cityService.deleteCityById(1L);
+
+        //test
+        verify(cityRepositoryMock, times(1)).deleteById(1L);
+        verifyNoMoreInteractions(cityRepositoryMock);
     }
 
     @Test(expected = NullPointerException.class)

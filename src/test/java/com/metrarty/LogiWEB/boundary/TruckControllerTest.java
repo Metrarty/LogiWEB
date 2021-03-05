@@ -24,12 +24,14 @@ public class TruckControllerTest {
         TruckDto truckDto = new TruckDto();
         truckController.createTruck(truckDto);
         verify(truckService, times(1)).createTruck(truckDto);
+        verifyNoMoreInteractions(truckService);
     }
 
     @Test
     public void testFindAllTrucks() {
         truckController.findAll();
         verify(truckService, times(1)).findAllTrucks();
+        verifyNoMoreInteractions(truckService);
     }
 
     @Test
@@ -37,11 +39,13 @@ public class TruckControllerTest {
         TruckDto truckDto = new TruckDto();
         truckController.editTruck(truckDto, 1L);
         verify(truckService, times(1)).editTruck(truckDto, 1L);
+        verifyNoMoreInteractions(truckService);
     }
 
     @Test
     public void testDeleteTruckById() {
         truckController.deleteTruckById(1L);
         verify(truckService, times(1)).deleteTruckById(1L);
+        verifyNoMoreInteractions(truckService);
     }
 }

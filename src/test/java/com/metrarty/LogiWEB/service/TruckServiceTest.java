@@ -43,6 +43,7 @@ public class TruckServiceTest {
         //test
         verify(truckRepository, times(1)).save(testTruck);
         verifyNoMoreInteractions(truckRepository);
+        verifyNoMoreInteractions(truckMapper);
     }
 
     @Test(expected = NullPointerException.class)
@@ -68,6 +69,7 @@ public class TruckServiceTest {
         Assert.assertEquals("Must be equal", expectedDto, actual.get(0));
         verify(truckRepository, times(1)).findAll();
         verifyNoMoreInteractions(truckRepository);
+        verifyNoMoreInteractions(truckMapper);
     }
 
     @Test
@@ -93,6 +95,8 @@ public class TruckServiceTest {
         verify(truckRepository, times(1)).findById(1L);
         verify(truckRepository, times(1)).save(saved);
         verify(truckMapper, times(1)).toDto(saved);
+        verifyNoMoreInteractions(truckRepository);
+        verifyNoMoreInteractions(truckMapper);
     }
 
     @Test(expected = TruckNotFoundException.class)
@@ -108,6 +112,8 @@ public class TruckServiceTest {
 
         //run
         truckService.editTruck(input, 1L);
+        verifyNoMoreInteractions(truckRepository);
+        verifyNoMoreInteractions(truckMapper);
     }
 
     @Test(expected = NullPointerException.class)
@@ -128,7 +134,12 @@ public class TruckServiceTest {
 
     @Test
     public void testDeleteTruckById() {
+        //run
         truckService.deleteTruckById(1L);
+
+        //test
+        verify(truckRepository, times(1)).deleteById(1L);
+        verifyNoMoreInteractions(truckRepository);
     }
 
     @Test(expected = NullPointerException.class)
