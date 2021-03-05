@@ -1,6 +1,5 @@
 package com.metrarty.LogiWEB.service;
 
-
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
@@ -94,6 +93,8 @@ public class DistanceServiceTest {
         verify(distanceRepository, times(1)).findById(1L);
         verify(distanceRepository, times(1)).save(saved);
         verify(distanceMapper, times(1)).toDto(saved);
+        verifyNoMoreInteractions(distanceRepository);
+        verifyNoMoreInteractions(distanceMapper);
     }
 
     @Test(expected = DistanceNotFoundException.class)
@@ -129,7 +130,12 @@ public class DistanceServiceTest {
 
     @Test
     public void testDeleteDistanceById() {
+        //run
         distanceService.deleteDistanceById(1L);
+
+        //test
+        verify(distanceRepository, times(1)).deleteById(1L);
+        verifyNoMoreInteractions(distanceRepository);
     }
 
     @Test(expected = NullPointerException.class)
