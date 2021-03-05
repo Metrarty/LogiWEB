@@ -24,12 +24,14 @@ public class CityControllerTest {
         CityDto cityDto = new CityDto();
         cityController.createCity(cityDto);
         verify(cityService, times(1)).createCity(cityDto);
+        verifyNoMoreInteractions(cityService);
     }
 
     @Test
     public void testFindAllCities() {
         cityController.findAll();
         verify(cityService, times(1)).findAllCities();
+        verifyNoMoreInteractions(cityService);
     }
 
     @Test
@@ -37,11 +39,13 @@ public class CityControllerTest {
         CityDto cityDto = new CityDto();
         cityController.editCity(cityDto, 1L);
         verify(cityService, times(1)).editCity(cityDto, 1L);
+        verifyNoMoreInteractions(cityService);
     }
 
     @Test
     public void testDeleteCityById() {
         cityController.deleteCityById(1L);
         verify(cityService, times(1)).deleteCityById(1L);
+        verifyNoMoreInteractions(cityService);
     }
 }
