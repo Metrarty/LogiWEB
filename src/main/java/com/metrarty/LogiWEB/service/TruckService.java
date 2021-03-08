@@ -102,6 +102,8 @@ public class TruckService {
                 distanceSuitable.add(distance);
             }
         }
+// TODO metrarty 08.03.2021: отсортировать все дистанции по возра
+// TODO metrarty 08.03.2021: если нет грузовика в пункте назначения, найти следуюющий минимальный (из списка дистанций)
 
 //        TruckDto result;
 //        List<DistanceDto> sortedDistances = new ArrayList<>();
