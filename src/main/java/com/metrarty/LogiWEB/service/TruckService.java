@@ -3,6 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
+import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Distance;
@@ -28,6 +29,7 @@ public class TruckService {
     private final TruckRepository truckRepository;
     private final TruckMapper truckMapper;
     private final DistanceService distanceService;
+    private final CityRepository cityRepository;
 
     /**
      * Creates truck and saves into repository.
@@ -81,8 +83,9 @@ public class TruckService {
         truckRepository.deleteById(id);
     }
 
-    public TruckDto chooseTruckToDeliver(@NonNull CityDto city, Long size) {
+    public List<DistanceDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
         Long minimalDistance = 0L;
+        City city = cityRepository.getOne(id);
         //создаем список всех имеющихся грузовиков
         List<TruckDto> allTrucks = findAllTrucks();
         //создаем мапу грузовик-город из списка грузовиков, которые подходят по вместимости
@@ -102,6 +105,8 @@ public class TruckService {
                 distanceSuitable.add(distance);
             }
         }
+        distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
+
 // TODO metrarty 08.03.2021: отсортировать все дистанции по возра
 // TODO metrarty 08.03.2021: если нет грузовика в пункте назначения, найти следуюющий минимальный (из списка дистанций)
 
@@ -114,6 +119,6 @@ public class TruckService {
 
 
 
-        return null;
+        return distanceSuitable;
     }
 }

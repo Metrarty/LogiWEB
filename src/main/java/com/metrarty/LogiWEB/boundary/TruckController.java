@@ -1,6 +1,7 @@
 package com.metrarty.LogiWEB.boundary;
 
 import com.metrarty.LogiWEB.boundary.model.CityDto;
+import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.TruckService;
@@ -65,9 +66,9 @@ public class TruckController {
         return "Truck with ID " + id + " is deleted";
     }
 
-    @GetMapping("/truck/choose/")
-    public TruckDto chooseTruckToDeliver(@RequestBody CityDto cityDto, Long size) {
-        log.info("TruckController.chooseTruckToDeliver was called with {} {}", cityDto, size);
-        return truckService.chooseTruckToDeliver(cityDto, size);
+    @GetMapping("/truck/choose/{id}/{size}/")
+    public List<DistanceDto> chooseTruckToDeliver(@PathVariable Long id, @PathVariable Long size) {
+        log.info("TruckController.chooseTruckToDeliver was called with {} {}", id, size);
+        return truckService.chooseTruckToDeliver(id, size);
     }
 }
