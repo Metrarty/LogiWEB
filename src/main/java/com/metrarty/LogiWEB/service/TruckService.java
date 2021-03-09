@@ -9,6 +9,7 @@ import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
+import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.CookiePolicy;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Truck service.
@@ -30,6 +33,7 @@ public class TruckService {
     private final TruckMapper truckMapper;
     private final DistanceService distanceService;
     private final CityRepository cityRepository;
+    private final CityMapper cityMapper;
 
     /**
      * Creates truck and saves into repository.
@@ -83,11 +87,12 @@ public class TruckService {
         truckRepository.deleteById(id);
     }
 
-    public List<DistanceDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
-        Long minimalDistance = 0L;
-        City city = cityRepository.getOne(id);
+    public List<TruckDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
+        CityDto cityDto = cityMapper.toDto(cityRepository.getOne(id));
+
         //создаем список всех имеющихся грузовиков
         List<TruckDto> allTrucks = findAllTrucks();
+
         //создаем мапу грузовик-город из списка грузовиков, которые подходят по вместимости
         Map<TruckDto, CityDto> trucksSuitable = new HashMap();
         for (TruckDto truck : allTrucks) {
@@ -101,24 +106,31 @@ public class TruckService {
         List<DistanceDto> allDistances = distanceService.findAllDistances();
         List<DistanceDto> distanceSuitable = new ArrayList<>();
         for(DistanceDto distance : allDistances) {
-            if (distance.getCity1().equals(city) || distance.getCity2().equals(city)) {
+            if (distance.getCity1().equals(cityDto) || distance.getCity2().equals(cityDto)) {
                 distanceSuitable.add(distance);
             }
         }
+        //сортируем по возрастанию
         distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
 
-// TODO metrarty 08.03.2021: отсортировать все дистанции по возра
-// TODO metrarty 08.03.2021: если нет грузовика в пункте назначения, найти следуюющий минимальный (из списка дистанций)
+        //добавляем в список машины, которые уже в городе назначения
+        List<TruckDto> trucks = trucksSuitable.entrySet()
+                .stream()
+                .filter(entry ->
+                        entry.getValue().equals(cityDto))
+                .map(Map.Entry::getKey).collect(Collectors.toList());
 
-//        TruckDto result;
-//        List<DistanceDto> sortedDistances = new ArrayList<>();
-//        for (CityDto cityDto : trucksSuitable)
-//        for (DistanceDto distanceDto : distanceSuitable) {
-//            if (distanceDto.getDistance() > minimalDistance)
-//        }
+        //если таких машин нет, то ищем в ближайшем городе
+        if (trucks.isEmpty()) {
+            for (int i = 0; i < distanceSuitable.size(); i++) {
+                for (Map.Entry entry: trucksSuitable.entrySet()) {
+                    if (entry.getValue().equals(distanceSuitable.get(i).getCity1()) || entry.getValue().equals(distanceSuitable.get(i).getCity2())) {
+                        trucks.add((TruckDto) entry.getKey());
+                    }
+                }
+            }
+        }
 
-
-
-        return distanceSuitable;
+        return trucks;
     }
 }

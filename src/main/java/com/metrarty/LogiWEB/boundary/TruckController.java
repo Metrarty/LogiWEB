@@ -67,7 +67,7 @@ public class TruckController {
     }
 
     @GetMapping("/truck/choose/{id}/{size}/")
-    public List<DistanceDto> chooseTruckToDeliver(@PathVariable Long id, @PathVariable Long size) {
+    public List<TruckDto> chooseTruckToDeliver(@PathVariable Long id, @PathVariable Long size) {
         log.info("TruckController.chooseTruckToDeliver was called with {} {}", id, size);
         return truckService.chooseTruckToDeliver(id, size);
     }
