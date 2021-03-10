@@ -32,8 +32,7 @@ public class TruckService {
     private final TruckRepository truckRepository;
     private final TruckMapper truckMapper;
     private final DistanceService distanceService;
-    private final CityRepository cityRepository;
-    private final CityMapper cityMapper;
+    private final CityService cityService;
 
     /**
      * Creates truck and saves into repository.
@@ -88,7 +87,15 @@ public class TruckService {
     }
 
     public List<TruckDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
-        CityDto cityDto = cityMapper.toDto(cityRepository.getOne(id));
+
+        // TODO metrarty 10.03.2021: перенести в city, добавить метод findById и exception handler
+        CityDto cityOrder = cityService.;
+
+        List<DistanceDto> distanceSuitable = prepareSuitableDistances(cityOrder);
+
+
+        //Sort in ascending order
+        distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
 
         //Create list of all available trucks
         List<TruckDto> allTrucks = findAllTrucks();
@@ -102,30 +109,19 @@ public class TruckService {
             }
         }
 
-        //Create a list of all distances between cities,only if they contain the city of the order
-        List<DistanceDto> allDistances = distanceService.findAllDistances();
-        List<DistanceDto> distanceSuitable = new ArrayList<>();
-        for(DistanceDto distance : allDistances) {
-            if (distance.getCity1().equals(cityDto) || distance.getCity2().equals(cityDto)) {
-                distanceSuitable.add(distance);
-            }
-        }
-
-        //Sort in ascending order
-        distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
-
         //Add to the list cars that are already in the destination city
         List<TruckDto> result = trucksSuitable.entrySet()
                 .stream()
                 .filter(entry ->
-                        entry.getValue().equals(cityDto))
+                        entry.getValue().equals(cityOrder))
                 .map(Map.Entry::getKey).collect(Collectors.toList());
 
         //If there are no such cars, looking in the nearest city
         if (result.isEmpty()) {
             for (int i = 0; i < distanceSuitable.size(); i++) {
                 for (Map.Entry entry: trucksSuitable.entrySet()) {
-                    if (entry.getValue().equals(distanceSuitable.get(i).getCity1()) || entry.getValue().equals(distanceSuitable.get(i).getCity2())) {
+                    if (entry.getValue().equals(distanceSuitable.get(i).getCity1()) ||
+                            entry.getValue().equals(distanceSuitable.get(i).getCity2())) {
                         result.add((TruckDto) entry.getKey());
                     }
                 }
@@ -133,4 +129,17 @@ public class TruckService {
         }
         return result;
     }
+
+    private List<DistanceDto> prepareSuitableDistances(CityDto cityOrder) {
+        List<DistanceDto> allDistances = distanceService.findAllDistances();
+        List<DistanceDto> distanceSuitable = new ArrayList<>();
+        for(DistanceDto distance : allDistances) {
+            if (distance.getCity1().equals(cityOrder) || distance.getCity2().equals(cityOrder)) {
+                distanceSuitable.add(distance);
+            }
+        }
+        return distanceSuitable;
+    }
+    // TODO metrarty 10.03.2021: разбить на маленькие методы
+    // TODO metrarty 10.03.2021: посмотреть как в spring ограничить кол-во загружаемых данных из репозитория
 }
