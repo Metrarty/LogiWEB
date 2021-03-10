@@ -90,10 +90,10 @@ public class TruckService {
     public List<TruckDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
         CityDto cityDto = cityMapper.toDto(cityRepository.getOne(id));
 
-        //создаем список всех имеющихся грузовиков
+        //Create list of all available trucks
         List<TruckDto> allTrucks = findAllTrucks();
 
-        //создаем мапу грузовик-город из списка грузовиков, которые подходят по вместимости
+        //Create a map truck - city from the list of trucks that fit the capacity
         Map<TruckDto, CityDto> trucksSuitable = new HashMap();
         for (TruckDto truck : allTrucks) {
             Long value = truck.getCapacity();
@@ -102,7 +102,7 @@ public class TruckService {
             }
         }
 
-        //создаем список всех дистанций между городами, только если они содержат город заказа
+        //Create a list of all distances between cities,only if they contain the city of the order
         List<DistanceDto> allDistances = distanceService.findAllDistances();
         List<DistanceDto> distanceSuitable = new ArrayList<>();
         for(DistanceDto distance : allDistances) {
@@ -110,27 +110,27 @@ public class TruckService {
                 distanceSuitable.add(distance);
             }
         }
-        //сортируем по возрастанию
+
+        //Sort in ascending order
         distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
 
-        //добавляем в список машины, которые уже в городе назначения
-        List<TruckDto> trucks = trucksSuitable.entrySet()
+        //Add to the list cars that are already in the destination city
+        List<TruckDto> result = trucksSuitable.entrySet()
                 .stream()
                 .filter(entry ->
                         entry.getValue().equals(cityDto))
                 .map(Map.Entry::getKey).collect(Collectors.toList());
 
-        //если таких машин нет, то ищем в ближайшем городе
-        if (trucks.isEmpty()) {
+        //If there are no such cars, looking in the nearest city
+        if (result.isEmpty()) {
             for (int i = 0; i < distanceSuitable.size(); i++) {
                 for (Map.Entry entry: trucksSuitable.entrySet()) {
                     if (entry.getValue().equals(distanceSuitable.get(i).getCity1()) || entry.getValue().equals(distanceSuitable.get(i).getCity2())) {
-                        trucks.add((TruckDto) entry.getKey());
+                        result.add((TruckDto) entry.getKey());
                     }
                 }
             }
         }
-
-        return trucks;
+        return result;
     }
 }

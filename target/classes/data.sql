@@ -1,12 +1,18 @@
 INSERT INTO CITY (city_name, created_at) VALUES
-  ('Omsk', now()),
-  ('Tomsk', now()),
-  ('Ufa', now());
+  ('Kiev', now()),
+  ('Moscow', now()),
+  ('Ufa', now()),
+  ('Omsk', now());
 
 INSERT INTO DISTANCE (city1_id, city2_id, distance) VALUES
-('1', '2', '345'),
-('2', '3', '564');
+('1', '2', '857'),
+('1', '3', '2032'),
+('1', '4', '3261'),
+('2', '3', '1355'),
+('2', '4', '2743'),
+('3', '4', '1346');
 
 INSERT INTO TRUCK (capacity, location_id, distance_per_day) VALUES
-('500', '2', '1000'),
-('700', '3', '800');
+('300', '2', '1000'),
+('700', '4', '800'),
+('1000', '2', '1500');
