@@ -39,6 +39,18 @@ public class CityService {
     }
 
     /**
+     * Find city by ID.
+     * @param id city ID
+     * @return city DTO
+     */
+    public CityDto findCityById(@NonNull Long id) {
+        log.info("CityService.findCityBuId was called with {}", id);
+        City city = cityRepository.getOne(id);
+        CityDto cityDto = cityMapper.toDto(city);
+        return cityDto;
+    }
+
+    /**
      * Finds all exist cities.
      * @return List of cities DTO
      */

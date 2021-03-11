@@ -88,26 +88,14 @@ public class TruckService {
 
     public List<TruckDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
 
-        // TODO metrarty 10.03.2021: перенести в city, добавить метод findById и exception handler
-        CityDto cityOrder = cityService.;
+        // TODO metrarty 10.03.2021: добавить exception handler если город не найден
+        CityDto cityOrder = cityService.findCityById(id);
 
-        List<DistanceDto> distanceSuitable = prepareSuitableDistances(cityOrder);
-
-
-        //Sort in ascending order
+        List<DistanceDto> distanceSuitable = distanceService.prepareSuitableDistances(cityOrder);
         distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
 
-        //Create list of all available trucks
         List<TruckDto> allTrucks = findAllTrucks();
-
-        //Create a map truck - city from the list of trucks that fit the capacity
-        Map<TruckDto, CityDto> trucksSuitable = new HashMap();
-        for (TruckDto truck : allTrucks) {
-            Long value = truck.getCapacity();
-            if (value >= size) {
-                trucksSuitable.put(truck, truck.getLocation());
-            }
-        }
+        Map<TruckDto, CityDto> trucksSuitable = prepareSuitableTrucksMap(allTrucks, size);
 
         //Add to the list cars that are already in the destination city
         List<TruckDto> result = trucksSuitable.entrySet()
@@ -118,28 +106,29 @@ public class TruckService {
 
         //If there are no such cars, looking in the nearest city
         if (result.isEmpty()) {
-            for (int i = 0; i < distanceSuitable.size(); i++) {
-                for (Map.Entry entry: trucksSuitable.entrySet()) {
-                    if (entry.getValue().equals(distanceSuitable.get(i).getCity1()) ||
-                            entry.getValue().equals(distanceSuitable.get(i).getCity2())) {
-                        result.add((TruckDto) entry.getKey());
+            for (DistanceDto distanceDto : distanceSuitable) {
+                trucksSuitable.forEach((key, value) -> {
+                    if (value.equals(distanceDto.getCity1()) ||
+                            value.equals(distanceDto.getCity2())) {
+                        result.add((TruckDto) key);
                     }
-                }
+                });
             }
         }
         return result;
     }
 
-    private List<DistanceDto> prepareSuitableDistances(CityDto cityOrder) {
-        List<DistanceDto> allDistances = distanceService.findAllDistances();
-        List<DistanceDto> distanceSuitable = new ArrayList<>();
-        for(DistanceDto distance : allDistances) {
-            if (distance.getCity1().equals(cityOrder) || distance.getCity2().equals(cityOrder)) {
-                distanceSuitable.add(distance);
+    private Map<TruckDto, CityDto> prepareSuitableTrucksMap(List<TruckDto> allTrucks, Long size) {
+        Map<TruckDto, CityDto> trucksSuitable = new HashMap();
+        for (TruckDto truck : allTrucks) {
+            Long value = truck.getCapacity();
+            if (value >= size) {
+                trucksSuitable.put(truck, truck.getLocation());
             }
         }
-        return distanceSuitable;
+        return trucksSuitable;
     }
+
     // TODO metrarty 10.03.2021: разбить на маленькие методы
     // TODO metrarty 10.03.2021: посмотреть как в spring ограничить кол-во загружаемых данных из репозитория
 }
