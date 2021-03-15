@@ -27,7 +27,11 @@ public class CityMapper {
         return entity;
     }
 
-
+    /**
+     * Transfers data from city DTO to city
+     * @param cityDto city DTO
+     * @return city
+     */
     public City toEntity(CityDto cityDto) {
         City entity = new City();
         entity.setId(cityDto.getId());
@@ -62,5 +66,4 @@ public class CityMapper {
     protected Instant getNow() {
         return Instant.now();
     }
-
 }
