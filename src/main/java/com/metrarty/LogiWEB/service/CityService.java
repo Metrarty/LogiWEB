@@ -33,7 +33,6 @@ public class CityService {
     public CityDto createCity(@NonNull CityDto cityDto) {
         log.info("CityService.createCity was called with {}", cityDto);
         City entity = cityMapper.toEntityWithCreatedAt(cityDto);
-
         cityRepository.save(entity);
         return cityMapper.toDto(entity);
     }
@@ -46,8 +45,7 @@ public class CityService {
     public CityDto findCityById(@NonNull Long id) {
         log.info("CityService.findCityBuId was called with {}", id);
         City city = cityRepository.getOne(id);
-        CityDto cityDto = cityMapper.toDto(city);
-        return cityDto;
+        return cityMapper.toDto(city);
     }
 
     /**

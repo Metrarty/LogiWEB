@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class TruckMapper {
 
-    private CityMapper cityMapper;
+    private final CityMapper cityMapper;
 
     @Autowired
     public TruckMapper(CityMapper cityMapper) {

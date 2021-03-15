@@ -66,6 +66,12 @@ public class TruckController {
         return "Truck with ID " + id + " is deleted";
     }
 
+    /**
+     * Creates list of trucks that are in the order city, if absent - adds trucks from nearest cities.
+     * @param id order city DTO ID
+     * @param size order size
+     * @return list trucks DTO
+     */
     @GetMapping("/truck/choose/{id}/{size}/")
     public List<TruckDto> chooseTruckToDeliver(@PathVariable Long id, @PathVariable Long size) {
         log.info("TruckController.chooseTruckToDeliver was called with {} {}", id, size);

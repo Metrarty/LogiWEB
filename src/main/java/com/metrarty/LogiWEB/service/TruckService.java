@@ -3,13 +3,9 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
-import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.TruckRepository;
-import com.metrarty.LogiWEB.repository.entity.City;
-import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
-import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.CookiePolicy;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Truck service.
@@ -86,40 +80,30 @@ public class TruckService {
         truckRepository.deleteById(id);
     }
 
+    /**
+     * Creates list of trucks that are in the order city, if absent - adds trucks from nearest cities.
+     * @param id order city DTO ID
+     * @param size order size
+     * @return list trucks DTO
+     */
     public List<TruckDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
 
-        // TODO metrarty 10.03.2021: добавить exception handler если город не найден
         CityDto cityOrder = cityService.findCityById(id);
-
-        List<DistanceDto> distanceSuitable = distanceService.prepareSuitableDistances(cityOrder);
-        distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
 
         List<TruckDto> allTrucks = findAllTrucks();
         Map<TruckDto, CityDto> trucksSuitable = prepareSuitableTrucksMap(allTrucks, size);
+        List<TruckDto> result = checkIfTruckIsInCityOrder(trucksSuitable, cityOrder);
 
-        //Add to the list cars that are already in the destination city
-        List<TruckDto> result = trucksSuitable.entrySet()
-                .stream()
-                .filter(entry ->
-                        entry.getValue().equals(cityOrder))
-                .map(Map.Entry::getKey).collect(Collectors.toList());
-
-        //If there are no such cars, looking in the nearest city
         if (result.isEmpty()) {
-            for (DistanceDto distanceDto : distanceSuitable) {
-                trucksSuitable.forEach((key, value) -> {
-                    if (value.equals(distanceDto.getCity1()) ||
-                            value.equals(distanceDto.getCity2())) {
-                        result.add((TruckDto) key);
-                    }
-                });
-            }
+            List<DistanceDto> distanceSuitable = distanceService.prepareSuitableDistances(cityOrder);
+            distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
+            addToResultNearestTrucks(result, distanceSuitable, trucksSuitable);
         }
         return result;
     }
 
     private Map<TruckDto, CityDto> prepareSuitableTrucksMap(List<TruckDto> allTrucks, Long size) {
-        Map<TruckDto, CityDto> trucksSuitable = new HashMap();
+        Map<TruckDto, CityDto> trucksSuitable = new HashMap<>();
         for (TruckDto truck : allTrucks) {
             Long value = truck.getCapacity();
             if (value >= size) {
@@ -129,6 +113,26 @@ public class TruckService {
         return trucksSuitable;
     }
 
-    // TODO metrarty 10.03.2021: разбить на маленькие методы
-    // TODO metrarty 10.03.2021: посмотреть как в spring ограничить кол-во загружаемых данных из репозитория
+    private List<TruckDto> checkIfTruckIsInCityOrder(Map<TruckDto, CityDto> trucksSuitable, CityDto cityOrder) {
+        List<TruckDto> trucks = new ArrayList<>();
+        for (Map.Entry<TruckDto, CityDto> entry : trucksSuitable.entrySet()) {
+            if (entry.getValue().equals(cityOrder)) {
+                TruckDto key = entry.getKey();
+                trucks.add(key);
+            }
+        }
+        return trucks;
+    }
+
+    private void addToResultNearestTrucks(List<TruckDto> result, List<DistanceDto> distanceSuitable, Map<TruckDto, CityDto> trucksSuitable) {
+        for (DistanceDto distanceDto : distanceSuitable) {
+            for (Map.Entry<TruckDto, CityDto> entry : trucksSuitable.entrySet()) {
+                TruckDto key = entry.getKey();
+                CityDto value = entry.getValue();
+                if (value.equals(distanceDto.getCity1()) || value.equals(distanceDto.getCity2())) {
+                    result.add(key);
+                }
+            }
+        }
+    }
 }

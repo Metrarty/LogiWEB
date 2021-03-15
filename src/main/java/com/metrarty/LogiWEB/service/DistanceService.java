@@ -67,7 +67,6 @@ public class DistanceService {
         }
         return distanceSuitable;
     }
-    // TODO metrarty 11.03.2021: написать тест для метода prepareSuitableDistances
 
     /**
      * Edits distance with exact ID.
