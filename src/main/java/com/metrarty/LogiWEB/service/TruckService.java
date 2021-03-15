@@ -81,12 +81,12 @@ public class TruckService {
     }
 
     /**
-     * Creates list of trucks that are in the order city, if absent - adds trucks from nearest cities.
-     * @param id order city DTO ID
+     * Find suitable truck that is in the order city, if absent - finds from nearest city.
+     * @param id order city DTO id
      * @param size order size
-     * @return list trucks DTO
+     * @return truck DTO
      */
-    public List<TruckDto> chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
+    public TruckDto chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
 
         CityDto cityOrder = cityService.findCityById(id);
 
@@ -99,7 +99,7 @@ public class TruckService {
             distanceSuitable.sort(Comparator.comparingLong(DistanceDto::getDistance));
             addToResultNearestTrucks(result, distanceSuitable, trucksSuitable);
         }
-        return result;
+        return result.get(0);
     }
 
     private Map<TruckDto, CityDto> prepareSuitableTrucksMap(List<TruckDto> allTrucks, Long size) {
