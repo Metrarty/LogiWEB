@@ -13,15 +13,10 @@ INSERT INTO DISTANCE (city1_id, city2_id, distance) VALUES
 ('3', '4', '1346');
 
 INSERT INTO TRUCK (capacity, location_id, distance_per_day) VALUES
-<<<<<<< HEAD
-('500', '2', '1000'),
-('700', '3', '800');
+('300', '2', '1000'),
+('700', '4', '800'),
+('1000', '2', '1500');
 
 INSERT INTO CARGO (size, created_at) VALUES
 ('1130', now()),
 ('570', now());
-=======
-('300', '2', '1000'),
-('700', '4', '800'),
-('1000', '2', '1500');
->>>>>>> origin/ticket9
