@@ -10,3 +10,7 @@ INSERT INTO DISTANCE (city1_id, city2_id, distance) VALUES
 INSERT INTO TRUCK (capacity, location_id, distance_per_day) VALUES
 ('500', '2', '1000'),
 ('700', '3', '800');
+
+INSERT INTO CARGO (size, created_at) VALUES
+('1130', now()),
+('570', now());
