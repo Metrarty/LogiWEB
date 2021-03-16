@@ -1,5 +1,6 @@
 package com.metrarty.LogiWEB.service;
 
+import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
@@ -49,6 +50,22 @@ public class DistanceService {
             result.add(distanceDto);
         }
         return result;
+    }
+
+    /**
+     * Prepare list of suitable distances that includes city of order.
+     * @param cityOrder order city DTO
+     * @return list of distances
+     */
+    public List<DistanceDto> prepareSuitableDistances(CityDto cityOrder) {
+        List<DistanceDto> allDistances = findAllDistances();
+        List<DistanceDto> distanceSuitable = new ArrayList<>();
+        for(DistanceDto distance : allDistances) {
+            if (distance.getCity1().equals(cityOrder) || distance.getCity2().equals(cityOrder)) {
+                distanceSuitable.add(distance);
+            }
+        }
+        return distanceSuitable;
     }
 
     /**
