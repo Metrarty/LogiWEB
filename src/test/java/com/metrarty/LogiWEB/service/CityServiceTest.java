@@ -53,6 +53,24 @@ public class CityServiceTest {
     }
 
     @Test
+    public void testFindCityById() {
+        //prepare
+        City city = new City();
+        when(cityRepositoryMock.getOne(1L)).thenReturn(city);
+        CityDto cityDto = new CityDto();
+        when(cityMapperMock.toDto(city)).thenReturn(cityDto);
+
+        //test
+        cityService.findCityById(1L);
+
+        //run
+        verify(cityRepositoryMock, times(1)).getOne(1L);
+        verify(cityMapperMock, times(1)).toDto(city);
+        verifyNoMoreInteractions(cityRepositoryMock, cityMapperMock);
+
+    }
+
+    @Test
     public void testFindAllCities() {
         //prepare
         City city = new City();
@@ -97,8 +115,7 @@ public class CityServiceTest {
         verify(cityRepositoryMock, times(1)).findById(1L);
         verify(cityRepositoryMock, times(1)).save(saved);
         verify(cityMapperMock, times(1)).toDto(saved);
-        verifyNoMoreInteractions(cityRepositoryMock);
-        verifyNoMoreInteractions(cityMapperMock);
+        verifyNoMoreInteractions(cityRepositoryMock, cityMapperMock);
     }
 
 
@@ -116,6 +133,7 @@ public class CityServiceTest {
 
         //run
         cityService.editCity(input, 1L);
+        verifyNoMoreInteractions(cityRepositoryMock, cityMapperMock);
     }
 
     @Test(expected = NullPointerException.class)

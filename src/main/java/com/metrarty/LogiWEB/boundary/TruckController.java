@@ -1,5 +1,7 @@
 package com.metrarty.LogiWEB.boundary;
 
+import com.metrarty.LogiWEB.boundary.model.CityDto;
+import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.TruckService;
@@ -62,5 +64,17 @@ public class TruckController {
         log.info("TruckController.deleteTruckById was called with {}", id);
         truckService.deleteTruckById(id);
         return "Truck with ID " + id + " is deleted";
+    }
+
+    /**
+     * Find suitable truck that is in the order city, if absent - finds from nearest city.
+     * @param id order city DTO id
+     * @param size order size
+     * @return truck DTO
+     */
+    @GetMapping("/truck/choose/{id}/{size}/")
+    public TruckDto chooseTruckToDeliver(@PathVariable Long id, @PathVariable Long size) {
+        log.info("TruckController.chooseTruckToDeliver was called with {} {}", id, size);
+        return truckService.chooseTruckToDeliver(id, size);
     }
 }

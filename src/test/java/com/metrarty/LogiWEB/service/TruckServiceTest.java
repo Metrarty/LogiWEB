@@ -43,7 +43,6 @@ public class TruckServiceTest {
         //test
         verify(truckRepository, times(1)).save(testTruck);
         verifyNoMoreInteractions(truckRepository);
-        verifyNoMoreInteractions(truckMapper);
     }
 
     @Test(expected = NullPointerException.class)
@@ -69,7 +68,6 @@ public class TruckServiceTest {
         Assert.assertEquals("Must be equal", expectedDto, actual.get(0));
         verify(truckRepository, times(1)).findAll();
         verifyNoMoreInteractions(truckRepository);
-        verifyNoMoreInteractions(truckMapper);
     }
 
     @Test

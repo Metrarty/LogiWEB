@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class DistanceMapper {
 
-    private CityMapper cityMapper;
+    private final CityMapper cityMapper;
 
     @Autowired
     public DistanceMapper(CityMapper cityMapper) {
