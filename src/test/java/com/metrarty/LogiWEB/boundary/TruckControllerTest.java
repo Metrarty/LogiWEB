@@ -48,4 +48,11 @@ public class TruckControllerTest {
         verify(truckService, times(1)).deleteTruckById(1L);
         verifyNoMoreInteractions(truckService);
     }
+
+    @Test
+    public void testChooseTrucktoDeliver() {
+        truckController.chooseTruckToDeliver(1L, 100L);
+        verify(truckService, times(1)).chooseTruckToDeliver(1L, 100L);
+        verifyNoMoreInteractions(truckService);
+    }
 }
