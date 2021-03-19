@@ -17,6 +17,9 @@ INSERT INTO TRUCK (capacity, location_id, distance_per_day) VALUES
 ('700', '4', '800'),
 ('1000', '2', '1500');
 
-INSERT INTO CARGO (size, created_at) VALUES
-('1130', now()),
-('570', now());
+INSERT INTO CARGO (size) VALUES
+('1130'),
+('570');
+
+INSERT INTO ORDERS (cargo_id, destination_id, created_at) VALUES
+('1', '1', now());

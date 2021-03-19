@@ -2,7 +2,7 @@ package com.metrarty.LogiWEB.service.mapper;
 
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
-import com.metrarty.LogiWEB.repository.entity.Order;
+import com.metrarty.LogiWEB.repository.entity.Orders;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class OrderMapper {
      * @param order order
      * @return order DTO
      */
-    public OrderDto toDto(@NonNull Order order) {
+    public OrderDto toDto(@NonNull Orders order) {
         log.info("OrderMapper.toDto was called with {}", order);
         OrderDto dto = new OrderDto();
         dto.setId(order.getId());
@@ -43,9 +43,9 @@ public class OrderMapper {
      * @param orderDto
      * @return
      */
-    public Order toEntity(@NonNull OrderDto orderDto) {
+    public Orders toEntity(@NonNull OrderDto orderDto) {
         log.info("OrderMapper.toEntity was called with {}", orderDto);
-        Order entity = new Order();
+        Orders entity = new Orders();
         entity.setId(orderDto.getId());
         entity.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         entity.setDestination(cityMapper.toEntity(orderDto.getDestination()));
@@ -58,9 +58,9 @@ public class OrderMapper {
      * @param orderDto order DTO
      * @return order
      */
-    public Order toEntityWithCreatedAt(@NonNull OrderDto orderDto) {
+    public Orders toEntityWithCreatedAt(@NonNull OrderDto orderDto) {
         log.info("OrderMapper.toInitialEntity was called with {}", orderDto);
-        Order entity = toEntity(orderDto);
+        Orders entity = toEntity(orderDto);
         entity.setCreatedAt(getNow());
         return entity;
     }
@@ -70,9 +70,9 @@ public class OrderMapper {
      * @param orderDto
      * @return
      */
-    public Order toEntityWithChangedAt(@NonNull OrderDto orderDto) {
+    public Orders toEntityWithChangedAt(@NonNull OrderDto orderDto) {
         log.info("OrderMapper.toUpdatedEntity was called with {}", orderDto);
-        Order entity = toEntity(orderDto);
+        Orders entity = toEntity(orderDto);
         entity.setChangedAt(getNow());
         return entity;
     }

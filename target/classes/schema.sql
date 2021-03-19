@@ -27,7 +27,13 @@ distance_per_day BIGINT
 
 CREATE TABLE CARGO (
  id BIGINT AUTO_INCREMENT PRIMARY KEY,
-  size BIGINT,
+  size BIGINT
+);
+
+CREATE TABLE ORDERS (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  cargo_id BIGINT,
+  destination_id BIGINT,
   delivery_date DATE,
   created_at TIMESTAMP NOT NULL,
   changed_at TIMESTAMP
