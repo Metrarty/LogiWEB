@@ -2,7 +2,7 @@ package com.metrarty.LogiWEB.service;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
-import com.metrarty.LogiWEB.repository.entity.Orders;
+import com.metrarty.LogiWEB.repository.entity.Order;
 import com.metrarty.LogiWEB.service.exception.OrderNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
 import lombok.NonNull;
@@ -29,7 +29,7 @@ public class OrderService {
      */
     public OrderDto createOrder(@NonNull OrderDto orderDto) {
         log.info("OrderService.createOrder was called with {}", orderDto);
-        Orders entity = orderMapper.toEntityWithCreatedAt(orderDto);
+        Order entity = orderMapper.toEntityWithCreatedAt(orderDto);
         orderRepository.save(entity);
         return orderMapper.toDto(entity);
     }
@@ -40,9 +40,9 @@ public class OrderService {
      */
     public List<OrderDto> findAllOrders() {
         log.info("OrderService.findAllOrders was called");
-        List<Orders> entities = orderRepository.findAll();
+        List<Order> entities = orderRepository.findAll();
         List<OrderDto> result = new ArrayList<>();
-        for (Orders order : entities) {
+        for (Order order : entities) {
             OrderDto orderDto = orderMapper.toDto(order);
             result.add(orderDto);
         }
@@ -57,14 +57,14 @@ public class OrderService {
      */
     public OrderDto editOrder(@NonNull OrderDto orderDto, @NonNull Long id) {
         log.info("OrderService.editOrder was called with {} {}", orderDto, id);
-        Orders order = orderMapper.toEntityWithChangedAt(orderDto);
+        Order order = orderMapper.toEntityWithChangedAt(orderDto);
 
-        Orders entity = orderRepository.findById(id)
+        Order entity = orderRepository.findById(id)
                 .orElseThrow(()-> new OrderNotFoundException("Order with ID " + id + " is not found"));
 
         order.setCreatedAt(entity.getCreatedAt());
         order.setId(entity.getId());
-        Orders saved = orderRepository.save(order);
+        Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
 
