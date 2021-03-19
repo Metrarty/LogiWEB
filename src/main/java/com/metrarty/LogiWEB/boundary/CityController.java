@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
 public class CityController {
+
     private final CityService cityService;
 
     /**

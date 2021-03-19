@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -18,7 +19,7 @@ public class Order {
     @OneToOne
     private City destination;
     @Column
-    private Date deliveryDate;
+    private LocalDate deliveryDate;
     @Column(updatable = false)
     @NotNull
     private Instant createdAt;

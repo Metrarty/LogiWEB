@@ -23,7 +23,11 @@ public class OrderMapper {
         this.cityMapper = cityMapper;
     }
 
-
+    /**
+     * Transfers data from order to order DTO.
+     * @param order order
+     * @return order DTO
+     */
     public OrderDto toDto(@NonNull Order order) {
         log.info("OrderMapper.toDto was called with {}", order);
         OrderDto dto = new OrderDto();
@@ -34,6 +38,11 @@ public class OrderMapper {
         return dto;
     }
 
+    /**
+     * Transfers data from order DTO to order
+     * @param orderDto
+     * @return
+     */
     public Order toEntity(@NonNull OrderDto orderDto) {
         log.info("OrderMapper.toEntity was called with {}", orderDto);
         Order entity = new Order();
@@ -44,6 +53,11 @@ public class OrderMapper {
         return entity;
     }
 
+    /**
+     * Creates order, transfers common fields from order DTO to order and sets createdAt time.
+     * @param orderDto order DTO
+     * @return order
+     */
     public Order toEntityWithCreatedAt(@NonNull OrderDto orderDto) {
         log.info("OrderMapper.toInitialEntity was called with {}", orderDto);
         Order entity = toEntity(orderDto);
@@ -51,6 +65,11 @@ public class OrderMapper {
         return entity;
     }
 
+    /**
+     * Creates order, transfers common fields from order DTO to order and sets changedAt time.
+     * @param orderDto
+     * @return
+     */
     public Order toEntityWithChangedAt(@NonNull OrderDto orderDto) {
         log.info("OrderMapper.toUpdatedEntity was called with {}", orderDto);
         Order entity = toEntity(orderDto);
