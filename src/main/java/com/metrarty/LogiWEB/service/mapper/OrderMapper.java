@@ -18,9 +18,10 @@ public class OrderMapper {
     private final CityMapper cityMapper;
 
     @Autowired
-    public OrderMapper(CargoMapper cargoMapper, CityMapper cityMapper) {
-        this.cargoMapper = cargoMapper;
+    public OrderMapper(CityMapper cityMapper,CargoMapper cargoMapper) {
         this.cityMapper = cityMapper;
+        this.cargoMapper = cargoMapper;
+
     }
 
     /**
