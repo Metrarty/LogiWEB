@@ -52,7 +52,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testFindAllCargos() {
+    public void testFindAllOrders() {
         //prepare
         Order order = new Order();
         List<Order> orders = Collections.singletonList(order);
