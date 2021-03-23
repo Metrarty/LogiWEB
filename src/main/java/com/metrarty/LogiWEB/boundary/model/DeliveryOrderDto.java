@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Data
-public class OrderDto {
+public class DeliveryOrderDto {
     private Long id;
     private CargoDto cargo;
     private CityDto destination;
