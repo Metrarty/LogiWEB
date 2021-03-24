@@ -4,6 +4,7 @@ import com.metrarty.LogiWEB.service.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Rest exception handler.
@@ -63,6 +64,11 @@ public class RestExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<String> handle(CargoSizeIsInvalidException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(DistanceIsInvalidException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }

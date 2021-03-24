@@ -1,4 +1,4 @@
-package com.metrarty.LogiWEB.service;
+package com.metrarty.LogiWEB.service.validator;
 
 import com.metrarty.LogiWEB.service.exception.CargoSizeIsInvalidException;
 import org.springframework.stereotype.Component;

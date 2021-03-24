@@ -4,8 +4,11 @@ import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
+import com.metrarty.LogiWEB.service.exception.DistanceIsInvalidException;
 import com.metrarty.LogiWEB.service.exception.DistanceNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
+import com.metrarty.LogiWEB.service.validator.CityExistenceValidator;
+import com.metrarty.LogiWEB.service.validator.DistanceValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +27,8 @@ import java.util.List;
 public class DistanceService {
     private final DistanceRepository distanceRepository;
     private final DistanceMapper distanceMapper;
+    private final DistanceValidator distanceValidator;
+    private final CityService cityService;
 
     /**
      * Creates distance and saves into repository.
@@ -32,6 +37,9 @@ public class DistanceService {
      */
     public Distance createDistance(@NonNull DistanceDto distanceDto) {
         log.info("DistanceService.createDistance was called with {}", distanceDto);
+        distanceValidator.apply(distanceDto.getDistance());
+        cityService.findCityById(distanceDto.getCity1().getId());
+        cityService.findCityById(distanceDto.getCity2().getId());
         Distance entity = distanceMapper.toEntity(distanceDto);
         distanceRepository.save(entity);
         return entity;
