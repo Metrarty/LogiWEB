@@ -44,7 +44,11 @@ public class CityService {
      */
     public CityDto findCityById(@NonNull Long id) {
         log.info("CityService.findCityBuId was called with {}", id);
+        if (!cityRepository.existsById(id)) {
+            throw new CityNotFoundException("City with ID " + id + " is not found");
+        }
         City city = cityRepository.getOne(id);
+
         return cityMapper.toDto(city);
     }
 
