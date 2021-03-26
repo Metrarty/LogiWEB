@@ -98,6 +98,7 @@ public class DistanceService {
      */
     public void deleteDistanceById(@NonNull Long id) {
         log.info("DistanceService.deleteDistanceById was called with {}", id);
+        distanceValidator.checkExistence(id);
         distanceRepository.deleteById(id);
     }
 }

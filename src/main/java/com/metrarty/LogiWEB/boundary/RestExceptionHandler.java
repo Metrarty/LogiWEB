@@ -71,4 +71,5 @@ public class RestExceptionHandler {
     public ResponseEntity<String> handle(DistanceIsInvalidException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
 }
