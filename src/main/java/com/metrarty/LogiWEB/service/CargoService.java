@@ -5,6 +5,7 @@ import com.metrarty.LogiWEB.repository.CargoRepository;
 import com.metrarty.LogiWEB.repository.entity.Cargo;
 import com.metrarty.LogiWEB.service.exception.CargoNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CargoMapper;
+import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +22,7 @@ public class CargoService {
 
     private final CargoRepository cargoRepository;
     private final CargoMapper cargoMapper;
+    private final CargoValidator cargoValidator;
 
     /**
      * Creates cargo and saves into repository.
@@ -29,6 +31,7 @@ public class CargoService {
      */
     public CargoDto createCargo(@NonNull CargoDto cargoDto) {
         log.info("CargoService.createCargo was called with {}", cargoDto);
+        cargoValidator.apply(cargoDto.getSize());
         Cargo entity = cargoMapper.toEntityWithCreatedAt(cargoDto);
         cargoRepository.save(entity);
         return cargoMapper.toDto(entity);
@@ -74,6 +77,7 @@ public class CargoService {
      */
     public void deleteCargoById(@NonNull Long id) {
         log.info("CargoService.deleteCargoById was called with {}", id);
+        cargoValidator.checkCargoExistence(id);
         cargoRepository.deleteById(id);
     }
 }

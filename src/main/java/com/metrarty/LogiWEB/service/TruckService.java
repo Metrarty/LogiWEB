@@ -7,7 +7,7 @@ import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
-import com.metrarty.LogiWEB.service.validator.CargoSizeValidator;
+import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +28,7 @@ public class TruckService {
     private final TruckMapper truckMapper;
     private final DistanceService distanceService;
     private final CityService cityService;
-    private  final CargoSizeValidator cargoSizeValidator;
+    private  final CargoValidator cargoValidator;
 
     /**
      * Creates truck and saves into repository.
@@ -89,7 +89,7 @@ public class TruckService {
      * @return truck DTO
      */
     public TruckDto chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
-        cargoSizeValidator.apply(size);
+        cargoValidator.apply(size);
 
         CityDto cityOrder = cityService.findCityById(id);
 
