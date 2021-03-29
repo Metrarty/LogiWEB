@@ -5,7 +5,7 @@ import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
-import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import com.metrarty.LogiWEB.service.validator.CityValidator;
@@ -77,7 +77,7 @@ public class TruckService {
         cityValidator.checkCityExistence(truckDto.getLocation().getId());
         Truck truck = truckMapper.toEntity(truckDto);
         Truck entity = truckRepository.findById(id)
-                .orElseThrow(()-> new TruckNotFoundException("Truck with ID " + id + " is not found"));
+                .orElseThrow(()-> new ItemNotFoundException("Truck with ID " + id + " is not found"));
         truck.setId(entity.getId());
         Truck saved = truckRepository.save(truck);
         return truckMapper.toDto(saved);
@@ -100,7 +100,7 @@ public class TruckService {
      * @return truck DTO
      */
     public TruckDto chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
-        cargoValidator.apply(size);
+        cargoValidator.checkCargo(size);
         cityValidator.checkCityExistence(id);
 
         CityDto cityOrder = cityService.findCityById(id);

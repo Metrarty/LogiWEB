@@ -1,8 +1,8 @@
 package com.metrarty.LogiWEB.service.validator;
 
 import com.metrarty.LogiWEB.repository.TruckRepository;
-import com.metrarty.LogiWEB.service.exception.CargoSizeIsInvalidException;
-import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ValueIsInvalidException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,33 +14,33 @@ public class TruckValidator {
     }
 
     /**
-     * Throws (@link CargoSizeIsInvalidException) if capacity less or equal null.
+     * Throws (@link ValueIsInvalidException) if capacity less or equal null.
      * @param capacity
      */
     public void checkCapacitySize(Long capacity) {
         if (isCapacityLessOrEqualNull(capacity)) {
-            throw new CargoSizeIsInvalidException("Capacity size is invalid");
+            throw new ValueIsInvalidException("Capacity size is invalid");
         }
     }
 
 
     /**
-     * Throws (@link CargoSizeIsInvalidException) if capacity less or equal null.
+     * Throws (@link ValueIsInvalidException) if distance per day less or equal null.
      * @param distancePerDay
      */
     public void checkDistancePerDay(Long distancePerDay) {
         if (isDistancePerDayLessOrEqualNull(distancePerDay)) {
-            throw new CargoSizeIsInvalidException("Distance per day size is invalid");
+            throw new ValueIsInvalidException("Distance per day size is invalid");
         }
     }
 
     /**
-     *
+     * Throws (@link ItemNotFoundException) if distance per day less or equal null.
      * @param id
      */
     public void checkTruckExistence(Long id) {
         if(!isTruckExists(id)) {
-            throw new TruckNotFoundException("Truck with ID " + id + " is not found.");
+            throw new ItemNotFoundException("Truck with ID " + id + " is not found.");
         }
     }
 

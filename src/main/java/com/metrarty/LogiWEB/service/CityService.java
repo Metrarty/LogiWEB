@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
-import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import com.metrarty.LogiWEB.service.validator.CityValidator;
 import lombok.NonNull;
@@ -77,7 +77,7 @@ public class CityService {
         City city = cityMapper.toEntityWithChangedAt(cityDto);
 
         City entity = cityRepository.findById(id)
-                .orElseThrow(()-> new CityNotFoundException("City with ID " + id + " is not found"));
+                .orElseThrow(()-> new ItemNotFoundException("City with ID " + id + " is not found"));
 
         city.setCreatedAt(entity.getCreatedAt());
         city.setId(entity.getId());

@@ -4,7 +4,7 @@ import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
-import com.metrarty.LogiWEB.service.exception.DistanceNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
 import com.metrarty.LogiWEB.service.validator.CityValidator;
 import com.metrarty.LogiWEB.service.validator.DistanceValidator;
@@ -83,10 +83,13 @@ public class DistanceService {
      */
     public DistanceDto editDistance(@NonNull DistanceDto distanceDto, @NonNull Long id) {
         log.info("DistanceService.editDistance was called with {}", id);
+        distanceValidator.checkDistance(distanceDto.getDistance());
+        cityValidator.checkCityExistence(distanceDto.getCity1().getId());
+        cityValidator.checkCityExistence(distanceDto.getCity2().getId());
 
         Distance distance = distanceMapper.toEntity(distanceDto);
         Distance entity = distanceRepository.findById(id)
-                .orElseThrow(()-> new DistanceNotFoundException("Distance with ID " + id + " is not found"));
+                .orElseThrow(()-> new ItemNotFoundException("Distance with ID " + id + " is not found"));
         distance.setId(entity.getId());
         Distance saved = distanceRepository.save(distance);
         return distanceMapper.toDto(saved);

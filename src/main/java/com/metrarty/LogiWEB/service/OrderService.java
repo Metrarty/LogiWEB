@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
-import com.metrarty.LogiWEB.service.exception.OrderNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
 import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import com.metrarty.LogiWEB.service.validator.CityValidator;
@@ -70,7 +70,7 @@ public class OrderService {
         Order order = orderMapper.toEntityWithChangedAt(orderDto);
 
         Order entity = orderRepository.findById(id)
-                .orElseThrow(()-> new OrderNotFoundException("Order with ID " + id + " is not found"));
+                .orElseThrow(()-> new ItemNotFoundException("Order with ID " + id + " is not found"));
 
         order.setCreatedAt(entity.getCreatedAt());
         order.setId(entity.getId());

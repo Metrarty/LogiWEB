@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CargoDto;
 import com.metrarty.LogiWEB.repository.CargoRepository;
 import com.metrarty.LogiWEB.repository.entity.Cargo;
-import com.metrarty.LogiWEB.service.exception.CargoNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CargoMapper;
 import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import lombok.NonNull;
@@ -31,7 +31,7 @@ public class CargoService {
      */
     public CargoDto createCargo(@NonNull CargoDto cargoDto) {
         log.info("CargoService.createCargo was called with {}", cargoDto);
-        cargoValidator.apply(cargoDto.getSize());
+        cargoValidator.checkCargo(cargoDto.getSize());
         Cargo entity = cargoMapper.toEntityWithCreatedAt(cargoDto);
         cargoRepository.save(entity);
         return cargoMapper.toDto(entity);
@@ -60,11 +60,11 @@ public class CargoService {
      */
     public CargoDto editCargo(@NonNull CargoDto cargoDto, @NonNull Long id) {
         log.info("CargoService.editCargo was called with {} {}", cargoDto, id);
-        cargoValidator.apply(cargoDto.getSize());
+        cargoValidator.checkCargo(cargoDto.getSize());
         Cargo cargo = cargoMapper.toEntityWithChangedAt(cargoDto);
 
         Cargo entity = cargoRepository.findById(id)
-                .orElseThrow(()-> new CargoNotFoundException("Cargo with ID " + id + " is not found"));
+                .orElseThrow(()-> new ItemNotFoundException("Cargo with ID " + id + " is not found"));
 
         cargo.setCreatedAt(entity.getCreatedAt());
         cargo.setId(entity.getId());

@@ -1,8 +1,8 @@
 package com.metrarty.LogiWEB.service.validator;
 
 import com.metrarty.LogiWEB.repository.CargoRepository;
-import com.metrarty.LogiWEB.service.exception.CargoNotFoundException;
-import com.metrarty.LogiWEB.service.exception.CargoSizeIsInvalidException;
+import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
+import com.metrarty.LogiWEB.service.exception.ValueIsInvalidException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,22 +15,22 @@ public class CargoValidator {
     }
 
     /**
-     * Throws (@link CargoSizeIsInvalidException) if cargo size if less or equal null.
+     * Throws (@link ValueIsInvalidException) if cargo size if less or equal null.
      * @param size Cargo size
      */
-    public void apply(Long size) {
+    public void checkCargo(Long size) {
         if (isSizeLessOrEqualNull(size)) {
-            throw new CargoSizeIsInvalidException("Cargo size is invalid");
+            throw new ValueIsInvalidException("Cargo size is invalid");
         }
     }
 
     /**
-     * Throws (@link CargoNotFoundException) if cargo with ID is not exists.
+     * Throws (@link ItemNotFoundException) if cargo with ID is not exists.
      * @param id cargo ID
      */
     public void checkCargoExistence(Long id) {
         if (!isCargoExists(id)) {
-            throw new CargoNotFoundException("Cargo with ID " + id + " is not found");
+            throw new ItemNotFoundException("Cargo with ID " + id + " is not found");
         }
     }
 
