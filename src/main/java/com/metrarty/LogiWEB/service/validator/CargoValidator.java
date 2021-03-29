@@ -14,21 +14,28 @@ public class CargoValidator {
         this.cargoRepository = cargoRepository;
     }
 
-
+    /**
+     * Throws (@link CargoSizeIsInvalidException) if cargo size if less or equal null.
+     * @param size Cargo size
+     */
     public void apply(Long size) {
         if (isSizeLessOrEqualNull(size)) {
             throw new CargoSizeIsInvalidException("Cargo size is invalid");
         }
     }
 
-    private boolean isSizeLessOrEqualNull(Long size) {
-        return size <= 0;
-    }
-
+    /**
+     * Throws (@link CargoNotFoundException) if cargo with ID is not exists.
+     * @param id cargo ID
+     */
     public void checkCargoExistence(Long id) {
         if (!isCargoExists(id)) {
             throw new CargoNotFoundException("Cargo with ID " + id + " is not found");
         }
+    }
+
+    private boolean isSizeLessOrEqualNull(Long size) {
+        return size <= 0;
     }
 
     private boolean isCargoExists(Long id) {

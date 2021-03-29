@@ -5,16 +5,20 @@ import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CityExistenceValidator {
+public class CityValidator {
 
     private final CityRepository cityRepository;
 
-    public CityExistenceValidator(CityRepository cityRepository) {
+    public CityValidator(CityRepository cityRepository) {
         this.cityRepository = cityRepository;
     }
 
-    public void apply(Long id) {
-        if (!cityRepository.existsById(id)) {
+    /**
+     * Throws (@link CityNotFoundException) if city with ID is not exists.
+     * @param id city ID
+     */
+    public void checkCityExistence(Long id) {
+        if (!isCityExist(id)) {
             throw new CityNotFoundException("City with ID " + id + " is not found");
         }
     }

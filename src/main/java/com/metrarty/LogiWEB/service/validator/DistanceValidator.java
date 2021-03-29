@@ -14,19 +14,28 @@ public class DistanceValidator {
         this.distanceRepository = distanceRepository;
     }
 
-    public void apply(Long distance) {
+    /**
+     * Throws (@link DistanceIsInvalidException) if distance less or equal null.
+     * @param distance distance
+     */
+    public void checkDistance(Long distance) {
         if (isDistanceLessOrEqualNull(distance)) {
             throw new DistanceIsInvalidException("Distance value is invalid");
         }
     }
-    private boolean isDistanceLessOrEqualNull(Long distance) {
-        return distance <= 0;
-    }
 
-    public void checkExistence(Long id) {
+    /**
+     * Throws (@link DistanceNotFoundException) if distance with ID is not exists.
+     * @param id distance ID
+     */
+    public void checkDistanceExistence(Long id) {
         if (!isDistanceExist(id)) {
             throw new DistanceNotFoundException("Distance with ID " + id + " is not found");
         }
+    }
+
+    private boolean isDistanceLessOrEqualNull(Long distance) {
+        return distance <= 0;
     }
 
     private boolean isDistanceExist(Long id) {

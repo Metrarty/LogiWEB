@@ -5,6 +5,9 @@ import com.metrarty.LogiWEB.repository.OrderRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
 import com.metrarty.LogiWEB.service.exception.OrderNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
+import com.metrarty.LogiWEB.service.validator.CargoValidator;
+import com.metrarty.LogiWEB.service.validator.CityValidator;
+import com.metrarty.LogiWEB.service.validator.OrderValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +24,9 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final CargoValidator cargoValidator;
+    private final CityValidator cityValidator;
+    private final OrderValidator orderValidator;
 
     /**
      * Creates order and saves into repository.
@@ -29,6 +35,8 @@ public class OrderService {
      */
     public OrderDto createOrder(@NonNull OrderDto orderDto) {
         log.info("OrderService.createOrder was called with {}", orderDto);
+        cargoValidator.checkCargoExistence(orderDto.getCargo().getId());
+        cityValidator.checkCityExistence(orderDto.getDestination().getId());
         Order entity = orderMapper.toEntityWithCreatedAt(orderDto);
         orderRepository.save(entity);
         return orderMapper.toDto(entity);
@@ -57,6 +65,8 @@ public class OrderService {
      */
     public OrderDto editOrder(@NonNull OrderDto orderDto, @NonNull Long id) {
         log.info("OrderService.editOrder was called with {} {}", orderDto, id);
+        cargoValidator.checkCargoExistence(orderDto.getCargo().getId());
+        cityValidator.checkCityExistence(orderDto.getDestination().getId());
         Order order = orderMapper.toEntityWithChangedAt(orderDto);
 
         Order entity = orderRepository.findById(id)
@@ -74,7 +84,7 @@ public class OrderService {
      */
     public void deleteOrderById(@NonNull Long id) {
         log.info("OrderService.deleteOrderById was called with {}", id);
+        orderValidator.checkOrderExistence(id);
         orderRepository.deleteById(id);
     }
-
 }

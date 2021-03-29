@@ -8,6 +8,8 @@ import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import com.metrarty.LogiWEB.service.validator.CargoValidator;
+import com.metrarty.LogiWEB.service.validator.CityValidator;
+import com.metrarty.LogiWEB.service.validator.TruckValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +30,9 @@ public class TruckService {
     private final TruckMapper truckMapper;
     private final DistanceService distanceService;
     private final CityService cityService;
-    private  final CargoValidator cargoValidator;
+    private final CargoValidator cargoValidator;
+    private final TruckValidator truckValidator;
+    private  final CityValidator cityValidator;
 
     /**
      * Creates truck and saves into repository.
@@ -37,6 +41,9 @@ public class TruckService {
      */
     public Truck createTruck(@NonNull TruckDto truckDto) {
         log.info("TruckService.createTruck was called with {}", truckDto);
+        truckValidator.checkCapacitySize(truckDto.getCapacity());
+        truckValidator.checkDistancePerDay(truckDto.getDistancePerDay());
+        cityValidator.checkCityExistence(truckDto.getLocation().getId());
         Truck entity = truckMapper.toEntity(truckDto);
         truckRepository.save(entity);
         return entity;
@@ -65,6 +72,9 @@ public class TruckService {
      */
     public TruckDto editTruck(@NonNull TruckDto truckDto, @NonNull Long id) {
         log.info("TruckService.editTruck was called with {}", id);
+        truckValidator.checkCapacitySize(truckDto.getCapacity());
+        truckValidator.checkDistancePerDay(truckDto.getDistancePerDay());
+        cityValidator.checkCityExistence(truckDto.getLocation().getId());
         Truck truck = truckMapper.toEntity(truckDto);
         Truck entity = truckRepository.findById(id)
                 .orElseThrow(()-> new TruckNotFoundException("Truck with ID " + id + " is not found"));
@@ -79,6 +89,7 @@ public class TruckService {
      */
     public void deleteTruckById(@NonNull Long id) {
         log.info("TruckService.deleteTruckById was called with {}", id);
+        truckValidator.checkTruckExistence(id);
         truckRepository.deleteById(id);
     }
 
@@ -90,6 +101,7 @@ public class TruckService {
      */
     public TruckDto chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
         cargoValidator.apply(size);
+        cityValidator.checkCityExistence(id);
 
         CityDto cityOrder = cityService.findCityById(id);
 

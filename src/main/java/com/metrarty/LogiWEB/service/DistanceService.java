@@ -4,10 +4,9 @@ import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
-import com.metrarty.LogiWEB.service.exception.DistanceIsInvalidException;
 import com.metrarty.LogiWEB.service.exception.DistanceNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
-import com.metrarty.LogiWEB.service.validator.CityExistenceValidator;
+import com.metrarty.LogiWEB.service.validator.CityValidator;
 import com.metrarty.LogiWEB.service.validator.DistanceValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ public class DistanceService {
     private final DistanceRepository distanceRepository;
     private final DistanceMapper distanceMapper;
     private final DistanceValidator distanceValidator;
-    private final CityService cityService;
+    private final CityValidator cityValidator;
 
     /**
      * Creates distance and saves into repository.
@@ -37,9 +36,9 @@ public class DistanceService {
      */
     public Distance createDistance(@NonNull DistanceDto distanceDto) {
         log.info("DistanceService.createDistance was called with {}", distanceDto);
-        distanceValidator.apply(distanceDto.getDistance());
-        cityService.findCityById(distanceDto.getCity1().getId());
-        cityService.findCityById(distanceDto.getCity2().getId());
+        distanceValidator.checkDistance(distanceDto.getDistance());
+        cityValidator.checkCityExistence(distanceDto.getCity1().getId());
+        cityValidator.checkCityExistence(distanceDto.getCity2().getId());
         Distance entity = distanceMapper.toEntity(distanceDto);
         distanceRepository.save(entity);
         return entity;
@@ -84,6 +83,7 @@ public class DistanceService {
      */
     public DistanceDto editDistance(@NonNull DistanceDto distanceDto, @NonNull Long id) {
         log.info("DistanceService.editDistance was called with {}", id);
+
         Distance distance = distanceMapper.toEntity(distanceDto);
         Distance entity = distanceRepository.findById(id)
                 .orElseThrow(()-> new DistanceNotFoundException("Distance with ID " + id + " is not found"));
@@ -98,7 +98,7 @@ public class DistanceService {
      */
     public void deleteDistanceById(@NonNull Long id) {
         log.info("DistanceService.deleteDistanceById was called with {}", id);
-        distanceValidator.checkExistence(id);
+        distanceValidator.checkDistanceExistence(id);
         distanceRepository.deleteById(id);
     }
 }

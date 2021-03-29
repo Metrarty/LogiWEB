@@ -62,11 +62,21 @@ public class RestExceptionHandler {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
+    /**
+     * Handles (@link CargoSizeIsInvalidException)
+     * @param ex CargoSizeIsInvalidException
+     * @return bad request response entity
+     */
     @ExceptionHandler
     public ResponseEntity<String> handle(CargoSizeIsInvalidException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
+    /**
+     * Handles (@link DistanceIsInvalidException)
+     * @param ex DistanceIsInvalidException
+     * @return bad request response entity
+     */
     @ExceptionHandler
     public ResponseEntity<String> handle(DistanceIsInvalidException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());

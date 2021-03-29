@@ -5,8 +5,7 @@ import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CityMapper;
-import com.metrarty.LogiWEB.service.validator.CityExistenceValidator;
-import com.sun.xml.bind.v2.TODO;
+import com.metrarty.LogiWEB.service.validator.CityValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,7 +25,7 @@ public class CityService {
 
     private final CityRepository cityRepository;
     private final CityMapper cityMapper;
-    private final CityExistenceValidator cityExistenceValidator;
+    private final CityValidator cityValidator;
 
     /**
      * Creates city and saves into repository.
@@ -47,7 +46,7 @@ public class CityService {
      */
     public CityDto findCityById(@NonNull Long id) {
         log.info("CityService.findCityBuId was called with {}", id);
-        cityExistenceValidator.apply(id);
+        cityValidator.checkCityExistence(id);
         City city = cityRepository.getOne(id);
         return cityMapper.toDto(city);
     }
@@ -92,7 +91,7 @@ public class CityService {
      */
     public void deleteCityById(@NonNull Long id) {
         log.info("CityService.deleteCityById was called with {}", id);
-        cityExistenceValidator.apply(id);
+        cityValidator.checkCityExistence(id);
         cityRepository.deleteById(id);
     }
 }
