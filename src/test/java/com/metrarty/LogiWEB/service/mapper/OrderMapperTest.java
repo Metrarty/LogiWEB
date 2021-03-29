@@ -12,9 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
-
 import java.time.Instant;
-import java.time.LocalDate;
+
 
 import static org.mockito.Mockito.when;
 
@@ -49,7 +48,7 @@ public class OrderMapperTest {
         order.setId(1L);
         order.setCargo(cargo);
         order.setDestination(destination);
-        order.setDeliveryDate(LocalDate.of(2022, 01, 01));
+        order.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
 
         OrderDto expected = new OrderDto();
         expected.setId(order.getId());
@@ -74,7 +73,7 @@ public class OrderMapperTest {
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setDeliveryDate(LocalDate.of(2022, 01, 01));
+        orderDto.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
 
         Order expected = new Order();
         expected.setId(orderDto.getId());
@@ -101,7 +100,7 @@ public class OrderMapperTest {
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setDeliveryDate(LocalDate.of(2022, 01, 01));
+        orderDto.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
 
         Order expected = new Order();
         expected.setId(orderDto.getId());

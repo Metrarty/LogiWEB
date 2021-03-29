@@ -20,7 +20,7 @@ public class Order {
     @OneToOne
     private City destination;
     @Column
-    private LocalDate deliveryDate;
+    private Instant deliveryDate;
     @Column(updatable = false)
     @NotNull
     private Instant createdAt;
