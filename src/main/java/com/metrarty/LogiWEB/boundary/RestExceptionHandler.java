@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
+
 /**
  * Rest exception handler.
  */
@@ -28,6 +30,11 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler
     public ResponseEntity<String> handle(ValueIsInvalidException ex) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<String> handle(ConstraintViolationException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 }
