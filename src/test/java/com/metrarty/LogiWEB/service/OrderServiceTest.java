@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
-import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -99,7 +99,7 @@ public class OrderServiceTest {
         verifyNoMoreInteractions(orderRepository, orderMapper);
     }
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test(expected = EntityNotFoundException.class)
     public void testEditOrder_whenOriginalNotFound() {
         //prepare
         OrderDto input = new OrderDto();

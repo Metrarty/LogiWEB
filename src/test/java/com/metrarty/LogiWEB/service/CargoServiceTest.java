@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CargoDto;
 import com.metrarty.LogiWEB.repository.CargoRepository;
 import com.metrarty.LogiWEB.repository.entity.Cargo;
-import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CargoMapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -100,7 +100,7 @@ public class CargoServiceTest {
     }
 
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test(expected = EntityNotFoundException.class)
     public void testEditCargo_whenOriginalNotFound() {
         //prepare
         CargoDto input = new CargoDto();
