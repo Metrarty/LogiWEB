@@ -1,11 +1,19 @@
 package com.metrarty.LogiWEB.boundary;
 
 import com.metrarty.LogiWEB.service.exception.*;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Rest exception handler.
@@ -34,7 +42,14 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<String> handle(ConstraintViolationException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ResponseEntity<Map<String, List<String>>> handle(final MethodArgumentNotValidException ex) {
+        final Map<String, List<String>> result = new HashMap<>();
+
+        for (ObjectError error : ex.getBindingResult().getAllErrors()) {
+            FieldError fieldError = (FieldError) error;
+            String defaultMessage = fieldError.getDefaultMessage();
+            result.computeIfAbsent(fieldError.getField(), k -> new ArrayList<>()).add(defaultMessage);
+        }
+        return ResponseEntity.badRequest().body(result);
     }
 }

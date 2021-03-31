@@ -14,7 +14,6 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    @NotEmpty
     private String cityName;
     @Column(updatable = false)
     @NotNull

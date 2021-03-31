@@ -13,11 +13,9 @@ public class Truck {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    @Max(value = 25000, message = "Capacity should be no more than 25000 kg")
     private Long capacity;
     @OneToOne
     private City location;
     @Column
-    @Max(value = 5000, message = "Distance should be no more than 5000km")
     private Long distancePerDay;
 }

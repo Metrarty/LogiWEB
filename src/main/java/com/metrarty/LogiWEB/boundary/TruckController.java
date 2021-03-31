@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class TruckController {
      * @return created truck
      */
     @PostMapping("/truck/create/")
-    public Truck createTruck(@RequestBody TruckDto truckDto) {
+    public Truck createTruck(@Valid @RequestBody TruckDto truckDto) {
         log.info("TruckController.createTruck was called with {}", truckDto);
         return truckService.createTruck(truckDto);
     }
