@@ -46,8 +46,7 @@ public class RestExceptionHandler {
         final List<String> result = new ArrayList<>();
 
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-            String message = error.getDefaultMessage();
-            result.add(message);
+            result.add(error.getDefaultMessage());
         }
         return ResponseEntity.badRequest().body(result);
     }
