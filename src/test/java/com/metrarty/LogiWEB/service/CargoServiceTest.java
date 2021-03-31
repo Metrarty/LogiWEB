@@ -58,10 +58,10 @@ public class CargoServiceTest {
         List<Cargo> cargos = Collections.singletonList(cargo);
         when(cargoRepository.findAll()).thenReturn(cargos);
         CargoDto dto = new CargoDto();
-        dto.setSize(100L);
+        dto.setId(1L);
         when(cargoMapper.toDto(cargo)).thenReturn(dto);
         CargoDto expectedDto = new CargoDto();
-        expectedDto.setSize(100L);
+        expectedDto.setId(1L);
         //run
         List<CargoDto> actual = cargoService.findAllCargos();
         //test

@@ -1,7 +1,5 @@
 package com.metrarty.LogiWEB.boundary;
 
-import com.metrarty.LogiWEB.boundary.model.CityDto;
-import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.TruckService;
