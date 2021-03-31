@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
-import com.metrarty.LogiWEB.service.exception.ItemNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -97,7 +97,7 @@ public class DistanceServiceTest {
         verifyNoMoreInteractions(distanceMapper);
     }
 
-    @Test(expected = ItemNotFoundException.class)
+    @Test(expected = EntityNotFoundException.class)
     public void testEditDistance_whenOriginalNotFound() {
         //prepare
         DistanceDto input = new DistanceDto();

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class RestExceptionHandler {
 
     /**
-     * Handles {@link ItemNotFoundException}.
-     * @param ex ItemNotFoundException
+     * Handles {@link EntityNotFoundException}.
+     * @param ex EntityNotFoundException
      * @return bad request response entity
      */
     @ExceptionHandler
-    public ResponseEntity<String> handle(ItemNotFoundException ex) {
+    public ResponseEntity<String> handle(EntityNotFoundException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
