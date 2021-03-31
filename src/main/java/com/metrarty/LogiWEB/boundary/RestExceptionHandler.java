@@ -42,13 +42,12 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<Map<String, List<String>>> handle(final MethodArgumentNotValidException ex) {
-        final Map<String, List<String>> result = new HashMap<>();
+    public ResponseEntity<List<String>> handle(final MethodArgumentNotValidException ex) {
+        final List<String> result = new ArrayList<>();
 
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-            FieldError fieldError = (FieldError) error;
-            String defaultMessage = fieldError.getDefaultMessage();
-            result.computeIfAbsent(fieldError.getField(), k -> new ArrayList<>()).add(defaultMessage);
+            String message = error.getDefaultMessage();
+            result.add(message);
         }
         return ResponseEntity.badRequest().body(result);
     }
