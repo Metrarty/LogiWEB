@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ public class CityController {
      * @return created city
      */
     @PostMapping("/city/create/")
-    public CityDto createCity(@RequestBody CityDto cityDto) {
+    public CityDto createCity(@Valid @RequestBody CityDto cityDto) {
         log.info("CityController.createCity was called with {}", cityDto);
         return cityService.createCity(cityDto);
     }
@@ -46,7 +48,7 @@ public class CityController {
      * @return edited city DTO
      */
     @PutMapping("/city/editbyid/{id}")
-    public CityDto editCity(@RequestBody CityDto cityDto, @PathVariable Long id) {
+    public CityDto editCity(@Valid @RequestBody CityDto cityDto, @PathVariable Long id) {
         log.info("CityController.editCity was called with {} {}", cityDto, id);
         return cityService.editCity(cityDto, id);
     }

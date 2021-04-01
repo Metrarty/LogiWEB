@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class OrderController {
      * @return created order
      */
     @PostMapping("/order/create/")
-    public OrderDto createOrder(@RequestBody OrderDto orderDto) {
+    public OrderDto createOrder(@Valid @RequestBody OrderDto orderDto) {
         log.info("OrderController.createOrder was called with {}", orderDto);
         return orderService.createOrder(orderDto);
     }
@@ -47,7 +48,7 @@ public class OrderController {
      * @return edited order DTO
      */
     @PutMapping("/order/editbyid/{id}")
-    public OrderDto editOrder(@RequestBody OrderDto orderDto, @PathVariable Long id) {
+    public OrderDto editOrder(@Valid @RequestBody OrderDto orderDto, @PathVariable Long id) {
         log.info("OrderController.editOrder was called with {} {}", orderDto, id);
         return orderService.editOrder(orderDto, id);
     }

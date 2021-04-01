@@ -8,6 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class DistanceController {
      * @return created distance
      */
     @PostMapping("/distance/create/")
-    public Distance createDistance(@RequestBody DistanceDto distanceDto) {
+    public Distance createDistance(@Valid @RequestBody DistanceDto distanceDto) {
         log.info("DistanceController.createDistance was called with {}", distanceDto);
         return distanceService.createDistance(distanceDto);
     }
@@ -47,7 +48,7 @@ public class DistanceController {
      * @return edited distance DTO
      */
     @PutMapping("/distance/editbyid/{id}/")
-    public DistanceDto editDistance(@RequestBody DistanceDto distanceDto, @PathVariable Long id) {
+    public DistanceDto editDistance(@Valid @RequestBody DistanceDto distanceDto, @PathVariable Long id) {
         log.info("DistanceController.editDistance was called with {} {}", distanceDto, id);
         return distanceService.editDistance(distanceDto, id);
     }

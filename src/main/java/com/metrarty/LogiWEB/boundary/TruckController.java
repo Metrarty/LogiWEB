@@ -48,7 +48,7 @@ public class TruckController {
      * @return edited truck DTO
      */
     @PutMapping("/truck/editbyid/{id}/")
-    public TruckDto editTruck(@RequestBody TruckDto truckDto, @PathVariable Long id) {
+    public TruckDto editTruck(@Valid @RequestBody TruckDto truckDto, @PathVariable Long id) {
         log.info("truckController.editTruck was called with {} {}", truckDto, id);
         return truckService.editTruck(truckDto, id);
     }
@@ -72,7 +72,7 @@ public class TruckController {
      * @return truck DTO
      */
     @GetMapping("/truck/choose/{id}/{size}/")
-    public TruckDto chooseTruckToDeliver(@PathVariable Long id, @PathVariable Long size) {
+    public TruckDto chooseTruckToDeliver(@PathVariable Long id, @Valid @PathVariable Long size) {
         log.info("TruckController.chooseTruckToDeliver was called with {} {}", id, size);
         return truckService.chooseTruckToDeliver(id, size);
     }
