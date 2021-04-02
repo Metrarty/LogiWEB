@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
-import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,7 @@ public class CityService {
      */
     public CityDto findCityById(@NonNull Long id) {
         log.info("CityService.findCityBuId was called with {}", id);
-        City city = cityRepository.getOne(id);
+        City city = findOneCityById(id);
         return cityMapper.toDto(city);
     }
 
@@ -73,8 +73,7 @@ public class CityService {
         log.info("CityService.editCity was called with {} {}", cityDto, id);
         City city = cityMapper.toEntityWithChangedAt(cityDto);
 
-        City entity = cityRepository.findById(id)
-                .orElseThrow(()-> new CityNotFoundException("City with ID " + id + " is not found"));
+        City entity = findOneCityById(id);
 
         city.setCreatedAt(entity.getCreatedAt());
         city.setId(entity.getId());
@@ -91,4 +90,8 @@ public class CityService {
         cityRepository.deleteById(id);
     }
 
+    private City findOneCityById(Long id) {
+        return cityRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("City with ID " + id + " is not found"));
+    }
 }

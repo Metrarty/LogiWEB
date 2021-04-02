@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class CityNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends RuntimeException {
 
-    public CityNotFoundException(String message) {
+    public EntityNotFoundException(String message) {
         super(message);
     }
 }

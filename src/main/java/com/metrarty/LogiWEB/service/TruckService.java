@@ -5,8 +5,10 @@ import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
-import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
+import com.metrarty.LogiWEB.service.validator.CargoValidator;
+import com.metrarty.LogiWEB.service.validator.TruckValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,6 +29,8 @@ public class TruckService {
     private final TruckMapper truckMapper;
     private final DistanceService distanceService;
     private final CityService cityService;
+    private final CargoValidator cargoValidator;
+    private final TruckValidator truckValidator;
 
     /**
      * Creates truck and saves into repository.
@@ -35,6 +39,8 @@ public class TruckService {
      */
     public Truck createTruck(@NonNull TruckDto truckDto) {
         log.info("TruckService.createTruck was called with {}", truckDto);
+        truckValidator.checkCapacitySize(truckDto.getCapacity());
+        truckValidator.checkDistancePerDay(truckDto.getDistancePerDay());
         Truck entity = truckMapper.toEntity(truckDto);
         truckRepository.save(entity);
         return entity;
@@ -63,9 +69,10 @@ public class TruckService {
      */
     public TruckDto editTruck(@NonNull TruckDto truckDto, @NonNull Long id) {
         log.info("TruckService.editTruck was called with {}", id);
+        truckValidator.checkCapacitySize(truckDto.getCapacity());
+        truckValidator.checkDistancePerDay(truckDto.getDistancePerDay());
         Truck truck = truckMapper.toEntity(truckDto);
-        Truck entity = truckRepository.findById(id)
-                .orElseThrow(()-> new TruckNotFoundException("Truck with ID " + id + " is not found"));
+        Truck entity = findOneTruckById(id);
         truck.setId(entity.getId());
         Truck saved = truckRepository.save(truck);
         return truckMapper.toDto(saved);
@@ -87,6 +94,7 @@ public class TruckService {
      * @return truck DTO
      */
     public TruckDto chooseTruckToDeliver(@NonNull Long id, @NonNull Long size) {
+        cargoValidator.checkCargo(size);
 
         CityDto cityOrder = cityService.findCityById(id);
 
@@ -134,5 +142,10 @@ public class TruckService {
                 }
             }
         }
+    }
+
+    private Truck findOneTruckById(Long id) {
+        return truckRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
     }
 }

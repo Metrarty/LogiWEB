@@ -4,7 +4,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.repository.CityRepository;
 import com.metrarty.LogiWEB.repository.entity.City;
-import com.metrarty.LogiWEB.service.exception.CityNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CityMapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -119,7 +119,7 @@ public class CityServiceTest {
     }
 
 
-    @Test(expected = CityNotFoundException.class)
+    @Test(expected = EntityNotFoundException.class)
     public void testEditCity_whenOriginalNotFound() {
         //prepare
         CityDto input = new CityDto();

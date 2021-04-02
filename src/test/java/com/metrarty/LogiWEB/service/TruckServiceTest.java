@@ -3,7 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
-import com.metrarty.LogiWEB.service.exception.TruckNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import org.junit.Assert;
 import org.junit.Test;
@@ -97,7 +97,7 @@ public class TruckServiceTest {
         verifyNoMoreInteractions(truckMapper);
     }
 
-    @Test(expected = TruckNotFoundException.class)
+    @Test(expected = EntityNotFoundException.class)
     public void testEditTruck_whenOriginalNotFound() {
         //prepare
         TruckDto input = new TruckDto();

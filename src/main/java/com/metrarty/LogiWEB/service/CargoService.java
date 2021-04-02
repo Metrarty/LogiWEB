@@ -3,8 +3,9 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CargoDto;
 import com.metrarty.LogiWEB.repository.CargoRepository;
 import com.metrarty.LogiWEB.repository.entity.Cargo;
-import com.metrarty.LogiWEB.service.exception.CargoNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CargoMapper;
+import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +22,7 @@ public class CargoService {
 
     private final CargoRepository cargoRepository;
     private final CargoMapper cargoMapper;
+    private final CargoValidator cargoValidator;
 
     /**
      * Creates cargo and saves into repository.
@@ -29,6 +31,7 @@ public class CargoService {
      */
     public CargoDto createCargo(@NonNull CargoDto cargoDto) {
         log.info("CargoService.createCargo was called with {}", cargoDto);
+        cargoValidator.checkCargo(cargoDto.getSize());
         Cargo entity = cargoMapper.toEntityWithCreatedAt(cargoDto);
         cargoRepository.save(entity);
         return cargoMapper.toDto(entity);
@@ -57,11 +60,9 @@ public class CargoService {
      */
     public CargoDto editCargo(@NonNull CargoDto cargoDto, @NonNull Long id) {
         log.info("CargoService.editCargo was called with {} {}", cargoDto, id);
+        cargoValidator.checkCargo(cargoDto.getSize());
         Cargo cargo = cargoMapper.toEntityWithChangedAt(cargoDto);
-
-        Cargo entity = cargoRepository.findById(id)
-                .orElseThrow(()-> new CargoNotFoundException("Cargo with ID " + id + " is not found"));
-
+        Cargo entity = findOneCargoById(id);
         cargo.setCreatedAt(entity.getCreatedAt());
         cargo.setId(entity.getId());
         Cargo saved = cargoRepository.save(cargo);
@@ -75,5 +76,10 @@ public class CargoService {
     public void deleteCargoById(@NonNull Long id) {
         log.info("CargoService.deleteCargoById was called with {}", id);
         cargoRepository.deleteById(id);
+    }
+
+    private Cargo findOneCargoById(Long id) {
+        return cargoRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Cargo with ID " + id + " is not found"));
     }
 }

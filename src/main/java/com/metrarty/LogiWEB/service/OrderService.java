@@ -3,11 +3,13 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
-import com.metrarty.LogiWEB.service.exception.OrderNotFoundException;
+import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
+import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,9 +61,7 @@ public class OrderService {
         log.info("OrderService.editOrder was called with {} {}", orderDto, id);
         Order order = orderMapper.toEntityWithChangedAt(orderDto);
 
-        Order entity = orderRepository.findById(id)
-                .orElseThrow(()-> new OrderNotFoundException("Order with ID " + id + " is not found"));
-
+        Order entity = findOneOrderById(id);
         order.setCreatedAt(entity.getCreatedAt());
         order.setId(entity.getId());
         Order saved = orderRepository.save(order);
@@ -77,4 +77,8 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
+    private Order findOneOrderById(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Order with ID " + id + " is not found"));
+    }
 }
