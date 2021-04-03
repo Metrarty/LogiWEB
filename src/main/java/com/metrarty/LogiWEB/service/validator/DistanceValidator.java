@@ -8,7 +8,7 @@ public class DistanceValidator {
 
 
     /**
-     * Throws (@link ValueIsInvalidException) if distance less or equal null.
+     * Throws (@link ValueIsInvalidException) if distance less or equal zero.
      * @param distance distance
      */
     public void checkDistance(Long distance) {

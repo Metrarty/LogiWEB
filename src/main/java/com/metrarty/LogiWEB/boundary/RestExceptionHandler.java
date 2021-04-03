@@ -41,6 +41,12 @@ public class RestExceptionHandler {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
+
+    /**
+     * Handles (@link MethodArgumentNotValidException)
+     * @param ex MethodArgumentNotValidException
+     * @return list of bad request responses
+     */
     @ExceptionHandler
     public ResponseEntity<List<String>> handle(final MethodArgumentNotValidException ex) {
         final List<String> result = new ArrayList<>();

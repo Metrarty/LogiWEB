@@ -9,7 +9,9 @@ import java.time.Instant;
 @Data
 public class OrderDto {
     private Long id;
+    @NotNull
     private CargoDto cargo;
+    @NotNull
     private CityDto destination;
     @NotNull
     @FutureOrPresent(message = "Delivery date should be present or future.")
