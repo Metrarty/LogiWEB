@@ -36,9 +36,12 @@ CREATE TABLE ORDERS (
  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   cargo_id BIGINT,
   destination_id BIGINT,
-  delivery_date DATE,
+  approximately_delivery_date DATE,
   created_at TIMESTAMP NOT NULL,
-  changed_at TIMESTAMP
+  changed_at TIMESTAMP,
+  delivered_at TIMESTAMP,
+  completed_at TIMESTAMP,
+  assigned_truck_id BIGINT
 );
 
 

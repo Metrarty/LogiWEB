@@ -16,11 +16,13 @@ public class OrderMapper {
 
     private final CargoMapper cargoMapper;
     private final CityMapper cityMapper;
+    private final TruckMapper truckMapper;
 
     @Autowired
-    public OrderMapper(CityMapper cityMapper, CargoMapper cargoMapper) {
+    public OrderMapper(CityMapper cityMapper, CargoMapper cargoMapper, TruckMapper truckMapper) {
         this.cityMapper = cityMapper;
         this.cargoMapper = cargoMapper;
+        this.truckMapper = truckMapper;
     }
 
     /**
@@ -34,7 +36,8 @@ public class OrderMapper {
         dto.setId(order.getId());
         dto.setCargo(cargoMapper.toDto(order.getCargo()));
         dto.setDestination(cityMapper.toDto(order.getDestination()));
-        dto.setDeliveryDate(order.getDeliveryDate());
+        dto.setDeliveryDate(order.getApproximatelyDeliveryDate());
+        dto.setAssignedTruck(truckMapper.toDto(order.getAssignedTruck()));
         return dto;
     }
 
@@ -49,7 +52,8 @@ public class OrderMapper {
         entity.setId(orderDto.getId());
         entity.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         entity.setDestination(cityMapper.toEntity(orderDto.getDestination()));
-        entity.setDeliveryDate(orderDto.getDeliveryDate());
+        entity.setApproximatelyDeliveryDate(orderDto.getDeliveryDate());
+        entity.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
         return entity;
     }
 

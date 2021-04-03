@@ -16,4 +16,5 @@ public class OrderDto {
     @NotNull
     @FutureOrPresent(message = "Delivery date should be present or future.")
     private Instant deliveryDate;
+    private TruckDto assignedTruck;
 }
