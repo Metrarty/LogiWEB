@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,7 @@ public class CargoController {
      * @return created cargo
      */
     @PostMapping("/cargo/create/")
-    public CargoDto createCargo(@RequestBody CargoDto cargoDto) {
+    public CargoDto createCargo(@Valid @RequestBody CargoDto cargoDto) {
         log.info("CargoController.createCargo was called with {}", cargoDto);
         return cargoService.createCargo(cargoDto);
     }
@@ -44,7 +45,7 @@ public class CargoController {
      * @return edited cargo DTO
      */
     @PutMapping("/cargo/editbyid/{id}")
-    public CargoDto editCargo(@RequestBody CargoDto cargoDto, @PathVariable Long id) {
+    public CargoDto editCargo(@Valid @RequestBody CargoDto cargoDto, @PathVariable Long id) {
         log.info("CargoController.editCargo was called with {} {}", cargoDto, id);
         return cargoService.editCargo(cargoDto, id);
     }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class CargoValidator {
 
     /**
-     * Throws (@link ValueIsInvalidException) if cargo size if less or equal null.
+     * Throws (@link ValueIsInvalidException) if cargo size if less or equal zero.
      * @param size Cargo size
      */
     public void checkCargo(Long size) {

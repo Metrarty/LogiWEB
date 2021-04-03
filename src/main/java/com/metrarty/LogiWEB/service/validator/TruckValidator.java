@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class TruckValidator {
 
     /**
-     * Throws (@link ValueIsInvalidException) if capacity less or equal null.
+     * Throws (@link ValueIsInvalidException) if capacity less or equal zero.
      * @param capacity
      */
     public void checkCapacitySize(Long capacity) {
@@ -17,7 +17,7 @@ public class TruckValidator {
     }
 
     /**
-     * Throws (@link ValueIsInvalidException) if distance per day less or equal null.
+     * Throws (@link ValueIsInvalidException) if distance per day less or equal zero.
      * @param distancePerDay
      */
     public void checkDistancePerDay(Long distancePerDay) {
