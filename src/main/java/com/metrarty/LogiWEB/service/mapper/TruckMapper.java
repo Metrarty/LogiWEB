@@ -33,6 +33,7 @@ public class TruckMapper {
         dto.setCapacity(truck.getCapacity());
         dto.setLocation(cityMapper.toDto(truck.getLocation()));
         dto.setDistancePerDay(truck.getDistancePerDay());
+        dto.setStatus(truck.getStatus());
         return dto;
     }
 
@@ -48,6 +49,7 @@ public class TruckMapper {
         entity.setCapacity(truckDto.getCapacity());
         entity.setLocation(cityMapper.toEntity(truckDto.getLocation()));
         entity.setDistancePerDay(truckDto.getDistancePerDay());
+        entity.setStatus(truckDto.getStatus());
         return entity;
     }
 

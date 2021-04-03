@@ -30,12 +30,14 @@ public class TruckMapperTest {
         truck.setCapacity(500L);
         truck.setLocation(location);
         truck.setDistancePerDay(1000L);
+        truck.setStatus(Truck.Status.FREE);
 
         TruckDto expected = new TruckDto();
         expected.setId(truck.getId());
         expected.setCapacity(truck.getCapacity());
         expected.setLocation(cityMapper.toDto(truck.getLocation()));
         expected.setDistancePerDay(truck.getDistancePerDay());
+        expected.setStatus(truck.getStatus());
 
         //run
         TruckDto actual = truckMapper.toDto(truck);
@@ -54,12 +56,14 @@ public class TruckMapperTest {
         truckDto.setCapacity(500L);
         truckDto.setLocation(locationDto);
         truckDto.setDistancePerDay(1000L);
+        truckDto.setStatus(Truck.Status.FREE);
 
         Truck expected = new Truck();
         expected.setId(truckDto.getId());
         expected.setCapacity(truckDto.getCapacity());
         expected.setLocation(cityMapper.toEntity(truckDto.getLocation()));
         expected.setDistancePerDay(truckDto.getDistancePerDay());
+        expected.setStatus(truckDto.getStatus());
 
         //run
         Truck actual = truckMapper.toEntity(truckDto);

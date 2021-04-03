@@ -22,7 +22,8 @@ CREATE TABLE TRUCK (
 id BIGINT AUTO_INCREMENT PRIMARY KEY,
 capacity BIGINT,
 location_id BIGINT,
-distance_per_day BIGINT
+distance_per_day BIGINT,
+status ENUM ('FREE', 'ASSIGNED', 'BROKEN') DEFAULT 'FREE'
 );
 
 CREATE TABLE CARGO (
