@@ -59,7 +59,7 @@ public class OrderMapperTest {
         expected.setId(order.getId());
         expected.setCargo(cargoMapper.toDto(order.getCargo()));
         expected.setDestination(cityMapper.toDto(order.getDestination()));
-        expected.setDeliveryDate(order.getApproximatelyDeliveryDate());
+        expected.setApproximatelyDeliveryDate(order.getApproximatelyDeliveryDate());
         expected.setAssignedTruck(truckMapper.toDto(order.getAssignedTruck()));
 
         //run
@@ -80,14 +80,14 @@ public class OrderMapperTest {
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        orderDto.setApproximatelyDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
         orderDto.setAssignedTruck(truckMapper.toDto(assignedTruck));
 
         Order expected = new Order();
         expected.setId(orderDto.getId());
         expected.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         expected.setDestination(cityMapper.toEntity(orderDto.getDestination()));
-        expected.setApproximatelyDeliveryDate(orderDto.getDeliveryDate());
+        expected.setApproximatelyDeliveryDate(orderDto.getApproximatelyDeliveryDate());
         expected.setCreatedAt(NOW);
         when(orderMapperSpy.getNow()).thenReturn(NOW);
         expected.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
@@ -110,14 +110,14 @@ public class OrderMapperTest {
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        orderDto.setApproximatelyDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
         orderDto.setAssignedTruck(truckMapper.toDto(assignedTruck));
 
         Order expected = new Order();
         expected.setId(orderDto.getId());
         expected.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         expected.setDestination(cityMapper.toEntity(orderDto.getDestination()));
-        expected.setApproximatelyDeliveryDate(orderDto.getDeliveryDate());
+        expected.setApproximatelyDeliveryDate(orderDto.getApproximatelyDeliveryDate());
         expected.setChangedAt(NOW);
         when(orderMapperSpy.getNow()).thenReturn(NOW);
         expected.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
