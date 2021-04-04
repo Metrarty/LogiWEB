@@ -17,6 +17,8 @@ public class Order {
     private Cargo cargo;
     @OneToOne
     private City destination;
+    @OneToOne
+    private Truck assignedTruck;
     @Column
     private Instant approximatelyDeliveryDate;
     @Column(updatable = false)
@@ -28,7 +30,6 @@ public class Order {
     private Instant deliveredAt;
     @Column
     private Instant completedAt;
-    @OneToOne
-    private Truck assignedTruck;
+
 
 }
