@@ -3,6 +3,7 @@ package com.metrarty.LogiWEB.service.mapper;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.entity.City;
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,14 +31,14 @@ public class TruckMapperTest {
         truck.setCapacity(500L);
         truck.setLocation(location);
         truck.setDistancePerDay(1000L);
-        truck.setStatus(Truck.Status.FREE);
+        truck.setTruckStatus(String.valueOf(TruckStatus.FREE));
 
         TruckDto expected = new TruckDto();
         expected.setId(truck.getId());
         expected.setCapacity(truck.getCapacity());
         expected.setLocation(cityMapper.toDto(truck.getLocation()));
         expected.setDistancePerDay(truck.getDistancePerDay());
-        expected.setStatus(truck.getStatus());
+        expected.setTruckStatus(TruckStatus.valueOf(truck.getTruckStatus()));
 
         //run
         TruckDto actual = truckMapper.toDto(truck);
@@ -56,14 +57,14 @@ public class TruckMapperTest {
         truckDto.setCapacity(500L);
         truckDto.setLocation(locationDto);
         truckDto.setDistancePerDay(1000L);
-        truckDto.setStatus(Truck.Status.FREE);
+        truckDto.setTruckStatus(TruckStatus.FREE);
 
         Truck expected = new Truck();
         expected.setId(truckDto.getId());
         expected.setCapacity(truckDto.getCapacity());
         expected.setLocation(cityMapper.toEntity(truckDto.getLocation()));
         expected.setDistancePerDay(truckDto.getDistancePerDay());
-        expected.setStatus(truckDto.getStatus());
+        expected.setTruckStatus(String.valueOf(truckDto.getTruckStatus()));
 
         //run
         Truck actual = truckMapper.toEntity(truckDto);
