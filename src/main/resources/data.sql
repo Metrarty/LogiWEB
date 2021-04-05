@@ -13,9 +13,9 @@ INSERT INTO DISTANCE (city1_id, city2_id, distance) VALUES
 ('3', '4', '1346');
 
 INSERT INTO TRUCK (capacity, location_id, distance_per_day, truck_status) VALUES
-('300', '2', '1000', 'FREE'),
+('300', '2', '1000', 'ASSIGNED'),
 ('700', '4', '800', 'ASSIGNED'),
-('1000', '2', '1500', 'BROKEN');
+('1000', '2', '1500', 'FREE');
 
 INSERT INTO CARGO (size, created_at) VALUES
 ('1130', now()),

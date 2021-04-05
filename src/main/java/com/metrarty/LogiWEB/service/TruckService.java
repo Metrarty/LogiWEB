@@ -5,6 +5,7 @@ import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import com.metrarty.LogiWEB.service.validator.CargoValidator;
@@ -113,11 +114,8 @@ public class TruckService {
     private Map<TruckDto, CityDto> prepareSuitableTrucksMap(List<TruckDto> allTrucks, Long size) {
         Map<TruckDto, CityDto> trucksSuitable = new HashMap<>();
         for (TruckDto truck : allTrucks) {
-            Long value = truck.getCapacity();
-            Truck.Status status = truck.getStatus();
-            if (value >= size & status.equals(Truck.Status.FREE)) {
+            if (truck.getCapacity() >= size & truck.getTruckStatus().equals(TruckStatus.FREE))
                 trucksSuitable.put(truck, truck.getLocation());
-            }
         }
         return trucksSuitable;
     }
@@ -148,5 +146,12 @@ public class TruckService {
     private Truck findOneTruckById(Long id) {
         return truckRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
+    }
+
+    public TruckDto changeTruckStatus(Long truckId, String status) {
+        Truck truck = findOneTruckById(truckId);
+        truck.setTruckStatus(String.valueOf(status));
+        Truck saved = truckRepository.save(truck);
+        return truckMapper.toDto(saved);
     }
 }
