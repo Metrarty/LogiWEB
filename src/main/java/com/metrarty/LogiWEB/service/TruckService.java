@@ -143,7 +143,7 @@ public class TruckService {
         }
     }
 
-    private Truck findOneTruckById(Long id) {
+    public Truck findOneTruckById(Long id) {
         return truckRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
     }
