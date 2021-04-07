@@ -113,10 +113,9 @@ public class TruckService {
 
     private Map<TruckDto, CityDto> prepareSuitableTrucksMap(List<TruckDto> allTrucks, Long size) {
         Map<TruckDto, CityDto> trucksSuitable = new HashMap<>();
-        for (TruckDto truck : allTrucks) {
+        for (TruckDto truck : allTrucks)
             if (truck.getCapacity() >= size & truck.getTruckStatus().equals(TruckStatus.FREE))
                 trucksSuitable.put(truck, truck.getLocation());
-        }
         return trucksSuitable;
     }
 

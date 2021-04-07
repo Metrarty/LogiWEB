@@ -90,12 +90,16 @@ public class OrderService {
 
     public OrderDto assignTruckToOrder(Long truckId, Long orderId) {
         Order order = findOneOrderById(orderId);
-        if ((order.getAssignedTruck() != null) || (!order.getAssignedTruck().getId().equals(truckId)))
-            truckService.changeTruckStatus(order.getAssignedTruck().getId(), "FREE");
+        Truck currentTruck = order.getAssignedTruck();
+
+        if (currentTruck != null)
+            truckService.changeTruckStatus(currentTruck.getId(), "FREE");
 
         truckService.changeTruckStatus(truckId, "ASSIGNED");
-        Truck truck = truckService.findOneTruckById(truckId);
-        order.setAssignedTruck(truck);
-        return orderMapper.toDto(order);
+
+        Truck assignedTruck = truckService.findOneTruckById(truckId);
+        order.setAssignedTruck(assignedTruck);
+        Order saved = orderRepository.save(order);
+        return orderMapper.toDto(saved);
     }
 }
