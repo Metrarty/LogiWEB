@@ -92,8 +92,9 @@ public class OrderService {
         Order order = findOneOrderById(orderId);
         Truck currentTruck = order.getAssignedTruck();
 
-        if (currentTruck != null)
+        if (currentTruck != null) {
             truckService.changeTruckStatus(currentTruck.getId(), "FREE");
+        }
 
         truckService.changeTruckStatus(truckId, "ASSIGNED");
 

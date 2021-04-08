@@ -63,6 +63,21 @@ public class TruckService {
     }
 
     /**
+     * Find all trucks with status FREE.
+     * @return List of trucks DTO
+     */
+    public List<TruckDto> findTrucksWithFreeStatus() {
+        log.info("TruckService.findTrucksWithFreeStatus was called");
+        List<Truck> entities = truckRepository.findAllByTruckStatus(TruckStatus.FREE.name());
+        List<TruckDto> result = new ArrayList<>();
+        for (Truck entity : entities) {
+            TruckDto truckDto = truckMapper.toDto(entity);
+            result.add(truckDto);
+        }
+        return result;
+    }
+
+    /**
      * Edits truck with exact ID.
      * @param truckDto truck DTO
      * @param id truck ID
@@ -99,8 +114,8 @@ public class TruckService {
 
         CityDto cityOrder = cityService.findCityById(id);
 
-        List<TruckDto> allTrucks = findAllTrucks();
-        Map<TruckDto, CityDto> trucksSuitable = prepareSuitableTrucksMap(allTrucks, size);
+        List<TruckDto> allTrucksWithFreeStatus = findTrucksWithFreeStatus();
+        Map<TruckDto, CityDto> trucksSuitable = prepareSuitableTrucksMap(allTrucksWithFreeStatus, size);
         List<TruckDto> result = checkIfTruckIsInCityOrder(trucksSuitable, cityOrder);
 
         if (result.isEmpty()) {
@@ -114,8 +129,9 @@ public class TruckService {
     private Map<TruckDto, CityDto> prepareSuitableTrucksMap(List<TruckDto> allTrucks, Long size) {
         Map<TruckDto, CityDto> trucksSuitable = new HashMap<>();
         for (TruckDto truck : allTrucks)
-            if (truck.getCapacity() >= size & truck.getTruckStatus().equals(TruckStatus.FREE))
+            if (truck.getCapacity() >= size) {
                 trucksSuitable.put(truck, truck.getLocation());
+            }
         return trucksSuitable;
     }
 
