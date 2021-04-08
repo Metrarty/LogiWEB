@@ -1,5 +1,6 @@
 package com.metrarty.LogiWEB.boundary.model;
 
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import lombok.Data;
 
 import javax.validation.constraints.Max;
@@ -17,4 +18,6 @@ public class TruckDto {
     @Min(value = 1, message = "Distance should be no less than 5000km.")
     @Max(value = 5000, message = "Distance should be no more than 5000km.")
     private Long distancePerDay;
+    @NotNull
+    private TruckStatus truckStatus;
 }

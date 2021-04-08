@@ -3,12 +3,12 @@ package com.metrarty.LogiWEB.repository.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Entity
 public class Truck {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,4 +18,6 @@ public class Truck {
     private City location;
     @Column
     private Long distancePerDay;
+    @Column
+    private String truckStatus;
 }

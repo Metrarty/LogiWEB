@@ -2,6 +2,7 @@ package com.metrarty.LogiWEB.service.mapper;
 
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.entity.Truck;
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +34,12 @@ public class TruckMapper {
         dto.setCapacity(truck.getCapacity());
         dto.setLocation(cityMapper.toDto(truck.getLocation()));
         dto.setDistancePerDay(truck.getDistancePerDay());
+        dto.setTruckStatus(TruckStatus.valueOf(truck.getTruckStatus()));
         return dto;
     }
 
     /**
-     * Transfers data from truck DTO to truck
+     * Transfers data from truck DTO to truck.
      * @param truckDto truck DTO
      * @return truck
      */
@@ -48,6 +50,7 @@ public class TruckMapper {
         entity.setCapacity(truckDto.getCapacity());
         entity.setLocation(cityMapper.toEntity(truckDto.getLocation()));
         entity.setDistancePerDay(truckDto.getDistancePerDay());
+        entity.setTruckStatus(truckDto.getTruckStatus().toString());
         return entity;
     }
 

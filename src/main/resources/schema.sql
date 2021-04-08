@@ -22,7 +22,8 @@ CREATE TABLE TRUCK (
 id BIGINT AUTO_INCREMENT PRIMARY KEY,
 capacity BIGINT,
 location_id BIGINT,
-distance_per_day BIGINT
+distance_per_day BIGINT,
+truck_status VARCHAR(250)
 );
 
 CREATE TABLE CARGO (
