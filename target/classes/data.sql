@@ -21,6 +21,6 @@ INSERT INTO CARGO (size, created_at) VALUES
 ('1130', now()),
 ('570', now());
 
-INSERT INTO ORDERS (cargo_id, destination_id, delivery_date, created_at) VALUES
-('1', '1', '2021-05-17', now()),
-('2', '4', '2021-06-20', now());
+INSERT INTO ORDERS (cargo_id, destination_id, approximately_delivery_date, created_at, assigned_truck_id) VALUES
+('1', '1', '2021-05-17', now(), '1'),
+('2', '4', '2021-06-20', now(), '2');

@@ -4,6 +4,7 @@ import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.entity.Cargo;
 import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Order;
+import com.metrarty.LogiWEB.repository.entity.Truck;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +30,8 @@ public class OrderMapperTest {
     @Mock
     private CityMapper cityMapper;
 
+    @Mock TruckMapper truckMapper;
+
     private static final Instant NOW = Instant.now();
 
     private OrderMapper orderMapperSpy;
@@ -43,18 +46,21 @@ public class OrderMapperTest {
         //prepare
         Cargo cargo = new Cargo();
         City destination = new City();
+        Truck assignedTruck = new Truck();
 
         Order order = new Order();
         order.setId(1L);
         order.setCargo(cargo);
         order.setDestination(destination);
-        order.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        order.setApproximatelyDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        order.setAssignedTruck(assignedTruck);
 
         OrderDto expected = new OrderDto();
         expected.setId(order.getId());
         expected.setCargo(cargoMapper.toDto(order.getCargo()));
         expected.setDestination(cityMapper.toDto(order.getDestination()));
-        expected.setDeliveryDate(order.getDeliveryDate());
+        expected.setApproximatelyDeliveryDate(order.getApproximatelyDeliveryDate());
+        expected.setAssignedTruck(truckMapper.toDto(order.getAssignedTruck()));
 
         //run
         OrderDto actual = orderMapper.toDto(order);
@@ -68,20 +74,23 @@ public class OrderMapperTest {
         //prepare
         Cargo cargo = new Cargo();
         City destination = new City();
+        Truck assignedTruck = new Truck();
 
         OrderDto orderDto = new OrderDto();
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        orderDto.setApproximatelyDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        orderDto.setAssignedTruck(truckMapper.toDto(assignedTruck));
 
         Order expected = new Order();
         expected.setId(orderDto.getId());
         expected.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         expected.setDestination(cityMapper.toEntity(orderDto.getDestination()));
-        expected.setDeliveryDate(orderDto.getDeliveryDate());
+        expected.setApproximatelyDeliveryDate(orderDto.getApproximatelyDeliveryDate());
         expected.setCreatedAt(NOW);
         when(orderMapperSpy.getNow()).thenReturn(NOW);
+        expected.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
 
         //run
         Order actual = orderMapperSpy.toEntityWithCreatedAt(orderDto);
@@ -95,20 +104,23 @@ public class OrderMapperTest {
         //prepare
         Cargo cargo = new Cargo();
         City destination = new City();
+        Truck assignedTruck = new Truck();
 
         OrderDto orderDto = new OrderDto();
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        orderDto.setApproximatelyDeliveryDate(Instant.parse("2022-03-29T00:00:01.000+00:00"));
+        orderDto.setAssignedTruck(truckMapper.toDto(assignedTruck));
 
         Order expected = new Order();
         expected.setId(orderDto.getId());
         expected.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         expected.setDestination(cityMapper.toEntity(orderDto.getDestination()));
-        expected.setDeliveryDate(orderDto.getDeliveryDate());
+        expected.setApproximatelyDeliveryDate(orderDto.getApproximatelyDeliveryDate());
         expected.setChangedAt(NOW);
         when(orderMapperSpy.getNow()).thenReturn(NOW);
+        expected.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
 
         //run
         Order actual = orderMapperSpy.toEntityWithChangedAt(orderDto);

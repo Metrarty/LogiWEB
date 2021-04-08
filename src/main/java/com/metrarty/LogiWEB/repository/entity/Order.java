@@ -5,8 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Entity
@@ -19,11 +17,19 @@ public class Order {
     private Cargo cargo;
     @OneToOne
     private City destination;
+    @OneToOne
+    private Truck assignedTruck;
     @Column
-    private Instant deliveryDate;
+    private Instant approximatelyDeliveryDate;
     @Column(updatable = false)
     @NotNull
     private Instant createdAt;
     @Column
     private Instant changedAt;
+    @Column
+    private Instant deliveredAt;
+    @Column
+    private Instant completedAt;
+
+
 }

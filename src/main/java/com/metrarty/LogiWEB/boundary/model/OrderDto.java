@@ -13,7 +13,16 @@ public class OrderDto {
     private CargoDto cargo;
     @NotNull
     private CityDto destination;
+    private TruckDto assignedTruck;
     @NotNull
-    @FutureOrPresent(message = "Delivery date should be present or future.")
-    private Instant deliveryDate;
+    @FutureOrPresent(message = "Date should be present or future.")
+    private Instant approximatelyDeliveryDate;
+    @FutureOrPresent(message = "Date should be present or future.")
+    private Instant createdAt;
+    @FutureOrPresent(message = "Date should be present or future.")
+    private Instant changedAt;
+    @FutureOrPresent(message = "Date should be present or future.")
+    private Instant deliveredAt;
+    @FutureOrPresent(message = "Date should be present or future.")
+    private Instant completedAt;
 }
