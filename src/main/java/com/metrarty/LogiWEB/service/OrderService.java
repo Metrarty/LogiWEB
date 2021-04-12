@@ -28,7 +28,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final TruckService truckService;
-    private final TruckMapper truckMapper;
 
     /**
      * Creates order and saves into repository.
