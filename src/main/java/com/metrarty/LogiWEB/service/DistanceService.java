@@ -3,6 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
+import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -101,5 +103,22 @@ public class DistanceService {
     private Distance findOneDistanceById(Long id) {
         return distanceRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Distance with ID " + id + " is not found"));
+    }
+
+    public Long distanceFromTruckToDestination(City orderDestination, City truckLocation) {
+        List<DistanceDto> allDistances = findAllDistances();
+
+        Long distanceFromTruckToDestination = 0L;
+        for (DistanceDto distanceBetweenCities : allDistances) {
+            if ((distanceBetweenCities.getCity1().getId().equals(orderDestination.getId())
+                    && distanceBetweenCities.getCity2().getId().equals(truckLocation.getId()))) {
+                distanceFromTruckToDestination = distanceBetweenCities.getDistance();
+            }
+            if ((distanceBetweenCities.getCity1().getId().equals(truckLocation.getId())
+                    && distanceBetweenCities.getCity2().getId().equals(orderDestination.getId()))) {
+                distanceFromTruckToDestination = distanceBetweenCities.getDistance();
+            }
+        }
+        return (distanceFromTruckToDestination);
     }
 }

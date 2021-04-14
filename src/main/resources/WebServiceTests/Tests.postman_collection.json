@@ -899,7 +899,6 @@
 									"        \"id\": 2,",
 									"        \"cityName\": \"Moscow\"",
 									"    },",
-									"    \"distancePerDay\": 1111,",
 									"    \"truckStatus\": \"FREE\"",
 									"};",
 									"",
@@ -1054,7 +1053,7 @@
 									"        \"cityName\": null\r",
 									"    },\r",
 									"    \"assignedTruck\": null,\r",
-									"    \"approximatelyDeliveryDate\": \"2021-05-16T21:00:00Z\",\r",
+									"    \"deliveryWorkingDays\": null,\r",
 									"    \"changedAt\": null,\r",
 									"    \"deliveredAt\": null,\r",
 									"    \"completedAt\": null\r",
@@ -1140,7 +1139,7 @@
 									"  pm.expect(pm.response.json()[0].cargo).to.eql(cargoOrderOne);",
 									"  pm.expect(pm.response.json()[0].destination).to.eql(destinationOrderOne);",
 									"  pm.expect(pm.response.json()[0].assignedTruck).to.be.null;",
-									"  pm.expect(pm.response.json()[0].approximatelyDeliveryDate).to.eql(\"2021-05-16T21:00:00Z\");",
+									"  pm.expect(pm.response.json()[0].deliveryWorkingDays).to.null;",
 									"  pm.expect(new Date(pm.response.json()[0].createdAt)).to.be.below(new Date());",
 									"  pm.expect(pm.response.json()[0].changedAt).to.be.null;",
 									"  pm.expect(pm.response.json()[0].deliveredAt).to.be.null;",
@@ -1151,7 +1150,7 @@
 									"  pm.expect(pm.response.json()[1].cargo).to.eql(cargoOrderTwo);",
 									"  pm.expect(pm.response.json()[1].destination).to.eql(destinationOrderTwo);",
 									"  pm.expect(pm.response.json()[1].assignedTruck).to.be.null;",
-									"  pm.expect(pm.response.json()[1].approximatelyDeliveryDate).to.eql(\"2021-06-19T21:00:00Z\");",
+									"  pm.expect(pm.response.json()[1].deliveryWorkingDays).to.null;",
 									"  pm.expect(new Date(pm.response.json()[1].createdAt)).to.be.below(new Date());",
 									"  pm.expect(pm.response.json()[1].changedAt).to.be.null;",
 									"  pm.expect(pm.response.json()[1].deliveredAt).to.be.null;",
@@ -1162,7 +1161,7 @@
 									"  pm.expect(pm.response.json()[2].cargo).to.eql(cargoOrderThree);",
 									"  pm.expect(pm.response.json()[2].destination).to.eql(destinationOrderThree);",
 									"  pm.expect(pm.response.json()[2].assignedTruck).to.be.null;",
-									"  pm.expect(pm.response.json()[2].approximatelyDeliveryDate).to.eql(\"2021-05-16T21:00:00Z\");",
+									"  pm.expect(pm.response.json()[2].deliveryWorkingDays).to.null;",
 									"  pm.expect(new Date(pm.response.json()[2].createdAt)).to.be.below(new Date());",
 									"  pm.expect(pm.response.json()[2].changedAt).to.be.null;",
 									"  pm.expect(pm.response.json()[2].deliveredAt).to.be.null;",
@@ -1202,6 +1201,69 @@
 					"response": []
 				},
 				{
+					"name": "Patch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Success status\", () => pm.response.to.be.success );",
+									"",
+									"pm.test(\"Object is contained\", () => {",
+									"  const expectedObject = {",
+									"    \"id\": 3,",
+									"    \"cargo\": {",
+									"        \"id\": 2,",
+									"        \"size\": 570",
+									"    },",
+									"    \"destination\": {",
+									"        \"id\": 2,",
+									"        \"cityName\": \"Moscow\"",
+									"    },",
+									"    \"assignedTruck\": {",
+									"        \"id\": 1,",
+									"        \"capacity\": 300,",
+									"        \"location\": {",
+									"            \"id\": 2,",
+									"            \"cityName\": \"Moscow\"",
+									"        },",
+									"        \"distancePerDay\": 1000,",
+									"        \"truckStatus\": \"ASSIGNED\"",
+									"    },",
+									"    \"deliveryWorkingDays\": 1,",
+									"    \"changedAt\": null,",
+									"    \"deliveredAt\": null,",
+									"    \"completedAt\": null",
+									"};",
+									"  pm.expect(pm.response.json()).to.deep.include(expectedObject);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/3/assign/truck/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"3",
+								"assign",
+								"truck",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update order with ID 3",
 					"event": [
 						{
@@ -1221,8 +1283,17 @@
 									"        \"id\": 2,",
 									"        \"cityName\": \"Moscow\"",
 									"    },",
-									"    \"assignedTruck\": null,",
-									"    \"approximatelyDeliveryDate\": \"2021-06-30T00:00:01Z\",",
+									"        \"assignedTruck\": {",
+									"        \"id\": 1,",
+									"        \"capacity\": 300,",
+									"        \"location\": {",
+									"            \"id\": 2,",
+									"            \"cityName\": \"Moscow\"",
+									"             },",
+									"            \"distancePerDay\": 1000,",
+									"            \"truckStatus\": \"ASSIGNED\"",
+									"        },",
+									"    \"deliveryWorkingDays\": 1,",
 									"    \"deliveredAt\": null,",
 									"    \"completedAt\": null",
 									"};",
@@ -1238,7 +1309,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"cargo\": {\r\n            \"id\": 2\r\n        },\r\n        \"destination\": {\r\n            \"id\": 2\r\n        },\r\n        \"approximatelyDeliveryDate\": \"2021-06-30T00:00:01.000+00:00\"\r\n}",
+							"raw": "{\r\n        \"cargo\": {\r\n            \"id\": 2\r\n        },\r\n        \"destination\": {\r\n            \"id\": 2\r\n        }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1293,69 +1364,6 @@
 								"order",
 								"deletebyid",
 								"3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Patch",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Success status\", () => pm.response.to.be.success );",
-									"",
-									"pm.test(\"Object is contained\", () => {",
-									"  const expectedObject = {",
-									"    \"id\": 1,",
-									"    \"cargo\": {",
-									"        \"id\": 1,",
-									"        \"size\": 1130",
-									"    },",
-									"    \"destination\": {",
-									"        \"id\": 1,",
-									"        \"cityName\": \"Kiev\"",
-									"    },",
-									"    \"assignedTruck\": {",
-									"        \"id\": 1,",
-									"        \"capacity\": 300,",
-									"        \"location\": {",
-									"            \"id\": 2,",
-									"            \"cityName\": \"Moscow\"",
-									"        },",
-									"        \"distancePerDay\": 1000,",
-									"        \"truckStatus\": \"ASSIGNED\"",
-									"    },",
-									"    \"approximatelyDeliveryDate\": \"2021-05-16T21:00:00Z\",",
-									"    \"changedAt\": null,",
-									"    \"deliveredAt\": null,",
-									"    \"completedAt\": null",
-									"};",
-									"  pm.expect(pm.response.json()).to.deep.include(expectedObject);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/order/1/assign/truck/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"order",
-								"1",
-								"assign",
-								"truck",
-								"1"
 							]
 						}
 					},

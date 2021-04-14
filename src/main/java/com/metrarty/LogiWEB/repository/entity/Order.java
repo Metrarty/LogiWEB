@@ -20,7 +20,7 @@ public class Order {
     @OneToOne
     private Truck assignedTruck;
     @Column
-    private Instant approximatelyDeliveryDate;
+    private Integer deliveryWorkingDays;
     @Column(updatable = false)
     @NotNull
     private Instant createdAt;
