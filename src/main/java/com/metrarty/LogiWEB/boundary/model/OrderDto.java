@@ -1,5 +1,6 @@
 package com.metrarty.LogiWEB.boundary.model;
 
+import com.metrarty.LogiWEB.repository.entity.OrderStatus;
 import lombok.Data;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -15,6 +16,8 @@ public class OrderDto {
     private CityDto destination;
     private TruckDto assignedTruck;
     private Integer deliveryWorkingDays;
+    @NotNull
+    private OrderStatus orderStatus;
     @FutureOrPresent(message = "Date should be present or future.")
     private Instant createdAt;
     @FutureOrPresent(message = "Date should be present or future.")

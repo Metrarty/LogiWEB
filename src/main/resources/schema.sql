@@ -38,6 +38,7 @@ CREATE TABLE ORDERS (
   cargo_id BIGINT,
   destination_id BIGINT,
   delivery_working_days INT,
+  order_status VARCHAR(250),
   created_at TIMESTAMP NOT NULL,
   changed_at TIMESTAMP,
   delivered_at TIMESTAMP,
