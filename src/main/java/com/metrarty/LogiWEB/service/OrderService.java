@@ -1,10 +1,14 @@
 package com.metrarty.LogiWEB.service;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
+import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
+import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
+import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
+import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +27,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
+    private final TruckService truckService;
 
     /**
      * Creates order and saves into repository.
@@ -80,5 +85,21 @@ public class OrderService {
     private Order findOneOrderById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Order with ID " + id + " is not found"));
+    }
+
+    public OrderDto assignTruckToOrder(Long truckId, Long orderId) {
+        Order order = findOneOrderById(orderId);
+        Truck currentTruck = order.getAssignedTruck();
+
+        if (currentTruck != null) {
+            truckService.changeTruckStatus(currentTruck.getId(), "FREE");
+        }
+
+        truckService.changeTruckStatus(truckId, "ASSIGNED");
+
+        Truck assignedTruck = truckService.findOneTruckById(truckId);
+        order.setAssignedTruck(assignedTruck);
+        Order saved = orderRepository.save(order);
+        return orderMapper.toDto(saved);
     }
 }

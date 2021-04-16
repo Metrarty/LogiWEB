@@ -36,6 +36,7 @@ public class OrderMapper {
         dto.setId(order.getId());
         dto.setCargo(cargoMapper.toDto(order.getCargo()));
         dto.setDestination(cityMapper.toDto(order.getDestination()));
+        if (order.getAssignedTruck() != null)
         dto.setAssignedTruck(truckMapper.toDto(order.getAssignedTruck()));
         dto.setApproximatelyDeliveryDate(order.getApproximatelyDeliveryDate());
         dto.setCreatedAt(order.getCreatedAt());
@@ -56,6 +57,7 @@ public class OrderMapper {
         entity.setId(orderDto.getId());
         entity.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         entity.setDestination(cityMapper.toEntity(orderDto.getDestination()));
+        if (orderDto.getAssignedTruck() != null)
         entity.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
         entity.setApproximatelyDeliveryDate(orderDto.getApproximatelyDeliveryDate());
         return entity;

@@ -64,4 +64,10 @@ public class OrderController {
         orderService.deleteOrderById(id);
         return "Order with ID " + id + " is deleted";
     }
+
+    @PatchMapping("/order/{orderId}/assign/truck/{truckId}")
+    public OrderDto assignTruckToOrder(@PathVariable Long truckId, @PathVariable Long orderId) {
+        log.info("OrderController.assignTruckToOrder was called with {}{}", truckId, orderId);
+        return orderService.assignTruckToOrder(truckId, orderId);
+    }
 }

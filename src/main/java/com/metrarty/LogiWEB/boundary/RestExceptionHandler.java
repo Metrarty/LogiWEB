@@ -61,6 +61,6 @@ public class RestExceptionHandler {
      */
     @ExceptionHandler
     public ResponseEntity<String> handle(HttpMessageNotReadableException ex) {
-        return ResponseEntity.badRequest().body("Truck Status is unknown");
+        return ResponseEntity.badRequest().body("HTTP body is not readable");
     }
 }

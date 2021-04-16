@@ -5,6 +5,7 @@ import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
 import com.metrarty.LogiWEB.service.validator.CargoValidator;
@@ -62,6 +63,21 @@ public class TruckService {
     }
 
     /**
+     * Find all trucks with status FREE.
+     * @return List of trucks DTO
+     */
+    public List<TruckDto> findTrucksWithFreeStatus() {
+        log.info("TruckService.findTrucksWithFreeStatus was called");
+        List<Truck> entities = truckRepository.findAllByTruckStatus(TruckStatus.FREE.name());
+        List<TruckDto> result = new ArrayList<>();
+        for (Truck entity : entities) {
+            TruckDto truckDto = truckMapper.toDto(entity);
+            result.add(truckDto);
+        }
+        return result;
+    }
+
+    /**
      * Edits truck with exact ID.
      * @param truckDto truck DTO
      * @param id truck ID
@@ -98,8 +114,8 @@ public class TruckService {
 
         CityDto cityOrder = cityService.findCityById(id);
 
-        List<TruckDto> allTrucks = findAllTrucks();
-        Map<TruckDto, CityDto> trucksSuitable = prepareSuitableTrucksMap(allTrucks, size);
+        List<TruckDto> allTrucksWithFreeStatus = findTrucksWithFreeStatus();
+        Map<TruckDto, CityDto> trucksSuitable = prepareSuitableTrucksMap(allTrucksWithFreeStatus, size);
         List<TruckDto> result = checkIfTruckIsInCityOrder(trucksSuitable, cityOrder);
 
         if (result.isEmpty()) {
@@ -112,12 +128,10 @@ public class TruckService {
 
     private Map<TruckDto, CityDto> prepareSuitableTrucksMap(List<TruckDto> allTrucks, Long size) {
         Map<TruckDto, CityDto> trucksSuitable = new HashMap<>();
-        for (TruckDto truck : allTrucks) {
-            Long value = truck.getCapacity();
-            if (value >= size) {
+        for (TruckDto truck : allTrucks)
+            if (truck.getCapacity() >= size) {
                 trucksSuitable.put(truck, truck.getLocation());
             }
-        }
         return trucksSuitable;
     }
 
@@ -144,8 +158,15 @@ public class TruckService {
         }
     }
 
-    private Truck findOneTruckById(Long id) {
+    public Truck findOneTruckById(Long id) {
         return truckRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
+    }
+
+    public TruckDto changeTruckStatus(Long truckId, String status) {
+        Truck truck = findOneTruckById(truckId);
+        truck.setTruckStatus(String.valueOf(status));
+        Truck saved = truckRepository.save(truck);
+        return truckMapper.toDto(saved);
     }
 }
