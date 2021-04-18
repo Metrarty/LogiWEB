@@ -36,6 +36,7 @@ CREATE TABLE CARGO (
 CREATE TABLE ORDERS (
  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   cargo_id BIGINT,
+  source_city_id BIGINT,
   destination_id BIGINT,
   delivery_working_days INT,
   order_status VARCHAR(250),

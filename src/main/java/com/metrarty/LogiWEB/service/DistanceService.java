@@ -28,6 +28,7 @@ public class DistanceService {
     private final DistanceRepository distanceRepository;
     private final DistanceMapper distanceMapper;
     private final DistanceValidator distanceValidator;
+    private final DistancePreparationService distancePreparationService;
 
     /**
      * Creates distance and saves into repository.
@@ -48,13 +49,7 @@ public class DistanceService {
      */
     public List<DistanceDto> findAllDistances() {
         log.info("DistanceService.findAllDistances was called");
-        List<Distance> entities = distanceRepository.findAll();
-        List<DistanceDto> result = new ArrayList<>();
-        for (Distance entity : entities) {
-            DistanceDto distanceDto = distanceMapper.toDto(entity);
-            result.add(distanceDto);
-        }
-        return result;
+        return distancePreparationService.prepareAllDistances();
     }
 
     /**
@@ -63,14 +58,7 @@ public class DistanceService {
      * @return list of distances
      */
     public List<DistanceDto> prepareSuitableDistances(CityDto cityOrder) {
-        List<DistanceDto> allDistances = findAllDistances();
-        List<DistanceDto> distanceSuitable = new ArrayList<>();
-        for(DistanceDto distance : allDistances) {
-            if (distance.getCity1().equals(cityOrder) || distance.getCity2().equals(cityOrder)) {
-                distanceSuitable.add(distance);
-            }
-        }
-        return distanceSuitable;
+        return distancePreparationService.prepareSuitableDistances(cityOrder);
     }
 
     /**
@@ -105,20 +93,10 @@ public class DistanceService {
                 .orElseThrow(()-> new EntityNotFoundException("Distance with ID " + id + " is not found"));
     }
 
-    public Long distanceFromTruckToDestination(City orderDestination, City truckLocation) {
-        List<DistanceDto> allDistances = findAllDistances();
+    public Long distanceBetweenCities(City orderDestination, City orderSourceCity) {
 
-        Long distanceFromTruckToDestination = 0L;
-        for (DistanceDto distanceBetweenCities : allDistances) {
-            if ((distanceBetweenCities.getCity1().getId().equals(orderDestination.getId())
-                    && distanceBetweenCities.getCity2().getId().equals(truckLocation.getId()))) {
-                distanceFromTruckToDestination = distanceBetweenCities.getDistance();
-            }
-            if ((distanceBetweenCities.getCity1().getId().equals(truckLocation.getId())
-                    && distanceBetweenCities.getCity2().getId().equals(orderDestination.getId()))) {
-                distanceFromTruckToDestination = distanceBetweenCities.getDistance();
-            }
-        }
-        return (distanceFromTruckToDestination);
+        return distanceRepository
+                .findDistanceBetweenCities(orderDestination.getId(), orderSourceCity.getId())
+                .orElse(0L);
     }
 }
