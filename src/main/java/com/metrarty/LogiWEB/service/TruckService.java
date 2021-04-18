@@ -1,14 +1,10 @@
 package com.metrarty.LogiWEB.service;
 
-import com.metrarty.LogiWEB.boundary.model.CityDto;
-import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
-import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
-import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import com.metrarty.LogiWEB.service.validator.TruckValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Truck service.
