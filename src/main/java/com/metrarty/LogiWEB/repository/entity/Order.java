@@ -16,6 +16,8 @@ public class Order {
     @OneToOne
     private Cargo cargo;
     @OneToOne
+    private City sourceCity;
+    @OneToOne
     private City destination;
     @OneToOne
     private Truck assignedTruck;

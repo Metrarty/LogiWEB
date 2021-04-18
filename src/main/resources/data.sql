@@ -23,6 +23,6 @@ INSERT INTO CARGO (size, created_at) VALUES
 ('666', now()),
 ('999', now());
 
-INSERT INTO ORDERS (cargo_id, destination_id, created_at) VALUES
-('1', '1', now()),
-('2', '4', now());
+INSERT INTO ORDERS (cargo_id, source_city_id, destination_id, created_at) VALUES
+('1', '1', '2', now()),
+('2', '4', '3', now());

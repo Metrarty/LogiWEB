@@ -13,6 +13,8 @@ public class OrderDto {
     private CargoDto cargo;
     @NotNull
     private CityDto destination;
+    @NotNull
+    private CityDto sourceCity;
     private TruckDto assignedTruck;
     private Integer deliveryWorkingDays;
     @FutureOrPresent(message = "Date should be present or future.")
