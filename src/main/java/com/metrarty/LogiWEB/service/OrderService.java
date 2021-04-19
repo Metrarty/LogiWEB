@@ -33,6 +33,10 @@ public class OrderService {
     public OrderDto createOrder(@NonNull OrderDto orderDto) {
         log.info("OrderService.createOrder was called with {}", orderDto);
         Order entity = orderMapper.toEntityWithCreatedAt(orderDto);
+        if (entity.getAssignedTruck() != null) {
+            entity.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
+                    .calculateDeliveryWorkingDays(entity));
+        }
         orderRepository.save(entity);
         return orderMapper.toDto(entity);
     }
