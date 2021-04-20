@@ -63,7 +63,6 @@ public class OrderMapper {
         entity.setDestination(cityMapper.toEntity(orderDto.getDestination()));
         if (orderDto.getAssignedTruck() != null)
         entity.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
-        entity.setOrderStatus(orderDto.getOrderStatus().toString());
         return entity;
     }
 

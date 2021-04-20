@@ -37,6 +37,7 @@ public class OrderService {
             entity.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
                     .calculateDeliveryWorkingDays(entity));
         }
+        entity.setOrderStatus("CREATED");
         orderRepository.save(entity);
         return orderMapper.toDto(entity);
     }
@@ -74,6 +75,7 @@ public class OrderService {
         }
         order.setCreatedAt(entity.getCreatedAt());
         order.setId(entity.getId());
+        order.setOrderStatus(entity.getOrderStatus());
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }

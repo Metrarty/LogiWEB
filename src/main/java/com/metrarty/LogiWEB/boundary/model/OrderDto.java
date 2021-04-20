@@ -18,7 +18,6 @@ public class OrderDto {
     private CityDto sourceCity;
     private TruckDto assignedTruck;
     private Integer deliveryWorkingDays;
-    @NotNull
     private OrderStatus orderStatus;
     @FutureOrPresent(message = "Date should be present or future.")
     private Instant createdAt;
