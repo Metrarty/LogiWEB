@@ -44,7 +44,6 @@ public class OrderMapper {
         dto.setOrderStatus(OrderStatus.valueOf(order.getOrderStatus()));
         dto.setCreatedAt(order.getCreatedAt());
         dto.setChangedAt(order.getChangedAt());
-        dto.setDeliveredAt(order.getDeliveredAt());
         dto.setCompletedAt(order.getCompletedAt());
         return dto;
     }

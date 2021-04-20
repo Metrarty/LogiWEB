@@ -31,8 +31,6 @@ public class Order {
     @Column
     private Instant changedAt;
     @Column
-    private Instant deliveredAt;
-    @Column
     private Instant completedAt;
 
 

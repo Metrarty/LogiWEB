@@ -19,4 +19,6 @@ public class Cargo {
     private Instant createdAt;
     @Column
     private Instant changedAt;
+    @Column
+    private Instant deliveredAt;
 }

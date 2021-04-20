@@ -24,7 +24,5 @@ public class OrderDto {
     @FutureOrPresent(message = "Date should be present or future.")
     private Instant changedAt;
     @FutureOrPresent(message = "Date should be present or future.")
-    private Instant deliveredAt;
-    @FutureOrPresent(message = "Date should be present or future.")
     private Instant completedAt;
 }
