@@ -3,6 +3,7 @@ package com.metrarty.LogiWEB.service.mapper;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.entity.Order;
+import com.metrarty.LogiWEB.repository.entity.OrderStatus;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,12 @@ public class OrderMapper {
         OrderDto dto = new OrderDto();
         dto.setId(order.getId());
         dto.setCargo(cargoMapper.toDto(order.getCargo()));
+        dto.setSourceCity(cityMapper.toDto(order.getSourceCity()));
         dto.setDestination(cityMapper.toDto(order.getDestination()));
         if (order.getAssignedTruck() != null)
         dto.setAssignedTruck(truckMapper.toDto(order.getAssignedTruck()));
-        dto.setApproximatelyDeliveryDate(order.getApproximatelyDeliveryDate());
+        dto.setDeliveryWorkingDays(order.getDeliveryWorkingDays());
+        dto.setOrderStatus(OrderStatus.valueOf(order.getOrderStatus()));
         dto.setCreatedAt(order.getCreatedAt());
         dto.setChangedAt(order.getChangedAt());
         dto.setDeliveredAt(order.getDeliveredAt());
@@ -56,10 +59,10 @@ public class OrderMapper {
         Order entity = new Order();
         entity.setId(orderDto.getId());
         entity.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
+        entity.setSourceCity(cityMapper.toEntity(orderDto.getSourceCity()));
         entity.setDestination(cityMapper.toEntity(orderDto.getDestination()));
         if (orderDto.getAssignedTruck() != null)
         entity.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
-        entity.setApproximatelyDeliveryDate(orderDto.getApproximatelyDeliveryDate());
         return entity;
     }
 

@@ -1,19 +1,14 @@
 package com.metrarty.LogiWEB.service;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
-import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
-import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
-import com.metrarty.LogiWEB.service.mapper.TruckMapper;
-import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +23,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final TruckService truckService;
+    private final DeliveryWorkingDaysCalculationService deliveryWorkingDaysCalculationService;
 
     /**
      * Creates order and saves into repository.
@@ -37,6 +33,11 @@ public class OrderService {
     public OrderDto createOrder(@NonNull OrderDto orderDto) {
         log.info("OrderService.createOrder was called with {}", orderDto);
         Order entity = orderMapper.toEntityWithCreatedAt(orderDto);
+        if (entity.getAssignedTruck() != null) {
+            entity.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
+                    .calculateDeliveryWorkingDays(entity));
+        }
+        entity.setOrderStatus("CREATED");
         orderRepository.save(entity);
         return orderMapper.toDto(entity);
     }
@@ -64,11 +65,17 @@ public class OrderService {
      */
     public OrderDto editOrder(@NonNull OrderDto orderDto, @NonNull Long id) {
         log.info("OrderService.editOrder was called with {} {}", orderDto, id);
-        Order order = orderMapper.toEntityWithChangedAt(orderDto);
 
+        Order order = orderMapper.toEntityWithChangedAt(orderDto);
         Order entity = findOneOrderById(id);
+        if (entity.getAssignedTruck() != null) {
+        order.setAssignedTruck(entity.getAssignedTruck());
+        order.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
+                .calculateDeliveryWorkingDays(order));
+        }
         order.setCreatedAt(entity.getCreatedAt());
         order.setId(entity.getId());
+        order.setOrderStatus(entity.getOrderStatus());
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
@@ -99,6 +106,8 @@ public class OrderService {
 
         Truck assignedTruck = truckService.findOneTruckById(truckId);
         order.setAssignedTruck(assignedTruck);
+        order.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
+                .calculateDeliveryWorkingDays(order));
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }

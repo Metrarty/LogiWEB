@@ -3,6 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
+import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -26,6 +28,7 @@ public class DistanceService {
     private final DistanceRepository distanceRepository;
     private final DistanceMapper distanceMapper;
     private final DistanceValidator distanceValidator;
+    private final DistancePreparationService distancePreparationService;
 
     /**
      * Creates distance and saves into repository.
@@ -46,13 +49,7 @@ public class DistanceService {
      */
     public List<DistanceDto> findAllDistances() {
         log.info("DistanceService.findAllDistances was called");
-        List<Distance> entities = distanceRepository.findAll();
-        List<DistanceDto> result = new ArrayList<>();
-        for (Distance entity : entities) {
-            DistanceDto distanceDto = distanceMapper.toDto(entity);
-            result.add(distanceDto);
-        }
-        return result;
+        return distancePreparationService.prepareAllDistances();
     }
 
     /**
@@ -61,14 +58,7 @@ public class DistanceService {
      * @return list of distances
      */
     public List<DistanceDto> prepareSuitableDistances(CityDto cityOrder) {
-        List<DistanceDto> allDistances = findAllDistances();
-        List<DistanceDto> distanceSuitable = new ArrayList<>();
-        for(DistanceDto distance : allDistances) {
-            if (distance.getCity1().equals(cityOrder) || distance.getCity2().equals(cityOrder)) {
-                distanceSuitable.add(distance);
-            }
-        }
-        return distanceSuitable;
+        return distancePreparationService.prepareSuitableDistances(cityOrder);
     }
 
     /**
@@ -101,5 +91,12 @@ public class DistanceService {
     private Distance findOneDistanceById(Long id) {
         return distanceRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Distance with ID " + id + " is not found"));
+    }
+
+    public Long distanceBetweenCities(City orderDestination, City orderSourceCity) {
+
+        return distanceRepository
+                .findDistanceBetweenCities(orderDestination.getId(), orderSourceCity.getId())
+                .orElse(0L);
     }
 }

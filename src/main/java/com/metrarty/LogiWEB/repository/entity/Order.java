@@ -16,11 +16,15 @@ public class Order {
     @OneToOne
     private Cargo cargo;
     @OneToOne
+    private City sourceCity;
+    @OneToOne
     private City destination;
     @OneToOne
     private Truck assignedTruck;
     @Column
-    private Instant approximatelyDeliveryDate;
+    private Integer deliveryWorkingDays;
+    @Column
+    private String orderStatus;
     @Column(updatable = false)
     @NotNull
     private Instant createdAt;
