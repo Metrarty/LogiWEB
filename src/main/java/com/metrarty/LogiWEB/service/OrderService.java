@@ -77,6 +77,8 @@ public class OrderService {
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
+    // TODO metrarty 21.04.2021: variable name does not show what it is.
+    //  Because both of the variables are order and entity at the same time
 
     /**
      * Deletes order, selected by ID.

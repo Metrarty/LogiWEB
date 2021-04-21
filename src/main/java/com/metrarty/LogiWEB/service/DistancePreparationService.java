@@ -51,5 +51,9 @@ public class DistancePreparationService {
         }
         return distanceSuitable;
     }
+    // TODO metrarty 21.04.2021: javadoc is missing
+    //not sure that this class is needed 
+
+    // TODO metrarty 21.04.2021: only distance service should have access to repo 
 
 }

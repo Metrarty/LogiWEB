@@ -23,4 +23,7 @@ public class DeliveryWorkingDaysCalculationService {
         Long distanceFromTruckToSourceCity = distanceService.distanceBetweenCities(orderDestination, truckLocation);
         return Math.toIntExact(((distanceFromTruckToSourceCity + distanceBetweenDestinationAndSource) / distancePerDay))+1;
     }
+
+    // TODO metrarty 21.04.2021: it produces a wrong value if for example - > ( 6 / 3 ) + 1 = 4 instead of 3
+    //due to it this logic must be updated
 }
