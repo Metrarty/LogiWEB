@@ -30,7 +30,7 @@ public class DeliveryWorkingDaysCalculationService {
     }
 
     private Long addOneDayIfDivisionModNotNull (Long distanceTotal, Long distancePerDay, Long result) {
-        Long mod = distanceTotal % distancePerDay;
+        long mod = distanceTotal % distancePerDay;
         if (mod != 0) {
             result = result +1;
         }
