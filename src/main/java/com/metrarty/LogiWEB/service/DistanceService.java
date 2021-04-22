@@ -81,13 +81,11 @@ public class DistanceService {
     public DistanceDto editDistance(@NonNull DistanceDto distanceDto, @NonNull Long id) {
         log.info("DistanceService.editDistance was called with {}", id);
         distanceValidator.checkDistance(distanceDto.getDistance());
-
-        Distance distance = distanceMapper.toEntity(distanceDto);
-        Distance entity = findOneDistanceById(id);
-
-        distance.setId(entity.getId());
-        Distance saved = distanceRepository.save(distance);
-        return distanceMapper.toDto(saved);
+        Distance editedDistance = distanceMapper.toEntity(distanceDto);
+        Distance originalDistance = findOneDistanceById(id);
+        editedDistance.setId(originalDistance.getId());
+        Distance savedDistance = distanceRepository.save(editedDistance);
+        return distanceMapper.toDto(savedDistance);
     }
 
     /**

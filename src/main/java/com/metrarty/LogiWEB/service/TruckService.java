@@ -68,11 +68,11 @@ public class TruckService {
         log.info("TruckService.editTruck was called with {}", id);
         truckValidator.checkCapacitySize(truckDto.getCapacity());
         truckValidator.checkDistancePerDay(truckDto.getDistancePerDay());
-        Truck truck = truckMapper.toEntity(truckDto);
-        Truck entity = findOneTruckById(id);
-        truck.setId(entity.getId());
-        Truck saved = truckRepository.save(truck);
-        return truckMapper.toDto(saved);
+        Truck editedTruck = truckMapper.toEntity(truckDto);
+        Truck originalTruck = findOneTruckById(id);
+        editedTruck.setId(originalTruck.getId());
+        Truck savedTruck = truckRepository.save(editedTruck);
+        return truckMapper.toDto(savedTruck);
     }
 
     /**

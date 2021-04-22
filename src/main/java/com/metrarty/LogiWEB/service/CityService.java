@@ -71,14 +71,12 @@ public class CityService {
      */
     public CityDto editCity(@NonNull CityDto cityDto, @NonNull Long id) {
         log.info("CityService.editCity was called with {} {}", cityDto, id);
-        City city = cityMapper.toEntityWithChangedAt(cityDto);
-
-        City entity = findOneCityById(id);
-
-        city.setCreatedAt(entity.getCreatedAt());
-        city.setId(entity.getId());
-        City saved = cityRepository.save(city);
-        return cityMapper.toDto(saved);
+        City editedCity = cityMapper.toEntityWithChangedAt(cityDto);
+        City originalCity = findOneCityById(id);
+        editedCity.setCreatedAt(originalCity.getCreatedAt());
+        editedCity.setId(originalCity.getId());
+        City savedCity = cityRepository.save(editedCity);
+        return cityMapper.toDto(savedCity);
     }
 
     /**
