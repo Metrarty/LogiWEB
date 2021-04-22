@@ -28,7 +28,6 @@ public class DistanceService {
     private final DistanceRepository distanceRepository;
     private final DistanceMapper distanceMapper;
     private final DistanceValidator distanceValidator;
-    private final DistancePreparationService distancePreparationService;
 
     /**
      * Creates distance and saves into repository.
@@ -48,8 +47,13 @@ public class DistanceService {
      * @return List of distances DTO
      */
     public List<DistanceDto> findAllDistances() {
-        log.info("DistanceService.findAllDistances was called");
-        return distancePreparationService.prepareAllDistances();
+        List<Distance> entities = distanceRepository.findAll();
+        List<DistanceDto> result = new ArrayList<>();
+        for (Distance entity : entities) {
+            DistanceDto distanceDto = distanceMapper.toDto(entity);
+            result.add(distanceDto);
+        }
+        return result;
     }
 
     /**
@@ -58,7 +62,14 @@ public class DistanceService {
      * @return list of distances
      */
     public List<DistanceDto> prepareSuitableDistances(CityDto cityOrder) {
-        return distancePreparationService.prepareSuitableDistances(cityOrder);
+        List<DistanceDto> allDistances = findAllDistances();
+        List<DistanceDto> distanceSuitable = new ArrayList<>();
+        for(DistanceDto distance : allDistances) {
+            if (distance.getCity1().equals(cityOrder) || distance.getCity2().equals(cityOrder)) {
+                distanceSuitable.add(distance);
+            }
+        }
+        return distanceSuitable;
     }
 
     /**
