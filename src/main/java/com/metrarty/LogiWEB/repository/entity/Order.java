@@ -23,13 +23,13 @@ public class Order {
     private Truck assignedTruck;
     @Column
     private Integer deliveryWorkingDays;
+    @Column
+    private String orderStatus;
     @Column(updatable = false)
     @NotNull
     private Instant createdAt;
     @Column
     private Instant changedAt;
-    @Column
-    private Instant deliveredAt;
     @Column
     private Instant completedAt;
 

@@ -3,6 +3,7 @@ package com.metrarty.LogiWEB.service.mapper;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.entity.Order;
+import com.metrarty.LogiWEB.repository.entity.OrderStatus;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,9 @@ public class OrderMapper {
         if (order.getAssignedTruck() != null)
         dto.setAssignedTruck(truckMapper.toDto(order.getAssignedTruck()));
         dto.setDeliveryWorkingDays(order.getDeliveryWorkingDays());
+        dto.setOrderStatus(OrderStatus.valueOf(order.getOrderStatus()));
         dto.setCreatedAt(order.getCreatedAt());
         dto.setChangedAt(order.getChangedAt());
-        dto.setDeliveredAt(order.getDeliveredAt());
         dto.setCompletedAt(order.getCompletedAt());
         return dto;
     }
