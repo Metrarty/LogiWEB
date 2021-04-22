@@ -7,8 +7,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -21,13 +19,21 @@ public class DeliveryWorkingDaysCalculationService {
         City orderDestination = order.getDestination();
         City orderSourceCity = order.getSourceCity();
         City truckLocation = order.getAssignedTruck().getLocation();
-        Double distancePerDay = Double.valueOf(order.getAssignedTruck().getDistancePerDay());
-        Double distanceBetweenDestinationAndSource = Double.valueOf(distanceService.distanceBetweenCities(orderDestination, orderSourceCity));
-        Double distanceFromTruckToSourceCity = Double.valueOf(distanceService.distanceBetweenCities(orderDestination, truckLocation));
-        if (distanceFromTruckToSourceCity == 0) {
-            distanceFromTruckToSourceCity = distanceBetweenDestinationAndSource;
+        Long distancePerDay = order.getAssignedTruck().getDistancePerDay();
+        Long distanceBetweenSourceAndDestination = distanceService.distanceBetweenCities(orderSourceCity, orderDestination);
+        Long distanceFromTruckToSourceCity = distanceService.distanceBetweenCities(orderSourceCity, truckLocation);
+
+        Long distanceTotal = distanceBetweenSourceAndDestination+distanceFromTruckToSourceCity;
+        Long result = distanceTotal / distancePerDay;
+
+        return addOneDayIfDivisionModNotNull(distanceTotal, distancePerDay, result).intValue();
+    }
+
+    private Long addOneDayIfDivisionModNotNull (Long distanceTotal, Long distancePerDay, Long result) {
+        Long mod = distanceTotal % distancePerDay;
+        if (mod != 0) {
+            result = result +1;
         }
-        BigDecimal result = new BigDecimal((distanceFromTruckToSourceCity + distanceBetweenDestinationAndSource) / distancePerDay).setScale(0, RoundingMode.HALF_UP);
-        return result.intValue();
+        return result;
     }
 }
