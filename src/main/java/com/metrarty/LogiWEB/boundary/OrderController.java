@@ -76,4 +76,10 @@ public class OrderController {
         log.info("OrderService.setStatusOnTheWay was called with {}", orderId);
         return orderService.setStatusOnTheWay(orderId);
     }
+
+    @PatchMapping("/order/{orderId}/set/status/completed")
+    public OrderDto setStatusCompleted(@PathVariable Long orderId) {
+        log.info("OrderService.setStatusCompleted is called with {}", orderId);
+        return orderService.setStatusCompleted(orderId);
+    }
 }

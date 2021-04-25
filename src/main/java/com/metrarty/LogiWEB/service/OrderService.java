@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class OrderService {
     private final TruckService truckService;
     private final DeliveryWorkingDaysCalculationService deliveryWorkingDaysCalculationService;
     private final OrderValidator orderValidator;
+    private final CargoService cargoService;
 
     /**
      * Creates order and saves into repository.
@@ -71,6 +73,7 @@ public class OrderService {
 
         Order editedOrder = orderMapper.toEntityWithChangedAt(orderDto);
         Order originalOrder = findOneOrderById(id);
+        orderValidator.checkOrderStatus(editedOrder.getOrderStatus());
         if (originalOrder.getAssignedTruck() != null) {
         editedOrder.setAssignedTruck(originalOrder.getAssignedTruck());
         editedOrder.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
@@ -120,6 +123,16 @@ public class OrderService {
         orderValidator.checkOrderTruck(order.getAssignedTruck());
         order.setOrderStatus("ON_THE_WAY");
         Order saved = orderRepository.save(order);
+        return orderMapper.toDto(saved);
+    }
+
+    public OrderDto setStatusCompleted(Long orderId) {
+        Order order = findOneOrderById(orderId);
+        order.setOrderStatus("COMPLETED");
+        order.setCompletedAt(Instant.now());
+        truckService.changeTruckStatus(order.getAssignedTruck().getId(), "FREE");
+        cargoService.setCargoDeliveredAt(order.getCargo().getId());
+        Order saved  = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
 }
