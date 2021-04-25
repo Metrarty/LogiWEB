@@ -61,12 +61,12 @@ public class CargoService {
     public CargoDto editCargo(@NonNull CargoDto cargoDto, @NonNull Long id) {
         log.info("CargoService.editCargo was called with {} {}", cargoDto, id);
         cargoValidator.checkCargo(cargoDto.getSize());
-        Cargo cargo = cargoMapper.toEntityWithChangedAt(cargoDto);
-        Cargo entity = findOneCargoById(id);
-        cargo.setCreatedAt(entity.getCreatedAt());
-        cargo.setId(entity.getId());
-        Cargo saved = cargoRepository.save(cargo);
-        return cargoMapper.toDto(saved);
+        Cargo editedCargo = cargoMapper.toEntityWithChangedAt(cargoDto);
+        Cargo originalCargo = findOneCargoById(id);
+        editedCargo.setCreatedAt(originalCargo.getCreatedAt());
+        editedCargo.setId(originalCargo.getId());
+        Cargo savedCargo = cargoRepository.save(editedCargo);
+        return cargoMapper.toDto(savedCargo);
     }
 
     /**

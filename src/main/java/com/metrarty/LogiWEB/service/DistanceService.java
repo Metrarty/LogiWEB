@@ -28,7 +28,6 @@ public class DistanceService {
     private final DistanceRepository distanceRepository;
     private final DistanceMapper distanceMapper;
     private final DistanceValidator distanceValidator;
-    private final DistancePreparationService distancePreparationService;
 
     /**
      * Creates distance and saves into repository.
@@ -48,8 +47,13 @@ public class DistanceService {
      * @return List of distances DTO
      */
     public List<DistanceDto> findAllDistances() {
-        log.info("DistanceService.findAllDistances was called");
-        return distancePreparationService.prepareAllDistances();
+        List<Distance> entities = distanceRepository.findAll();
+        List<DistanceDto> result = new ArrayList<>();
+        for (Distance entity : entities) {
+            DistanceDto distanceDto = distanceMapper.toDto(entity);
+            result.add(distanceDto);
+        }
+        return result;
     }
 
     /**
@@ -58,7 +62,14 @@ public class DistanceService {
      * @return list of distances
      */
     public List<DistanceDto> prepareSuitableDistances(CityDto cityOrder) {
-        return distancePreparationService.prepareSuitableDistances(cityOrder);
+        List<DistanceDto> allDistances = findAllDistances();
+        List<DistanceDto> distanceSuitable = new ArrayList<>();
+        for(DistanceDto distance : allDistances) {
+            if (distance.getCity1().equals(cityOrder) || distance.getCity2().equals(cityOrder)) {
+                distanceSuitable.add(distance);
+            }
+        }
+        return distanceSuitable;
     }
 
     /**
@@ -70,13 +81,11 @@ public class DistanceService {
     public DistanceDto editDistance(@NonNull DistanceDto distanceDto, @NonNull Long id) {
         log.info("DistanceService.editDistance was called with {}", id);
         distanceValidator.checkDistance(distanceDto.getDistance());
-
-        Distance distance = distanceMapper.toEntity(distanceDto);
-        Distance entity = findOneDistanceById(id);
-
-        distance.setId(entity.getId());
-        Distance saved = distanceRepository.save(distance);
-        return distanceMapper.toDto(saved);
+        Distance editedDistance = distanceMapper.toEntity(distanceDto);
+        Distance originalDistance = findOneDistanceById(id);
+        editedDistance.setId(originalDistance.getId());
+        Distance savedDistance = distanceRepository.save(editedDistance);
+        return distanceMapper.toDto(savedDistance);
     }
 
     /**
