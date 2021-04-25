@@ -1,5 +1,5 @@
 package com.metrarty.LogiWEB.repository.entity;
 
 public enum OrderStatus {
-    CREATED, ONTHEWAY, COMPLETED, CANCELLED;
+    CREATED, ON_THE_WAY, COMPLETED, CANCELLED;
 }
