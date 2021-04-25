@@ -70,4 +70,10 @@ public class OrderController {
         log.info("OrderController.assignTruckToOrder was called with {}{}", truckId, orderId);
         return orderService.assignTruckToOrder(truckId, orderId);
     }
+
+    @PatchMapping("/order/{orderId}/set/status/ontheway")
+    public OrderDto setStatusOnTheWay(@PathVariable Long orderId) {
+        log.info("OrderService.setStatusOnTheWay was called with {}", orderId);
+        return orderService.setStatusOnTheWay(orderId);
+    }
 }

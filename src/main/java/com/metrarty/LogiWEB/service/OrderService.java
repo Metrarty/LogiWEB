@@ -6,6 +6,7 @@ import com.metrarty.LogiWEB.repository.entity.Order;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
+import com.metrarty.LogiWEB.service.validator.OrderValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final TruckService truckService;
     private final DeliveryWorkingDaysCalculationService deliveryWorkingDaysCalculationService;
+    private final OrderValidator orderValidator;
 
     /**
      * Creates order and saves into repository.
@@ -109,6 +111,14 @@ public class OrderService {
         order.setAssignedTruck(assignedTruck);
         order.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
                 .calculateDeliveryWorkingDays(order));
+        Order saved = orderRepository.save(order);
+        return orderMapper.toDto(saved);
+    }
+
+    public OrderDto setStatusOnTheWay(Long orderId) {
+        Order order = findOneOrderById(orderId);
+        orderValidator.checkOrderTruck(order.getAssignedTruck());
+        order.setOrderStatus("ON_THE_WAY");
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
