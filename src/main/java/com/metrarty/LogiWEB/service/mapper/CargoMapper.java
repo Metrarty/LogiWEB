@@ -21,6 +21,7 @@ public class CargoMapper {
         CargoDto entity = new CargoDto();
         entity.setId(cargo.getId());
         entity.setSize(cargo.getSize());
+        entity.setDeliveredAt(cargo.getDeliveredAt());
         return entity;
     }
 
@@ -34,6 +35,7 @@ public class CargoMapper {
         Cargo entity = new Cargo();
         entity.setId(cargoDto.getId());
         entity.setSize(cargoDto.getSize());
+        entity.setDeliveredAt(cargoDto.getDeliveredAt());
         return entity;
     }
 

@@ -30,7 +30,8 @@ CREATE TABLE CARGO (
  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   size BIGINT,
   created_at TIMESTAMP NOT NULL,
-  changed_at TIMESTAMP
+  changed_at TIMESTAMP,
+  delivered_at TIMESTAMP
 );
 
 CREATE TABLE ORDERS (
@@ -42,7 +43,6 @@ CREATE TABLE ORDERS (
   order_status VARCHAR(250),
   created_at TIMESTAMP NOT NULL,
   changed_at TIMESTAMP,
-  delivered_at TIMESTAMP,
   completed_at TIMESTAMP,
   assigned_truck_id BIGINT
 );
