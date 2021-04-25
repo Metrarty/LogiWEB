@@ -36,6 +36,7 @@ public class OrderService {
         if (entity.getAssignedTruck() != null) {
             entity.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
                     .calculateDeliveryWorkingDays(entity));
+            truckService.changeTruckStatus(entity.getAssignedTruck().getId(), "ASSIGNED");
         }
         entity.setOrderStatus("CREATED");
         orderRepository.save(entity);
