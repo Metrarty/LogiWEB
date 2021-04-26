@@ -2,6 +2,7 @@ package com.metrarty.LogiWEB.service.validator;
 
 import com.metrarty.LogiWEB.repository.entity.OrderStatus;
 import com.metrarty.LogiWEB.repository.entity.Truck;
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.exception.ValueIsInvalidException;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class OrderValidator {
 
     public void checkOrderTruck(Truck assignedTruck) {
-        if (isTruckIdNull(assignedTruck)) {
+        if (isAssignedTruckNull(assignedTruck)) {
             throw new EntityNotFoundException("Truck is not assigned to order.");
         }
     }
@@ -21,11 +22,11 @@ public class OrderValidator {
         }
     }
 
-    private boolean isTruckIdNull(Truck assignedTruck) {
+    private boolean isAssignedTruckNull(Truck assignedTruck) {
         return assignedTruck == null;
     }
 
     private boolean isStatus (String orderStatus) {
-        return "COMPLETED".equals(orderStatus);
+        return OrderStatus.COMPLETED.name().equals(orderStatus);
     }
 }
