@@ -3,7 +3,9 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
+import com.metrarty.LogiWEB.repository.entity.OrderStatus;
 import com.metrarty.LogiWEB.repository.entity.Truck;
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
 import com.metrarty.LogiWEB.service.validator.OrderValidator;
@@ -40,9 +42,9 @@ public class OrderService {
         if (entity.getAssignedTruck() != null) {
             entity.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
                     .calculateDeliveryWorkingDays(entity));
-            truckService.changeTruckStatus(entity.getAssignedTruck().getId(), "ASSIGNED");
+            truckService.changeTruckStatus(entity.getAssignedTruck().getId(), TruckStatus.ASSIGNED.name());
         }
-        entity.setOrderStatus("CREATED");
+        entity.setOrderStatus(OrderStatus.CREATED.name());
         orderRepository.save(entity);
         return orderMapper.toDto(entity);
     }
@@ -73,7 +75,7 @@ public class OrderService {
 
         Order editedOrder = orderMapper.toEntityWithChangedAt(orderDto);
         Order originalOrder = findOneOrderById(id);
-        orderValidator.checkOrderStatus(editedOrder.getOrderStatus());
+        orderValidator.checkOrderStatus(originalOrder.getOrderStatus());
         if (originalOrder.getAssignedTruck() != null) {
         editedOrder.setAssignedTruck(originalOrder.getAssignedTruck());
         editedOrder.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
@@ -105,10 +107,10 @@ public class OrderService {
         Truck currentTruck = order.getAssignedTruck();
 
         if (currentTruck != null) {
-            truckService.changeTruckStatus(currentTruck.getId(), "FREE");
+            truckService.changeTruckStatus(currentTruck.getId(), TruckStatus.FREE.name());
         }
 
-        truckService.changeTruckStatus(truckId, "ASSIGNED");
+        truckService.changeTruckStatus(truckId, TruckStatus.ASSIGNED.name());
 
         Truck assignedTruck = truckService.findOneTruckById(truckId);
         order.setAssignedTruck(assignedTruck);
@@ -121,16 +123,18 @@ public class OrderService {
     public OrderDto setStatusOnTheWay(Long orderId) {
         Order order = findOneOrderById(orderId);
         orderValidator.checkOrderTruck(order.getAssignedTruck());
-        order.setOrderStatus("ON_THE_WAY");
+        order.setOrderStatus(OrderStatus.ON_THE_WAY.name());
+        order.setChangedAt(Instant.now());
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
 
     public OrderDto setStatusCompleted(Long orderId) {
         Order order = findOneOrderById(orderId);
-        order.setOrderStatus("COMPLETED");
+        orderValidator.checkOrderStatus(order.getOrderStatus());
+        order.setOrderStatus(OrderStatus.COMPLETED.name());
         order.setCompletedAt(Instant.now());
-        truckService.changeTruckStatus(order.getAssignedTruck().getId(), "FREE");
+        truckService.changeTruckStatus(order.getAssignedTruck().getId(), TruckStatus.FREE.name());
         cargoService.setCargoDeliveredAt(order.getCargo().getId());
         Order saved  = orderRepository.save(order);
         return orderMapper.toDto(saved);
