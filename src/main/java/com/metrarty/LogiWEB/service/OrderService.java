@@ -19,6 +19,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Order service.
+ */
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
@@ -97,11 +100,12 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
-    private Order findOneOrderById(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Order with ID " + id + " is not found"));
-    }
-
+    /**
+     * Assigns truck for order, selected by ID.
+     * @param truckId truck ID
+     * @param orderId order ID
+     * @return order DTO with assigned truck
+     */
     public OrderDto assignTruckToOrder(Long truckId, Long orderId) {
         Order order = findOneOrderById(orderId);
         Truck currentTruck = order.getAssignedTruck();
@@ -120,6 +124,11 @@ public class OrderService {
         return orderMapper.toDto(saved);
     }
 
+    /**
+     * Set status ON_THE_WAY for order, selected by ID.
+     * @param orderId order ID
+     * @return order DTO with status ON_THE_WAY
+     */
     public OrderDto setStatusOnTheWay(Long orderId) {
         Order order = findOneOrderById(orderId);
         orderValidator.checkOrderTruck(order.getAssignedTruck());
@@ -129,6 +138,11 @@ public class OrderService {
         return orderMapper.toDto(saved);
     }
 
+    /**
+     * Set status COMPLETED for order, selected by ID.
+     * @param orderId order ID
+     * @return order DTO with status COMPLETED
+     */
     public OrderDto setStatusCompleted(Long orderId) {
         Order order = findOneOrderById(orderId);
         orderValidator.checkOrderStatus(order.getOrderStatus());
@@ -138,6 +152,11 @@ public class OrderService {
         cargoService.setCargoDeliveredAt(order.getCargo().getId());
         Order saved  = orderRepository.save(order);
         return orderMapper.toDto(saved);
+    }
+
+    private Order findOneOrderById(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Order with ID " + id + " is not found"));
     }
 
     protected Instant getNow() {

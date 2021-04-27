@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ * Truck selection service.
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2

@@ -16,6 +16,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Cargo service.
+ */
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
@@ -79,14 +82,18 @@ public class CargoService {
         cargoRepository.deleteById(id);
     }
 
-    private Cargo findOneCargoById(Long id) {
-        return cargoRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Cargo with ID " + id + " is not found"));
-    }
-
+    /**
+     * Set deliveredAt for cargo, selected by ID.
+     * @param id cargo ID.
+     */
     public void setCargoDeliveredAt(Long id) {
         Cargo originalCargo = findOneCargoById(id);
         originalCargo.setDeliveredAt(Instant.now());
         cargoRepository.save(originalCargo);
+    }
+
+    private Cargo findOneCargoById(Long id) {
+        return cargoRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Cargo with ID " + id + " is not found"));
     }
 }

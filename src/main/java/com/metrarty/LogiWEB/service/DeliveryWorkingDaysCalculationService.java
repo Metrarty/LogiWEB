@@ -7,7 +7,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Delivery working days calculation service.
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
@@ -15,6 +17,11 @@ public class DeliveryWorkingDaysCalculationService {
 
     private final DistanceService distanceService;
 
+    /**
+     * Calculates amount of days required for order delivery.
+     * @param order order
+     * @return days amount
+     */
     public Integer calculateDeliveryWorkingDays(Order order) {
         City orderDestination = order.getDestination();
         City orderSourceCity = order.getSourceCity();

@@ -94,15 +94,21 @@ public class TruckService {
         return truckSelectionService.chooseTruckToDeliver(id, size);
     }
 
-    public Truck findOneTruckById(Long id) {
-        return truckRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
-    }
-
+    /**
+     * Changes truck status.
+     * @param truckId truck ID
+     * @param status truck status
+     * @return truck DTO with changed status
+     */
     public TruckDto changeTruckStatus(Long truckId, String status) {
         Truck truck = findOneTruckById(truckId);
         truck.setTruckStatus(String.valueOf(status));
         Truck saved = truckRepository.save(truck);
         return truckMapper.toDto(saved);
+    }
+
+    public Truck findOneTruckById(Long id) {
+        return truckRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
     }
 }

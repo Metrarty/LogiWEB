@@ -65,18 +65,34 @@ public class OrderController {
         return "Order with ID " + id + " is deleted";
     }
 
+    /**
+     * Assigns truck for order, selected by ID.
+     * @param truckId truck ID
+     * @param orderId order ID
+     * @return order DTO with assigned truck
+     */
     @PatchMapping("/order/{orderId}/assign/truck/{truckId}")
     public OrderDto assignTruckToOrder(@PathVariable Long truckId, @PathVariable Long orderId) {
         log.info("OrderController.assignTruckToOrder was called with {}{}", truckId, orderId);
         return orderService.assignTruckToOrder(truckId, orderId);
     }
 
+    /**
+     * Set status ON_THE_WAY for order, selected by ID.
+     * @param orderId order ID
+     * @return order DTO with status ON_THE_WAY
+     */
     @PatchMapping("/order/{orderId}/set/status/ontheway")
     public OrderDto setStatusOnTheWay(@PathVariable Long orderId) {
         log.info("OrderService.setStatusOnTheWay was called with {}", orderId);
         return orderService.setStatusOnTheWay(orderId);
     }
 
+    /**
+     * Set status COMPLETED for order, selected by ID.
+     * @param orderId order ID
+     * @return order DTO with status COMPLETED
+     */
     @PatchMapping("/order/{orderId}/set/status/completed")
     public OrderDto setStatusCompleted(@PathVariable Long orderId) {
         log.info("OrderService.setStatusCompleted is called with {}", orderId);

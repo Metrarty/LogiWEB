@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
+/**
+ * Order mapper.
+ */
 @Component
 @Log4j2
 public class OrderMapper {
