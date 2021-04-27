@@ -124,7 +124,7 @@ public class OrderService {
         Order order = findOneOrderById(orderId);
         orderValidator.checkOrderTruck(order.getAssignedTruck());
         order.setOrderStatus(OrderStatus.ON_THE_WAY.name());
-        order.setChangedAt(Instant.now());
+        order.setChangedAt(getNow());
         Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
@@ -133,10 +133,14 @@ public class OrderService {
         Order order = findOneOrderById(orderId);
         orderValidator.checkOrderStatus(order.getOrderStatus());
         order.setOrderStatus(OrderStatus.COMPLETED.name());
-        order.setCompletedAt(Instant.now());
+        order.setCompletedAt(getNow());
         truckService.changeTruckStatus(order.getAssignedTruck().getId(), TruckStatus.FREE.name());
         cargoService.setCargoDeliveredAt(order.getCargo().getId());
         Order saved  = orderRepository.save(order);
         return orderMapper.toDto(saved);
+    }
+
+    protected Instant getNow() {
+        return Instant.now();
     }
 }

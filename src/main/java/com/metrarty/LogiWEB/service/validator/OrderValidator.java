@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class OrderValidator {
 
     public void checkOrderTruck(Truck assignedTruck) {
-        if (isAssignedTruckNull(assignedTruck)) {
+        if (isTruckNotAssigned(assignedTruck)) {
             throw new EntityNotFoundException("Truck is not assigned to order.");
         }
     }
@@ -21,7 +21,7 @@ public class OrderValidator {
         }
     }
 
-    private boolean isAssignedTruckNull(Truck assignedTruck) {
+    private boolean isTruckNotAssigned(Truck assignedTruck) {
         return assignedTruck == null;
     }
 
