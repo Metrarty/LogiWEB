@@ -1,10 +1,7 @@
 package com.metrarty.LogiWEB.service.mapper;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
-import com.metrarty.LogiWEB.repository.entity.Cargo;
-import com.metrarty.LogiWEB.repository.entity.City;
-import com.metrarty.LogiWEB.repository.entity.Order;
-import com.metrarty.LogiWEB.repository.entity.Truck;
+import com.metrarty.LogiWEB.repository.entity.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,15 +42,21 @@ public class OrderMapperTest {
     public void testToDto() {
         //prepare
         Cargo cargo = new Cargo();
+        City source = new City();
         City destination = new City();
         Truck assignedTruck = new Truck();
 
         Order order = new Order();
         order.setId(1L);
         order.setCargo(cargo);
+        order.setSourceCity(source);
         order.setDestination(destination);
-        order.setDeliveryWorkingDays(2);
         order.setAssignedTruck(assignedTruck);
+        order.setDeliveryWorkingDays(2);
+        order.setOrderStatus("CREATED");
+        order.setCreatedAt(NOW);
+        order.setChangedAt(NOW);
+        order.setCompletedAt(NOW);
 
         OrderDto expected = new OrderDto();
         expected.setId(order.getId());
@@ -61,9 +64,13 @@ public class OrderMapperTest {
         expected.setDestination(cityMapper.toDto(order.getDestination()));
         expected.setDeliveryWorkingDays(order.getDeliveryWorkingDays());
         expected.setAssignedTruck(truckMapper.toDto(order.getAssignedTruck()));
+        expected.setOrderStatus(OrderStatus.valueOf(order.getOrderStatus()));
+        expected.setCreatedAt(order.getCreatedAt());
+        expected.setChangedAt(order.getChangedAt());
+        expected.setCompletedAt(order.getCompletedAt());
 
         //run
-        OrderDto actual = orderMapper.toDto(order);
+        OrderDto actual = orderMapperSpy.toDto(order);
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
@@ -73,19 +80,22 @@ public class OrderMapperTest {
     public void testToInitialEntity() {
         //prepare
         Cargo cargo = new Cargo();
+        City source = new City();
         City destination = new City();
         Truck assignedTruck = new Truck();
 
         OrderDto orderDto = new OrderDto();
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
+        orderDto.setSourceCity(cityMapper.toDto(source));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setDeliveryWorkingDays(2);
         orderDto.setAssignedTruck(truckMapper.toDto(assignedTruck));
+        orderDto.setDeliveryWorkingDays(2);
 
         Order expected = new Order();
         expected.setId(orderDto.getId());
         expected.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
+        expected.setSourceCity(cityMapper.toEntity(orderDto.getSourceCity()));
         expected.setDestination(cityMapper.toEntity(orderDto.getDestination()));
         expected.setDeliveryWorkingDays(orderDto.getDeliveryWorkingDays());
         expected.setCreatedAt(NOW);
@@ -103,12 +113,14 @@ public class OrderMapperTest {
     public void testToUpdatedEntity() {
         //prepare
         Cargo cargo = new Cargo();
+        City source = new City();
         City destination = new City();
         Truck assignedTruck = new Truck();
 
         OrderDto orderDto = new OrderDto();
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
+        orderDto.setSourceCity(cityMapper.toDto(source));
         orderDto.setDestination(cityMapper.toDto(destination));
         orderDto.setDeliveryWorkingDays(2);
         orderDto.setAssignedTruck(truckMapper.toDto(assignedTruck));
@@ -116,6 +128,7 @@ public class OrderMapperTest {
         Order expected = new Order();
         expected.setId(orderDto.getId());
         expected.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
+        expected.setSourceCity(cityMapper.toEntity(orderDto.getSourceCity()));
         expected.setDestination(cityMapper.toEntity(orderDto.getDestination()));
         expected.setDeliveryWorkingDays(orderDto.getDeliveryWorkingDays());
         expected.setChangedAt(NOW);

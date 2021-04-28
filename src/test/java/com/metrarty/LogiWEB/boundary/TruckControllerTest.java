@@ -50,7 +50,7 @@ public class TruckControllerTest {
     }
 
     @Test
-    public void testChooseTrucktoDeliver() {
+    public void testChooseTruckToDeliver() {
         truckController.chooseTruckToDeliver(1L, 100L);
         verify(truckService, times(1)).chooseTruckToDeliver(1L, 100L);
         verifyNoMoreInteractions(truckService);

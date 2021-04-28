@@ -1,6 +1,7 @@
 package com.metrarty.LogiWEB.boundary;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
+import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.service.OrderService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +47,27 @@ public class OrderControllerTest {
     public void testDeleteOrderById() {
         orderController.deleteOrderById(1L);
         verify(orderService, times(1)).deleteOrderById(1L);
+        verifyNoMoreInteractions(orderService);
+    }
+
+    @Test
+    public void testAssignTruckOrder() {
+        orderController.assignTruckToOrder(1L, 2L);
+        verify(orderService, times(1)).assignTruckToOrder(1L, 2L);
+        verifyNoMoreInteractions(orderService);
+    }
+
+    @Test
+    public void testSetStatusOnTheWay() {
+        orderController.setStatusOnTheWay(1L);
+        verify(orderService, times(1)).setStatusOnTheWay(1L);
+        verifyNoMoreInteractions(orderService);
+    }
+
+    @Test
+    public void testSetStatusCompleted() {
+        orderController.setStatusCompleted(1L);
+        verify(orderService, times(1)).setStatusCompleted(1L);
         verifyNoMoreInteractions(orderService);
     }
 }
