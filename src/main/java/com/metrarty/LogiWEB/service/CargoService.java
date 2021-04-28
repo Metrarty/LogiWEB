@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,5 +82,11 @@ public class CargoService {
     private Cargo findOneCargoById(Long id) {
         return cargoRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Cargo with ID " + id + " is not found"));
+    }
+
+    public void setCargoDeliveredAt(Long id) {
+        Cargo originalCargo = findOneCargoById(id);
+        originalCargo.setDeliveredAt(Instant.now());
+        cargoRepository.save(originalCargo);
     }
 }
