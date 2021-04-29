@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,12 +32,12 @@ public class TruckMapperTest {
         truck.setCapacity(500L);
         truck.setLocation(location);
         truck.setDistancePerDay(1000L);
-        truck.setTruckStatus(String.valueOf(TruckStatus.FREE));
+        truck.setTruckStatus(TruckStatus.FREE.name());
 
         TruckDto expected = new TruckDto();
         expected.setId(truck.getId());
         expected.setCapacity(truck.getCapacity());
-        expected.setLocation(cityMapper.toDto(truck.getLocation()));
+        expected.setLocation(null);
         expected.setDistancePerDay(truck.getDistancePerDay());
         expected.setTruckStatus(TruckStatus.valueOf(truck.getTruckStatus()));
 
@@ -45,6 +46,8 @@ public class TruckMapperTest {
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
+        Mockito.verify(cityMapper, Mockito.times(1)).toDto(location);
+        Mockito.verifyNoMoreInteractions(cityMapper);
     }
 
     @Test

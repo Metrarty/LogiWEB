@@ -5,6 +5,7 @@ import com.metrarty.LogiWEB.repository.CargoRepository;
 import com.metrarty.LogiWEB.repository.entity.Cargo;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.CargoMapper;
+import com.metrarty.LogiWEB.service.validator.CargoValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +32,9 @@ public class CargoServiceTest {
     @Mock
     private CargoMapper cargoMapper;
 
+    @Mock
+    private CargoValidator cargoValidator;
+
     private static final Instant NOW = Instant.now();
 
     @Test
@@ -38,10 +42,12 @@ public class CargoServiceTest {
         //prepare
         CargoDto testCargoDto = new CargoDto();
         testCargoDto.setId(1L);
+        testCargoDto.setSize(100L);
         Cargo testCargo = cargoMapper.toEntityWithCreatedAt(testCargoDto);
         //run
         cargoService.createCargo(testCargoDto);
         //test
+        verify(cargoValidator, times(1)).checkCargo(100L);
         verify(cargoRepository, times(1)).save(testCargo);
         verifyNoMoreInteractions(cargoRepository);
     }

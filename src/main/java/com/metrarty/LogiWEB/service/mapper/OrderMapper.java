@@ -63,8 +63,9 @@ public class OrderMapper {
         entity.setCargo(cargoMapper.toEntity(orderDto.getCargo()));
         entity.setSourceCity(cityMapper.toEntity(orderDto.getSourceCity()));
         entity.setDestination(cityMapper.toEntity(orderDto.getDestination()));
-        if (orderDto.getAssignedTruck() != null)
-        entity.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
+        if (orderDto.getAssignedTruck() != null) {
+            entity.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
+        }
         entity.setDeliveryWorkingDays(orderDto.getDeliveryWorkingDays());
         return entity;
     }
