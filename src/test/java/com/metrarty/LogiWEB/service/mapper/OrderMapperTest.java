@@ -1,6 +1,7 @@
 package com.metrarty.LogiWEB.service.mapper;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
+import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.entity.*;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,7 +28,8 @@ public class OrderMapperTest {
     @Mock
     private CityMapper cityMapper;
 
-    @Mock TruckMapper truckMapper;
+    @Mock
+    private TruckMapper truckMapper;
 
     private static final Instant NOW = Instant.now();
 
@@ -83,13 +85,16 @@ public class OrderMapperTest {
         City source = new City();
         City destination = new City();
         Truck assignedTruck = new Truck();
+        assignedTruck.setId(1L);
+        TruckDto assignedTruckDto = new TruckDto();
+        assignedTruckDto.setId(1L);
 
         OrderDto orderDto = new OrderDto();
         orderDto.setId(1L);
         orderDto.setCargo(cargoMapper.toDto(cargo));
         orderDto.setSourceCity(cityMapper.toDto(source));
         orderDto.setDestination(cityMapper.toDto(destination));
-        orderDto.setAssignedTruck(truckMapper.toDto(assignedTruck));
+        orderDto.setAssignedTruck(assignedTruckDto);
         orderDto.setDeliveryWorkingDays(2);
 
         Order expected = new Order();
@@ -100,7 +105,8 @@ public class OrderMapperTest {
         expected.setDeliveryWorkingDays(orderDto.getDeliveryWorkingDays());
         expected.setCreatedAt(NOW);
         when(orderMapperSpy.getNow()).thenReturn(NOW);
-        expected.setAssignedTruck(truckMapper.toEntity(orderDto.getAssignedTruck()));
+        expected.setAssignedTruck(assignedTruck);
+        when(truckMapper.toEntity(assignedTruckDto)).thenReturn(assignedTruck);
 
         //run
         Order actual = orderMapperSpy.toEntityWithCreatedAt(orderDto);
@@ -108,6 +114,7 @@ public class OrderMapperTest {
         //test
         Assert.assertEquals("Must be equals", expected, actual);
     }
+
 
     @Test
     public void testToUpdatedEntity() {
