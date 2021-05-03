@@ -65,7 +65,7 @@ public class TruckMapperTest {
         Truck expected = new Truck();
         expected.setId(truckDto.getId());
         expected.setCapacity(truckDto.getCapacity());
-        expected.setLocation(cityMapper.toEntity(truckDto.getLocation()));
+        expected.setLocation(null);
         expected.setDistancePerDay(truckDto.getDistancePerDay());
         expected.setTruckStatus(String.valueOf(truckDto.getTruckStatus()));
 
@@ -74,6 +74,7 @@ public class TruckMapperTest {
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
+        Mockito.verify(cityMapper, Mockito.times(1)).toEntity(locationDto);
+        Mockito.verifyNoMoreInteractions(cityMapper);
     }
-
 }
