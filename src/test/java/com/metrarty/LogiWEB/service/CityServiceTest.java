@@ -38,8 +38,8 @@ public class CityServiceTest {
     public void testCreateCity() {
         //prepare
         CityDto testCityDto = new CityDto();
-        testCityDto.setId(1L);
-        City testCity = cityMapperMock.toEntityWithCreatedAt(testCityDto);
+        City testCity = new City();
+        when(cityMapperMock.toEntityWithCreatedAt(testCityDto)).thenReturn(testCity);
         //run
         cityService.createCity(testCityDto);
         //test
@@ -56,7 +56,7 @@ public class CityServiceTest {
     public void testFindCityById() {
         //prepare
         City city = new City();
-        when(cityRepositoryMock.getOne(1L)).thenReturn(city);
+        when(cityRepositoryMock.findById(1L)).thenReturn(Optional.of(city));
         CityDto cityDto = new CityDto();
         when(cityMapperMock.toDto(city)).thenReturn(cityDto);
 
@@ -64,7 +64,7 @@ public class CityServiceTest {
         cityService.findCityById(1L);
 
         //run
-        verify(cityRepositoryMock, times(1)).getOne(1L);
+        verify(cityRepositoryMock, times(1)).findById(1L);
         verify(cityMapperMock, times(1)).toDto(city);
         verifyNoMoreInteractions(cityRepositoryMock, cityMapperMock);
 

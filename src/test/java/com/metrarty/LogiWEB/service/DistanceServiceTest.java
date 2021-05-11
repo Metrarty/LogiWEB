@@ -5,6 +5,7 @@ import com.metrarty.LogiWEB.repository.DistanceRepository;
 import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
+import com.metrarty.LogiWEB.service.validator.DistanceValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,12 +31,15 @@ public class DistanceServiceTest {
     @Mock
     private DistanceMapper distanceMapper;
 
+    @Mock
+    private DistanceValidator distanceValidator;
+
     @Test
     public void testCreateDistance() {
         //prepare
         DistanceDto testDistanceDto = new DistanceDto();
-        testDistanceDto.setId(1L);
-        Distance testDistance = distanceMapper.toEntity(testDistanceDto);
+        Distance testDistance = new Distance();
+        when(distanceMapper.toEntity(testDistanceDto)).thenReturn(testDistance);
 
         //run
         distanceService.createDistance(testDistanceDto);
