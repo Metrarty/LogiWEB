@@ -41,9 +41,9 @@ public class CargoServiceTest {
     public void testCreateCargo() {
         //prepare
         CargoDto testCargoDto = new CargoDto();
-        testCargoDto.setId(1L);
         testCargoDto.setSize(100L);
-        Cargo testCargo = cargoMapper.toEntityWithCreatedAt(testCargoDto);
+        Cargo testCargo = new Cargo();
+        when(cargoMapper.toEntityWithCreatedAt(testCargoDto)).thenReturn(testCargo);
         //run
         cargoService.createCargo(testCargoDto);
         //test
@@ -74,13 +74,15 @@ public class CargoServiceTest {
         Assert.assertEquals("Must be equal", 1, actual.size());
         Assert.assertEquals("Must be equal", expectedDto, actual.get(0));
         verify(cargoRepository, times(1)).findAll();
-        verifyNoMoreInteractions(cargoRepository);
+        verify(cargoMapper, times(1)).toDto(cargo);
+        verifyNoMoreInteractions(cargoRepository, cargoMapper);
     }
 
     @Test
     public void testEditCargo() {
         //prepare
         CargoDto input = new CargoDto();
+        input.setSize(100L);
         Cargo cargo = new Cargo();
         when(cargoMapper.toEntityWithChangedAt(input)).thenReturn(cargo);
 
@@ -98,11 +100,12 @@ public class CargoServiceTest {
         cargoService.editCargo(input, 1L);
 
         //test
+        verify(cargoValidator, times(1)).checkCargo(100L);
         verify(cargoMapper, times(1)).toEntityWithChangedAt(input);
         verify(cargoRepository, times(1)).findById(1L);
         verify(cargoRepository, times(1)).save(saved);
         verify(cargoMapper, times(1)).toDto(saved);
-        verifyNoMoreInteractions(cargoRepository, cargoMapper);
+        verifyNoMoreInteractions(cargoRepository, cargoMapper, cargoValidator);
     }
 
 
@@ -152,5 +155,20 @@ public class CargoServiceTest {
     @Test(expected = NullPointerException.class)
     public void testDeleteCargoById_WhenInputIsNull() {
         cargoService.deleteCargoById(null);
+    }
+
+    @Test
+    public void setCargoDeliveredAtTest() {
+        //prepare
+        Cargo testOriginalCargo = new Cargo();
+        testOriginalCargo.setId(1L);
+        when(cargoRepository.findById(1L)).thenReturn(Optional.of(testOriginalCargo));
+        testOriginalCargo.setDeliveredAt(NOW);
+        //run
+        cargoService.setCargoDeliveredAt(1L);
+        //test
+        verify(cargoRepository, times(1)).findById(1L);
+        verify(cargoRepository, times(1)).save(testOriginalCargo);
+        verifyNoMoreInteractions(cargoRepository);
     }
 }
