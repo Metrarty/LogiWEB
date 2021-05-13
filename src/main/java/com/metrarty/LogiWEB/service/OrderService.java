@@ -80,9 +80,9 @@ public class OrderService {
         Order originalOrder = findOneOrderById(id);
         orderValidator.checkOrderStatus(originalOrder.getOrderStatus());
         if (originalOrder.getAssignedTruck() != null) {
-        editedOrder.setAssignedTruck(originalOrder.getAssignedTruck());
-        editedOrder.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
-                .calculateDeliveryWorkingDays(editedOrder));
+            editedOrder.setAssignedTruck(originalOrder.getAssignedTruck());
+            editedOrder.setDeliveryWorkingDays(deliveryWorkingDaysCalculationService
+                    .calculateDeliveryWorkingDays(editedOrder));
         }
         editedOrder.setCreatedAt(originalOrder.getCreatedAt());
         editedOrder.setId(originalOrder.getId());

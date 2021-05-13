@@ -97,27 +97,31 @@ public class OrderServiceTest {
     @Test
     public void testEditOrder() {
         //prepare
-        OrderDto input = new OrderDto();
-        Order order = new Order();
-        when(orderMapper.toEntityWithChangedAt(input)).thenReturn(order);
+        OrderDto inputDto = new OrderDto();
+        Order editedOrder = new Order();
+        when(orderMapper.toEntityWithChangedAt(inputDto)).thenReturn(editedOrder);
 
-        Order foundOrder = new Order();
-        foundOrder.setId(1L);
-        foundOrder.setCreatedAt(NOW);
-        when(orderRepository.findById(1L)).thenReturn(java.util.Optional.of(foundOrder));
+        Order originalOrder = new Order();
+        originalOrder.setId(1L);
+        originalOrder.setCreatedAt(NOW);
+        originalOrder.setOrderStatus("CREATED");
+        Truck assignedTruck = new Truck();
+        originalOrder.setAssignedTruck(assignedTruck);
+        when(orderRepository.findById(1L)).thenReturn(java.util.Optional.of(originalOrder));
 
         Order saved = new Order();
-        when(orderRepository.save(saved)).thenReturn(saved);
+        when(orderRepository.save(editedOrder)).thenReturn(saved);
 
         //run
-        orderService.editOrder(input, 1L);
+        orderService.editOrder(inputDto, 1L);
 
         //test
-        verify(orderMapper, times(1)).toEntityWithChangedAt(input);
+        verify(orderMapper, times(1)).toEntityWithChangedAt(inputDto);
         verify(orderRepository, times(1)).findById(1L);
-        verify(orderRepository, times(1)).save(saved);
+        verify(orderValidator, times(1)).checkOrderStatus("CREATED");
+        verify(orderRepository, times(1)).save(editedOrder);
         verify(orderMapper, times(1)).toDto(saved);
-        verifyNoMoreInteractions(orderRepository, orderMapper);
+        verifyNoMoreInteractions(orderRepository, orderMapper, orderValidator);
     }
 
     @Test(expected = EntityNotFoundException.class)
