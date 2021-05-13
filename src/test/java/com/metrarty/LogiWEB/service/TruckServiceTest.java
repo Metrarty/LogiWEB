@@ -5,6 +5,7 @@ import com.metrarty.LogiWEB.repository.TruckRepository;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
+import com.metrarty.LogiWEB.service.validator.TruckValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,19 +31,28 @@ public class TruckServiceTest {
     @Mock
     private TruckMapper truckMapper;
 
+    @Mock
+    private TruckValidator truckValidator;
+
+    @Mock TruckSelectionService truckSelectionService;
+
     @Test
     public void testCreateTruck() {
         //prepare
         TruckDto testTruckDto = new TruckDto();
-        testTruckDto.setId(1L);
-        Truck testTruck = truckMapper.toEntity(testTruckDto);
+        testTruckDto.setCapacity(1000L);
+        testTruckDto.setDistancePerDay(5000L);
+        Truck testTruck = new Truck();
+        when(truckMapper.toEntity(testTruckDto)).thenReturn(testTruck);
 
         //run
         truckService.createTruck(testTruckDto);
 
         //test
+        verify(truckValidator, times(1)).checkCapacitySize(1000L);
+        verify(truckValidator, times(1)).checkDistancePerDay(5000L);
         verify(truckRepository, times(1)).save(testTruck);
-        verifyNoMoreInteractions(truckRepository);
+        verifyNoMoreInteractions(truckRepository, truckValidator);
     }
 
     @Test(expected = NullPointerException.class)
@@ -143,5 +153,36 @@ public class TruckServiceTest {
     @Test(expected = NullPointerException.class)
     public void testDeleteTruckById_WhenInputIsNull() {
         truckService.deleteTruckById(null);
+    }
+
+    @Test
+    public void chooseTruckToDeliverTest() {
+        //prepare
+        Truck truck = new Truck();
+        truck.setId(1L);
+        //run
+        truckService.chooseTruckToDeliver(1L, 500L);
+        //test
+        verify(truckSelectionService, times(1)).chooseTruckToDeliver(1L, 500L);
+        verifyNoMoreInteractions(truckSelectionService);
+    }
+
+    @Test
+    public void changeTruckStatusTest() {
+        //prepare
+        Truck truck = new Truck();
+        truck.setId(1L);
+        when(truckRepository.findById(1L)).thenReturn(Optional.of(truck));
+
+        Truck saved = new Truck();
+        saved.setId(1L);
+        saved.setTruckStatus("ASSIGNED");
+        when(truckRepository.save(saved)).thenReturn(saved);
+        //run
+        truckService.changeTruckStatus(1L, "ASSIGNED");
+        //test
+        verify(truckRepository, times(1)).findById(1L);
+        verify(truckRepository, times(1)).save(saved);
+        verifyNoMoreInteractions(truckRepository);
     }
 }

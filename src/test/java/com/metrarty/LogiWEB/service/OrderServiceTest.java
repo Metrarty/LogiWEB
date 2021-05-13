@@ -1,10 +1,15 @@
 package com.metrarty.LogiWEB.service;
 
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
+import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
 import com.metrarty.LogiWEB.repository.entity.Order;
+import com.metrarty.LogiWEB.repository.entity.OrderStatus;
+import com.metrarty.LogiWEB.repository.entity.Truck;
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
+import com.metrarty.LogiWEB.service.validator.OrderValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,19 +36,37 @@ public class OrderServiceTest {
     @Mock
     private OrderMapper orderMapper;
 
+    @Mock
+    private DeliveryWorkingDaysCalculationService deliveryWorkingDaysCalculationService;
+
+    @Mock
+    private TruckService truckService;
+
+    @Mock
+    private OrderValidator orderValidator;
+
     private static final Instant NOW =Instant.now();
 
     @Test
     public void TestCreateOrder() {
         //prepare
+        Truck assignedTruck = new Truck();
+        TruckDto assignedTruckDto = new TruckDto();
         OrderDto testOrderDto = new OrderDto();
-        testOrderDto.setId(1L);
-        Order testOrder = orderMapper.toEntityWithCreatedAt(testOrderDto);
+        Order testOrder = new Order();
+        testOrder.setAssignedTruck(assignedTruck);
+        when(orderMapper.toEntityWithCreatedAt(testOrderDto)).thenReturn(testOrder);
+        when(deliveryWorkingDaysCalculationService.calculateDeliveryWorkingDays(testOrder)).thenReturn(10);
+        when(truckService.changeTruckStatus(null, String.valueOf(TruckStatus.ASSIGNED))).thenReturn(assignedTruckDto);
         //run
         orderService.createOrder(testOrderDto);
         //test
         verify(orderRepository, times(1)).save(testOrder);
-        verifyNoMoreInteractions(orderRepository);
+        verify(orderMapper, times(1)).toEntityWithCreatedAt(testOrderDto);
+        verify(orderMapper, times(1)).toDto(testOrder);
+        verify(deliveryWorkingDaysCalculationService, times(1)).calculateDeliveryWorkingDays(testOrder);
+        verify(truckService, times(1)).changeTruckStatus(null, String.valueOf(TruckStatus.ASSIGNED));
+        verifyNoMoreInteractions(orderRepository, orderMapper, deliveryWorkingDaysCalculationService, truckService);
     }
 
     @Test(expected = NullPointerException.class)
@@ -84,8 +107,6 @@ public class OrderServiceTest {
         when(orderRepository.findById(1L)).thenReturn(java.util.Optional.of(foundOrder));
 
         Order saved = new Order();
-        saved.setId(1L);
-        saved.setCreatedAt(NOW);
         when(orderRepository.save(saved)).thenReturn(saved);
 
         //run
@@ -145,5 +166,30 @@ public class OrderServiceTest {
     @Test(expected = NullPointerException.class)
     public void testDeleteOrderById_WhenInputIsNull() {
         orderService.deleteOrderById(null);
+    }
+
+    @Test
+    public void assignTruckToOrderTest() {
+        //prepare
+        Truck currentTruck = new Truck();
+        currentTruck.setId(1L);
+        Order order = new Order();
+        order.setId(2L);
+        order.setAssignedTruck(currentTruck);
+        when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
+
+        Truck assignedTruck = new Truck();
+        assignedTruck.setId(3L);
+        when(truckService.findOneTruckById(3L)).thenReturn(currentTruck);
+
+        Order saved = new Order();
+        saved.setAssignedTruck(assignedTruck);
+        when(deliveryWorkingDaysCalculationService.calculateDeliveryWorkingDays(saved)).thenReturn(10);
+        when(orderRepository.save(saved)).thenReturn(saved);
+
+        //run
+        orderService.assignTruckToOrder(1L,2L);
+        //test
+        verify(orderRepository, times(1)).findById(2L);
     }
 }
