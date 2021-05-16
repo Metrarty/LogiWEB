@@ -105,7 +105,7 @@ public class CityServiceTest {
         City saved = new City();
         saved.setId(1L);
         saved.setCreatedAt(NOW);
-        when(cityRepositoryMock.save(saved)).thenReturn(saved);
+        when(cityRepositoryMock.save(foundCity)).thenReturn(saved);
 
         //run
         cityService.editCity(input, 1L);

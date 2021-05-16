@@ -92,7 +92,7 @@ public class DistanceServiceTest {
 
         Distance saved = new Distance();
         saved.setId(1L);
-        when(distanceRepository.save(saved)).thenReturn(saved);
+        when(distanceRepository.save(foundDistance)).thenReturn(saved);
 
         //run
         distanceService.editDistance(input, 1L);
@@ -100,7 +100,7 @@ public class DistanceServiceTest {
         //test
         verify(distanceMapper, times(1)).toEntity(input);
         verify(distanceRepository, times(1)).findById(1L);
-        verify(distanceRepository, times(1)).save(saved);
+        verify(distanceRepository, times(1)).save(foundDistance);
         verify(distanceMapper, times(1)).toDto(saved);
         verifyNoMoreInteractions(distanceRepository, distanceMapper);
     }

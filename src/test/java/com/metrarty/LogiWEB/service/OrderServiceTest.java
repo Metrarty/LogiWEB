@@ -3,8 +3,8 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
+import com.metrarty.LogiWEB.repository.entity.Cargo;
 import com.metrarty.LogiWEB.repository.entity.Order;
-import com.metrarty.LogiWEB.repository.entity.OrderStatus;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
@@ -44,6 +44,9 @@ public class OrderServiceTest {
 
     @Mock
     private OrderValidator orderValidator;
+
+    @Mock
+    private CargoService cargoService;
 
     private static final Instant NOW =Instant.now();
 
@@ -175,25 +178,97 @@ public class OrderServiceTest {
     @Test
     public void assignTruckToOrderTest() {
         //prepare
-        Truck currentTruck = new Truck();
-        currentTruck.setId(1L);
-        Order order = new Order();
-        order.setId(2L);
-        order.setAssignedTruck(currentTruck);
-        when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
+        Truck inputTruck = new Truck();
+        inputTruck.setId(1L);
 
+        Order inputOrder = new Order();
+        inputOrder.setId(2L);
+        inputOrder.setCreatedAt(NOW);
+        inputOrder.setOrderStatus("CREATED");
         Truck assignedTruck = new Truck();
         assignedTruck.setId(3L);
-        when(truckService.findOneTruckById(3L)).thenReturn(currentTruck);
+        inputOrder.setAssignedTruck(assignedTruck);
+
+        when(orderRepository.findById(2L)).thenReturn(Optional.of(inputOrder));
+
+        TruckDto changedAssignedTruck = new TruckDto();
+        changedAssignedTruck.setTruckStatus(TruckStatus.valueOf("FREE"));
+        when(truckService.changeTruckStatus(3L, "FREE")).thenReturn(changedAssignedTruck);
+
+        when(truckService.findOneTruckById(1L)).thenReturn(inputTruck);
+
 
         Order saved = new Order();
-        saved.setAssignedTruck(assignedTruck);
-        when(deliveryWorkingDaysCalculationService.calculateDeliveryWorkingDays(saved)).thenReturn(10);
-        when(orderRepository.save(saved)).thenReturn(saved);
+
+        when(orderRepository.save(inputOrder)).thenReturn(saved);
 
         //run
-        orderService.assignTruckToOrder(1L,2L);
+        orderService.assignTruckToOrder(1L, 2L);
+
         //test
+        verify(truckService, times(1)).changeTruckStatus(3L, "FREE");
+        verify(deliveryWorkingDaysCalculationService, times(1)).calculateDeliveryWorkingDays(inputOrder);
         verify(orderRepository, times(1)).findById(2L);
+        verify(truckService, times(1)).findOneTruckById(1L);
+        verify(truckService, times(1)).changeTruckStatus(1L, "ASSIGNED");
+        verify(orderRepository, times(1)).save(inputOrder);
+        verify(orderMapper, times(1)).toDto(saved);
+        verifyNoMoreInteractions(truckService, deliveryWorkingDaysCalculationService, orderRepository, orderMapper);
+    }
+
+    @Test
+    public void setStatusOnTheWayTest() {
+        //prepare
+        Order order = new Order();
+        order.setId(1L);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+
+        Order saved = new Order();
+        saved.setId(1L);
+        saved.setOrderStatus("ON_THE_WAY");
+        saved.setChangedAt(NOW);
+        when(orderRepository.save(order)).thenReturn(saved);
+        //run
+        orderService.setStatusOnTheWay(1L);
+        //test
+        verify(orderRepository, times(1)).findById(1L);
+        verify(orderRepository, times(1)).save(order);
+        verify(orderMapper, times(1)).toDto(saved);
+        verifyNoMoreInteractions(orderRepository, orderMapper);
+    }
+
+    @Test
+    public void setStatusCompleted() {
+        //prepare
+
+        Truck assignedTruck = new Truck();
+        assignedTruck.setId(2L);
+
+        Cargo cargo = new Cargo();
+        cargo.setId(3L);
+
+        Order order = new Order();
+        order.setId(1L);
+        order.setCargo(cargo);
+        order.setAssignedTruck(assignedTruck);
+        order.setOrderStatus("CREATED");
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+
+        Order saved = new Order();
+        saved.setId(1L);
+        saved.setOrderStatus("COMPLETED");
+        saved.setCompletedAt(NOW);
+        saved.setAssignedTruck(assignedTruck);
+        when(orderRepository.save(order)).thenReturn(saved);
+        //run
+        orderService.setStatusCompleted(1L);
+        //test
+        verify(orderRepository, times(1)).findById(1L);
+        verify(orderValidator, times(1)).checkOrderStatus("CREATED");
+        verify(truckService, times(1)).changeTruckStatus(2L,"FREE");
+        verify(cargoService, times(1)).setCargoDeliveredAt(3L);
+        verify(orderRepository, times(1)).save(order);
+        verify(orderMapper, times(1)).toDto(saved);
+        verifyNoMoreInteractions(orderRepository, orderMapper);
     }
 }

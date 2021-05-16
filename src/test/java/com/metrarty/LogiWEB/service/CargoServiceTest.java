@@ -94,7 +94,7 @@ public class CargoServiceTest {
         Cargo saved = new Cargo();
         saved.setId(1L);
         saved.setCreatedAt(NOW);
-        when(cargoRepository.save(saved)).thenReturn(saved);
+        when(cargoRepository.save(foundCargo)).thenReturn(saved);
 
         //run
         cargoService.editCargo(input, 1L);

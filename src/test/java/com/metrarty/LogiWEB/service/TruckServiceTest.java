@@ -83,28 +83,27 @@ public class TruckServiceTest {
     @Test
     public void testEditTruck() {
         //prepare
-        TruckDto input = new TruckDto();
-        Truck truck = new Truck();
-        when(truckMapper.toEntity(input)).thenReturn(truck);
+        TruckDto inputDto = new TruckDto();
+        Truck editedTruck = new Truck();
+        when(truckMapper.toEntity(inputDto)).thenReturn(editedTruck);
 
-        Truck foundTruck = new Truck();
-        foundTruck.setId(1L);
-        when(truckRepository.findById(1L)).thenReturn(Optional.of(foundTruck));
+        Truck originalTruck = new Truck();
+        originalTruck.setId(1L);
+        when(truckRepository.findById(1L)).thenReturn(Optional.of(originalTruck));
 
         Truck saved = new Truck();
         saved.setId(1L);
-        when(truckRepository.save(saved)).thenReturn(saved);
+        when(truckRepository.save(editedTruck)).thenReturn(saved);
 
         //run
-        truckService.editTruck(input, 1L);
+        truckService.editTruck(inputDto, 1L);
 
         //test
-        verify(truckMapper, times(1)).toEntity(input);
+        verify(truckMapper, times(1)).toEntity(inputDto);
         verify(truckRepository, times(1)).findById(1L);
-        verify(truckRepository, times(1)).save(saved);
+        verify(truckRepository, times(1)).save(editedTruck);
         verify(truckMapper, times(1)).toDto(saved);
-        verifyNoMoreInteractions(truckRepository);
-        verifyNoMoreInteractions(truckMapper);
+        verifyNoMoreInteractions(truckRepository, truckMapper);
     }
 
     @Test(expected = EntityNotFoundException.class)
@@ -177,12 +176,12 @@ public class TruckServiceTest {
         Truck saved = new Truck();
         saved.setId(1L);
         saved.setTruckStatus("ASSIGNED");
-        when(truckRepository.save(saved)).thenReturn(saved);
+        when(truckRepository.save(truck)).thenReturn(saved);
         //run
         truckService.changeTruckStatus(1L, "ASSIGNED");
         //test
         verify(truckRepository, times(1)).findById(1L);
-        verify(truckRepository, times(1)).save(saved);
+        verify(truckRepository, times(1)).save(truck);
         verifyNoMoreInteractions(truckRepository);
     }
 }

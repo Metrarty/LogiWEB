@@ -27,6 +27,7 @@ public class DeliveryWorkingDaysCalculationService {
         City orderSourceCity = order.getSourceCity();
         City truckLocation = order.getAssignedTruck().getLocation();
         Long distancePerDay = order.getAssignedTruck().getDistancePerDay();
+
         Long distanceBetweenSourceAndDestination = distanceService.distanceBetweenCities(orderSourceCity, orderDestination);
         Long distanceFromTruckToSourceCity = distanceService.distanceBetweenCities(orderSourceCity, truckLocation);
 
