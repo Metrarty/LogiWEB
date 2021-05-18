@@ -23,7 +23,7 @@ public class OrderValidator {
     }
 
     /**
-     * Throws (@link ValueIsInvalidException) if order status is COMPLETED.
+     * Throws (@link ValueIsInvalidException) if order status is COMPLETED of CANCELLED.
      * @param orderStatus order status
      */
     public void checkOrderStatus(String orderStatus) {

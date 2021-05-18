@@ -127,7 +127,7 @@ public class OrderService {
     }
 
     /**
-     * Set status ON_THE_WAY for order, selected by ID.
+     * Sets status ON_THE_WAY for order, selected by ID.
      * @param orderId order ID
      * @return order DTO with status ON_THE_WAY
      */
@@ -141,7 +141,7 @@ public class OrderService {
     }
 
     /**
-     * Set status COMPLETED for order, selected by ID.
+     * Sets status COMPLETED for order, selected by ID.
      * @param orderId order ID
      * @return order DTO with status COMPLETED
      */
@@ -156,6 +156,12 @@ public class OrderService {
         return orderMapper.toDto(saved);
     }
 
+    /**
+     * Sets status CANCELLED for order, selected by ID, sets status FREE for assigned truck and sets truck location
+     * at the source city or destination depending what is closer to truck.
+     * @param orderId order ID
+     * @return order DTP with status CANCELLED
+     */
     public OrderDto setStatusCancelled(Long orderId) {
         Order order = findOneOrderById(orderId);
         orderValidator.checkOrderStatus(order.getOrderStatus());

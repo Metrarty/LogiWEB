@@ -30,6 +30,10 @@ public class TruckValidator {
         }
     }
 
+    /**
+     * Throws (@link ValueIsInvalidException) if truck status is not ASSIGNED.
+     * @param truckStatus
+     */
     public void checkTruckStatus(String truckStatus) {
         if (!isTruckStatusAssigned(truckStatus)) {
             throw new ValueIsInvalidException("Truck status is not assigned");

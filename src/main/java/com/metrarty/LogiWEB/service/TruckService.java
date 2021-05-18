@@ -118,11 +118,16 @@ public class TruckService {
                 .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
     }
 
-    public TruckDto changeTruckLocation(Long truckId, City truckLocation) {
+    /**
+     * Sets new location city for assigned truck, assigned to order.
+     * @param truckId truck ID
+     * @param truckLocation new truck location
+     */
+    public void changeTruckLocation(Long truckId, City truckLocation) {
         Truck truck = findOneTruckById(truckId);
         truckValidator.checkTruckStatus(truck.getTruckStatus());
         truck.setLocation(truckLocation);
         Truck saved = truckRepository.save(truck);
-        return truckMapper.toDto(saved);
+        truckMapper.toDto(saved);
     }
 }
