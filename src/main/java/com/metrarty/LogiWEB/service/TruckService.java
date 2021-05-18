@@ -76,7 +76,7 @@ public class TruckService {
     }
 
     /**
-     * Deletes truck, selected by id
+     * Deletes truck, selected by id.
      * @param id truck ID
      */
     public void deleteTruckById(@NonNull Long id) {
@@ -107,6 +107,11 @@ public class TruckService {
         return truckMapper.toDto(saved);
     }
 
+    /**
+     * Finds one truck from repository by ID, if not found throws (@link EntityNotFoundException)
+     * @param id truck ID
+     * @return truck
+     */
     public Truck findOneTruckById(Long id) {
         return truckRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));

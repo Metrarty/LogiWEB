@@ -43,7 +43,7 @@ public class CargoService {
 
     /**
      * Finds all exist cities.
-     * @return List of cities DTO.
+     * @return List of cities DTO
      */
     public List<CargoDto> findAllCargos() {
         log.info("CargoService.findAllCargos was called");
@@ -84,7 +84,7 @@ public class CargoService {
 
     /**
      * Set deliveredAt for cargo, selected by ID.
-     * @param id cargo ID.
+     * @param id cargo ID
      */
     public void setCargoDeliveredAt(Long id) {
         Cargo originalCargo = findOneCargoById(id);
