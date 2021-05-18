@@ -2,6 +2,7 @@ package com.metrarty.LogiWEB.service;
 
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
+import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
@@ -115,5 +116,13 @@ public class TruckService {
     public Truck findOneTruckById(Long id) {
         return truckRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Truck with ID " + id + " is not found"));
+    }
+
+    public TruckDto changeTruckLocation(Long truckId, City truckLocation) {
+        Truck truck = findOneTruckById(truckId);
+        truckValidator.checkTruckStatus(truck.getTruckStatus());
+        truck.setLocation(truckLocation);
+        Truck saved = truckRepository.save(truck);
+        return truckMapper.toDto(saved);
     }
 }

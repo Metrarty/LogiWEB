@@ -9,6 +9,7 @@ import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
 import com.metrarty.LogiWEB.service.validator.OrderValidator;
+import com.metrarty.LogiWEB.service.validator.TruckValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,6 +34,7 @@ public class OrderService {
     private final DeliveryWorkingDaysCalculationService deliveryWorkingDaysCalculationService;
     private final OrderValidator orderValidator;
     private final CargoService cargoService;
+    private final DistanceService distanceService;
 
     /**
      * Creates order and saves into repository.
@@ -155,7 +157,23 @@ public class OrderService {
     }
 
     public OrderDto setStatusCancelled(Long orderId) {
-        return null;
+        Order order = findOneOrderById(orderId);
+        orderValidator.checkOrderStatus(order.getOrderStatus());
+        order.setOrderStatus(OrderStatus.CANCELLED.name());
+        order.setCancelledAt(getNow());
+
+        truckService.changeTruckLocation(order.getAssignedTruck().getId(), order.getDestination());
+
+        Long distanceFromTruckToDestination = distanceService.distanceBetweenCities(order.getAssignedTruck().getLocation(), order.getDestination());
+        Long distanceFromTruckToSourceCity = distanceService.distanceBetweenCities(order.getAssignedTruck().getLocation(), order.getSourceCity());
+        if (distanceFromTruckToSourceCity < distanceFromTruckToDestination) {
+            truckService.changeTruckLocation(order.getAssignedTruck().getId(), order.getSourceCity());
+        }
+        truckService.changeTruckStatus(order.getAssignedTruck().getId(), TruckStatus.FREE.name());
+        order.setAssignedTruck(null);
+        order.setDeliveryWorkingDays(null);
+        Order saved = orderRepository.save(order);
+        return orderMapper.toDto(saved);
     }
 
     private Order findOneOrderById(Long id) {

@@ -1,5 +1,6 @@
 package com.metrarty.LogiWEB.service.validator;
 
+import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.ValueIsInvalidException;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +30,12 @@ public class TruckValidator {
         }
     }
 
+    public void checkTruckStatus(String truckStatus) {
+        if (!isTruckStatusAssigned(truckStatus)) {
+            throw new ValueIsInvalidException("Truck status is not assigned");
+        }
+    }
+
     private boolean isCapacityLessOrEqualZero(Long size) {
         return size <= 0;
     }
@@ -37,4 +44,7 @@ public class TruckValidator {
         return distancePerDay <= 0;
     }
 
+    private boolean isTruckStatusAssigned(String truckStatus) {
+        return TruckStatus.ASSIGNED.name().equals(truckStatus);
+    }
 }

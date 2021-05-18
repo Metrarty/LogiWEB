@@ -30,6 +30,9 @@ public class OrderValidator {
         if (isStatusCompleted(orderStatus)) {
             throw new ValueIsInvalidException("Order is completed.");
         }
+        if (isStatusCancelled(orderStatus)) {
+            throw new ValueIsInvalidException("Order is cancelled.");
+        }
     }
 
     private boolean isTruckNotAssigned(Truck assignedTruck) {
@@ -38,5 +41,9 @@ public class OrderValidator {
 
     private boolean isStatusCompleted(String orderStatus) {
         return OrderStatus.COMPLETED.name().equals(orderStatus);
+    }
+
+    private boolean isStatusCancelled(String orderStatus) {
+        return OrderStatus.CANCELLED.name().equals(orderStatus);
     }
 }
