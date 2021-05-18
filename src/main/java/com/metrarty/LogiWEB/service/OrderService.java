@@ -154,6 +154,10 @@ public class OrderService {
         return orderMapper.toDto(saved);
     }
 
+    public OrderDto setStatusCancelled(Long orderId) {
+        return null;
+    }
+
     private Order findOneOrderById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(()-> new EntityNotFoundException("Order with ID " + id + " is not found"));

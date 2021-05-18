@@ -78,7 +78,7 @@ public class OrderController {
     }
 
     /**
-     * Set status ON_THE_WAY for order, selected by ID.
+     * Sets status ON_THE_WAY for order, selected by ID.
      * @param orderId order ID
      * @return order DTO with status ON_THE_WAY
      */
@@ -89,7 +89,7 @@ public class OrderController {
     }
 
     /**
-     * Set status COMPLETED for order, selected by ID.
+     * Sets status COMPLETED for order, selected by ID.
      * @param orderId order ID
      * @return order DTO with status COMPLETED
      */
@@ -97,5 +97,16 @@ public class OrderController {
     public OrderDto setStatusCompleted(@PathVariable Long orderId) {
         log.info("OrderService.setStatusCompleted is called with {}", orderId);
         return orderService.setStatusCompleted(orderId);
+    }
+
+    /**
+     * Sets status CANCELLED for order, selected by ID.
+     * @param orderId order ID
+     * @return order DTO with status CANCELLED
+     */
+    @PatchMapping("/order/{orderId}/set/status/cancelled")
+    public OrderDto setStatusCancelled(@PathVariable Long orderId) {
+        log.info("OrderService.statusCancelled is called with {}", orderId);
+        return orderService.setStatusCancelled(orderId);
     }
 }
