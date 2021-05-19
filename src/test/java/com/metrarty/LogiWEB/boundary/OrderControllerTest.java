@@ -70,4 +70,11 @@ public class OrderControllerTest {
         verify(orderService, times(1)).setStatusCompleted(1L);
         verifyNoMoreInteractions(orderService);
     }
+
+    @Test
+    public void testSetStatusCancelled() {
+        orderController.setStatusCancelled(1L);
+        verify(orderService, times(1)).setStatusCancelled(1L);
+        verifyNoMoreInteractions(orderService);
+    }
 }

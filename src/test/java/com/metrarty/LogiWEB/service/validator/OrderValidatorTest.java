@@ -36,4 +36,9 @@ public class OrderValidatorTest {
     public void checkOrderStatusWhenCreated() {
         orderValidator.checkOrderStatus("CREATED");
     }
+
+    @Test(expected = ValueIsInvalidException.class)
+    public void checkOrderStatusWhenCancelled() {
+        orderValidator.checkOrderStatus("CANCELLED");
+    }
 }

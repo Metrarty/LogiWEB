@@ -2,6 +2,7 @@ package com.metrarty.LogiWEB.service;
 
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.TruckRepository;
+import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Truck;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.TruckMapper;
@@ -180,6 +181,30 @@ public class TruckServiceTest {
         //run
         truckService.changeTruckStatus(1L, "ASSIGNED");
         //test
+        verify(truckRepository, times(1)).findById(1L);
+        verify(truckRepository, times(1)).save(truck);
+        verifyNoMoreInteractions(truckRepository);
+    }
+
+    @Test
+    public void changeTruckLocationTest() {
+        //prepare
+        Truck truck = new Truck();
+        truck.setId(1L);
+        truck.setTruckStatus("ASSIGNED");
+        when(truckRepository.findById(1L)).thenReturn(Optional.of(truck));
+
+        Truck saved = new Truck();
+        saved.setId(1L);
+        saved.setTruckStatus("ASSIGNED");
+        City truckLocation = new City();
+        saved.setLocation(truckLocation);
+        when(truckRepository.save(truck)).thenReturn(saved);
+
+        //run
+        truckService.changeTruckLocation(1L, truckLocation);
+        //test
+        verify(truckValidator, times(1)).checkTruckStatus("ASSIGNED");
         verify(truckRepository, times(1)).findById(1L);
         verify(truckRepository, times(1)).save(truck);
         verifyNoMoreInteractions(truckRepository);
