@@ -44,6 +44,7 @@ CREATE TABLE ORDERS (
   created_at TIMESTAMP NOT NULL,
   changed_at TIMESTAMP,
   completed_at TIMESTAMP,
+  cancelled_at TIMESTAMP,
   assigned_truck_id BIGINT
 );
 

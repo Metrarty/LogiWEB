@@ -9,6 +9,7 @@ import com.metrarty.LogiWEB.repository.entity.TruckStatus;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
 import com.metrarty.LogiWEB.service.validator.OrderValidator;
+import com.metrarty.LogiWEB.service.validator.TruckValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,6 +34,7 @@ public class OrderService {
     private final DeliveryWorkingDaysCalculationService deliveryWorkingDaysCalculationService;
     private final OrderValidator orderValidator;
     private final CargoService cargoService;
+    private final DistanceService distanceService;
 
     /**
      * Creates order and saves into repository.
@@ -125,7 +127,7 @@ public class OrderService {
     }
 
     /**
-     * Set status ON_THE_WAY for order, selected by ID.
+     * Sets status ON_THE_WAY for order, selected by ID.
      * @param orderId order ID
      * @return order DTO with status ON_THE_WAY
      */
@@ -139,7 +141,7 @@ public class OrderService {
     }
 
     /**
-     * Set status COMPLETED for order, selected by ID.
+     * Sets status COMPLETED for order, selected by ID.
      * @param orderId order ID
      * @return order DTO with status COMPLETED
      */
@@ -151,6 +153,32 @@ public class OrderService {
         truckService.changeTruckStatus(order.getAssignedTruck().getId(), TruckStatus.FREE.name());
         cargoService.setCargoDeliveredAt(order.getCargo().getId());
         Order saved  = orderRepository.save(order);
+        return orderMapper.toDto(saved);
+    }
+
+    /**
+     * Sets status CANCELLED for order, selected by ID, sets status FREE for assigned truck and sets truck location
+     * at the source city or destination depending what is closer to truck.
+     * @param orderId order ID
+     * @return order DTP with status CANCELLED
+     */
+    public OrderDto setStatusCancelled(Long orderId) {
+        Order order = findOneOrderById(orderId);
+        orderValidator.checkOrderStatus(order.getOrderStatus());
+        order.setOrderStatus(OrderStatus.CANCELLED.name());
+        order.setCancelledAt(getNow());
+
+        truckService.changeTruckLocation(order.getAssignedTruck().getId(), order.getDestination());
+
+        Long distanceFromTruckToDestination = distanceService.distanceBetweenCities(order.getAssignedTruck().getLocation(), order.getDestination());
+        Long distanceFromTruckToSourceCity = distanceService.distanceBetweenCities(order.getAssignedTruck().getLocation(), order.getSourceCity());
+        if (distanceFromTruckToSourceCity < distanceFromTruckToDestination) {
+            truckService.changeTruckLocation(order.getAssignedTruck().getId(), order.getSourceCity());
+        }
+        truckService.changeTruckStatus(order.getAssignedTruck().getId(), TruckStatus.FREE.name());
+        order.setAssignedTruck(null);
+        order.setDeliveryWorkingDays(null);
+        Order saved = orderRepository.save(order);
         return orderMapper.toDto(saved);
     }
 

@@ -48,6 +48,7 @@ public class OrderMapper {
         dto.setCreatedAt(order.getCreatedAt());
         dto.setChangedAt(order.getChangedAt());
         dto.setCompletedAt(order.getCompletedAt());
+        dto.setCancelledAt(order.getCancelledAt());
         return dto;
     }
 

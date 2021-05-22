@@ -3,10 +3,7 @@ package com.metrarty.LogiWEB.service;
 import com.metrarty.LogiWEB.boundary.model.OrderDto;
 import com.metrarty.LogiWEB.boundary.model.TruckDto;
 import com.metrarty.LogiWEB.repository.OrderRepository;
-import com.metrarty.LogiWEB.repository.entity.Cargo;
-import com.metrarty.LogiWEB.repository.entity.Order;
-import com.metrarty.LogiWEB.repository.entity.Truck;
-import com.metrarty.LogiWEB.repository.entity.TruckStatus;
+import com.metrarty.LogiWEB.repository.entity.*;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.OrderMapper;
 import com.metrarty.LogiWEB.service.validator.OrderValidator;
@@ -47,6 +44,9 @@ public class OrderServiceTest {
 
     @Mock
     private CargoService cargoService;
+
+    @Mock
+    private DistanceService distanceService;
 
     private static final Instant NOW =Instant.now();
 
@@ -270,5 +270,51 @@ public class OrderServiceTest {
         verify(orderRepository, times(1)).save(order);
         verify(orderMapper, times(1)).toDto(saved);
         verifyNoMoreInteractions(orderRepository, orderMapper);
+    }
+
+    @Test
+    public void setStatusCancelledTest() {
+        //prepare
+        Truck assignedTruck = new Truck();
+        assignedTruck.setId(1L);
+        assignedTruck.setTruckStatus("ASSIGNED");
+        City truckLocation = new City();
+        truckLocation.setId(3L);
+        assignedTruck.setLocation(truckLocation);
+
+        City orderDestination  = new City();
+        orderDestination.setId(2L);
+        City orderSource = new City();
+        orderSource.setId(4L);
+
+        Order order = new Order();
+        order.setId(1L);
+        order.setSourceCity(orderSource);
+        order.setDestination(orderDestination);
+        order.setOrderStatus("CREATED");
+        order.setAssignedTruck(assignedTruck);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+
+        Long distanceFromTruckToDestination = 1000L;
+        Long distanceFromTruckToSourceCity = 100L;
+        when(distanceService.distanceBetweenCities(truckLocation, orderDestination)).thenReturn(distanceFromTruckToDestination);
+        when(distanceService.distanceBetweenCities(truckLocation, orderSource)).thenReturn(distanceFromTruckToSourceCity);
+
+        Order saved = new Order();
+        saved.setId(2L);
+        order.setOrderStatus("CANCELLED");
+        order.setCancelledAt(NOW);
+        when(orderRepository.save(order)).thenReturn(saved);
+        //run
+        orderService.setStatusCancelled(1L);
+        //test
+        verify(orderRepository, times(1)).findById(1L);
+        verify(orderValidator, times(1)).checkOrderStatus("CANCELLED");
+        verify(truckService, times(1)).changeTruckLocation(1L, orderDestination);
+        verify(truckService, times(1)).changeTruckLocation(1L, orderSource);
+        verify(truckService, times(1)).changeTruckStatus(1l, "FREE");
+        verify(orderRepository, times(1)).save(order);
+        verify(orderMapper, times(1)).toDto(saved);
+        verifyNoMoreInteractions(orderValidator, truckService, orderRepository, orderMapper);
     }
 }

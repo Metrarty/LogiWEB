@@ -31,4 +31,14 @@ public class TruckValidatorTest {
     public void checkDistancePerDayWhenPositive() {
         truckValidator.checkDistancePerDay(1L);
     }
+
+    @Test
+    public void checkTruckStatusTest() {
+        truckValidator.checkTruckStatus("ASSIGNED");
+    }
+
+    @Test(expected = ValueIsInvalidException.class)
+    public void checkTruckStatusTestWhenNotAssigned() {
+        truckValidator.checkTruckStatus("FREE");
+    }
 }

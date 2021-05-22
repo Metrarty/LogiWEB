@@ -32,4 +32,6 @@ public class Order {
     private Instant changedAt;
     @Column
     private Instant completedAt;
+    @Column
+    private Instant cancelledAt;
 }

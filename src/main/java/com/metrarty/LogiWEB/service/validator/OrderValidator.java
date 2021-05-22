@@ -23,12 +23,15 @@ public class OrderValidator {
     }
 
     /**
-     * Throws (@link ValueIsInvalidException) if order status is COMPLETED.
+     * Throws (@link ValueIsInvalidException) if order status is COMPLETED of CANCELLED.
      * @param orderStatus order status
      */
     public void checkOrderStatus(String orderStatus) {
         if (isStatusCompleted(orderStatus)) {
             throw new ValueIsInvalidException("Order is completed.");
+        }
+        if (isStatusCancelled(orderStatus)) {
+            throw new ValueIsInvalidException("Order is cancelled.");
         }
     }
 
@@ -38,5 +41,9 @@ public class OrderValidator {
 
     private boolean isStatusCompleted(String orderStatus) {
         return OrderStatus.COMPLETED.name().equals(orderStatus);
+    }
+
+    private boolean isStatusCancelled(String orderStatus) {
+        return OrderStatus.CANCELLED.name().equals(orderStatus);
     }
 }
