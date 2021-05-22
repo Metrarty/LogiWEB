@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "256b7199-5feb-45c1-9fab-fbca0250b380",
+		"_postman_id": "88ae67d9-fef5-486f-a85c-15a3672b5aab",
 		"name": "Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1142,7 +1142,7 @@
 									"        \"distancePerDay\": 1000,\r",
 									"        \"truckStatus\": \"ASSIGNED\"\r",
 									"    },\r",
-									"    \"deliveryWorkingDays\": 2,\r",
+									"    \"deliveryWorkingDays\": 3,\r",
 									"    \"orderStatus\": \"CREATED\",\r",
 									"    \"changedAt\": null,\r",
 									"    \"completedAt\": null\r",
@@ -1409,7 +1409,7 @@
 					"response": []
 				},
 				{
-					"name": "Patch",
+					"name": "Assign truck to order",
 					"event": [
 						{
 							"listen": "test",
@@ -1443,7 +1443,7 @@
 									"        \"distancePerDay\": 1000,",
 									"        \"truckStatus\": \"ASSIGNED\"",
 									"    },",
-									"    \"deliveryWorkingDays\": 1,",
+									"    \"deliveryWorkingDays\": 2,",
 									"    \"changedAt\": null,",
 									"    \"completedAt\": null",
 									"};",
@@ -1470,6 +1470,274 @@
 								"assign",
 								"truck",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change order status to On The Way",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Success status\", () => pm.response.to.be.success );",
+									"",
+									"pm.test(\"Object is contained\", () => {",
+									"  const expectedObject = {",
+									"    \"id\": 1,",
+									"    \"cargo\": {",
+									"        \"id\": 1,",
+									"        \"size\": 1130,",
+									"        \"deliveredAt\": null",
+									"    },",
+									"    \"destination\": {",
+									"        \"id\": 2,",
+									"        \"cityName\": \"Moscow\"",
+									"    },",
+									"    \"sourceCity\": {",
+									"        \"id\": 1,",
+									"        \"cityName\": \"Kiev\"",
+									"    },",
+									"    \"assignedTruck\": {",
+									"        \"id\": 1,",
+									"        \"capacity\": 300,",
+									"        \"location\": {",
+									"            \"id\": 2,",
+									"            \"cityName\": \"Moscow\"",
+									"        },",
+									"        \"distancePerDay\": 1000,",
+									"        \"truckStatus\": \"ASSIGNED\"",
+									"    },",
+									"    \"deliveryWorkingDays\": 2,",
+									"    \"orderStatus\": \"ON_THE_WAY\",",
+									"    \"completedAt\": null",
+									"}",
+									"",
+									"  pm.expect(pm.response.json()).to.deep.include(expectedObject);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/1/set/status/ontheway",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"1",
+								"set",
+								"status",
+								"ontheway"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change order status to Completed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Success status\", () => pm.response.to.be.success );",
+									"",
+									"pm.test(\"Object is contained\", () => {",
+									"",
+									"    const destinationOrderOne = {",
+									"            \"id\": 2,",
+									"            \"cityName\": \"Moscow\"",
+									"        };",
+									"",
+									"    const sourceCityOne = {",
+									"            \"id\": 1,",
+									"            \"cityName\": \"Kiev\"",
+									"        };",
+									"",
+									"    const assignedTruck = {",
+									"        \"id\": 1,",
+									"        \"capacity\": 300,",
+									"        \"location\": {",
+									"            \"id\": 2,",
+									"            \"cityName\": \"Moscow\"",
+									"        },",
+									"        \"distancePerDay\": 1000,",
+									"        \"truckStatus\": \"FREE\"",
+									"    };",
+									"",
+									"  pm.expect(pm.response.json().id).to.eql(1);",
+									"  pm.expect(pm.response.json().cargo.id).to.eql(1);",
+									"  pm.expect(pm.response.json().cargo.size).to.eql(1130);",
+									"  pm.expect(new Date(pm.response.json().cargo.deliveredAt)).to.be.below(new Date());",
+									"  pm.expect(pm.response.json().destination).to.eql(destinationOrderOne);",
+									"  pm.expect(pm.response.json().sourceCity).to.eql(sourceCityOne);",
+									"  pm.expect(pm.response.json().assignedTruck).to.eql(assignedTruck);",
+									"  pm.expect(pm.response.json().deliveryWorkingDays).to.eql(2);",
+									"  pm.expect(new Date(pm.response.json().createdAt)).to.be.below(new Date());",
+									"  pm.expect(new Date(pm.response.json().changedAt)).to.be.below(new Date());",
+									"  pm.expect(new Date(pm.response.json().completedAt)).to.be.below(new Date());",
+									"  pm.expect(pm.response.json().cancelledAt).to.eql(null);",
+									" });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/1/set/status/completed",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"1",
+								"set",
+								"status",
+								"completed"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign truck to order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Success status\", () => pm.response.to.be.success );",
+									"",
+									"pm.test(\"Object is contained\", () => {",
+									"  const expectedObject = {",
+									"    \"id\": 2,",
+									"    \"cargo\": {",
+									"        \"id\": 2,",
+									"        \"size\": 570,",
+									"        \"deliveredAt\": null",
+									"    },",
+									"    \"destination\": {",
+									"        \"id\": 3,",
+									"        \"cityName\": \"Ufa\"",
+									"    },",
+									"    \"sourceCity\": {",
+									"        \"id\": 4,",
+									"        \"cityName\": \"Omsk\"",
+									"    },",
+									"    \"assignedTruck\": {",
+									"        \"id\": 1,",
+									"        \"capacity\": 300,",
+									"        \"location\": {",
+									"            \"id\": 2,",
+									"            \"cityName\": \"Moscow\"",
+									"        },",
+									"        \"distancePerDay\": 1000,",
+									"        \"truckStatus\": \"ASSIGNED\"",
+									"    },",
+									"    \"deliveryWorkingDays\": 5,",
+									"    \"orderStatus\": \"CREATED\",",
+									"    \"changedAt\": null,",
+									"    \"completedAt\": null,",
+									"    \"cancelledAt\": null",
+									"};",
+									"  pm.expect(pm.response.json()).to.deep.include(expectedObject);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/2/assign/truck/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"2",
+								"assign",
+								"truck",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change order status to Cancelled",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Success status\", () => pm.response.to.be.success );",
+									"",
+									"pm.test(\"Object is contained\", () => {",
+									"",
+									"    const destinationOrderOne = {",
+									"            \"id\": 3,",
+									"            \"cityName\": \"Ufa\"",
+									"        };",
+									"",
+									"    const sourceCityOne = {",
+									"            \"id\": 4,",
+									"            \"cityName\": \"Omsk\"",
+									"        };",
+									"",
+									"  pm.expect(pm.response.json().id).to.eql(2);",
+									"  pm.expect(pm.response.json().cargo.id).to.eql(2);",
+									"  pm.expect(pm.response.json().cargo.size).to.eql(570);",
+									"  pm.expect(pm.response.json().cargo.deliveredAt).to.eql(null);",
+									"  pm.expect(pm.response.json().destination).to.eql(destinationOrderOne);",
+									"  pm.expect(pm.response.json().sourceCity).to.eql(sourceCityOne);",
+									"  pm.expect(pm.response.json().assignedTruck).to.eql(null);",
+									"  pm.expect(pm.response.json().deliveryWorkingDays).to.eql(null);",
+									"  pm.expect(new Date(pm.response.json().createdAt)).to.be.below(new Date());",
+									"  pm.expect(new Date(pm.response.json().changedAt)).to.be.below(new Date());",
+									"  pm.expect(pm.response.json().completedAt).to.eql(null);",
+									"  pm.expect(new Date(pm.response.json().cancelledAt)).to.be.below(new Date());",
+									" });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/order/2/set/status/cancelled",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"2",
+								"set",
+								"status",
+								"cancelled"
 							]
 						}
 					},
