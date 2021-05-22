@@ -16,6 +16,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+/**
+ * Truck selection service.
+ */
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2
@@ -60,14 +63,14 @@ public class TruckSelectionService {
     }
 
     private List<TruckDto> checkIfTruckIsInCityOrder(Map<TruckDto, CityDto> trucksSuitable, CityDto cityOrder) {
-        List<TruckDto> trucks = new ArrayList<>();
+        List<TruckDto> trucksInCityOrder = new ArrayList<>();
         for (Map.Entry<TruckDto, CityDto> entry : trucksSuitable.entrySet()) {
             if (entry.getValue().equals(cityOrder)) {
-                TruckDto key = entry.getKey();
-                trucks.add(key);
+                TruckDto foundTruck = entry.getKey();
+                trucksInCityOrder.add(foundTruck);
             }
         }
-        return trucks;
+        return trucksInCityOrder;
     }
 
     private void addToResultNearestTrucks(List<TruckDto> result, List<DistanceDto> distanceSuitable, Map<TruckDto, CityDto> trucksSuitable) {

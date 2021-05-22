@@ -97,15 +97,21 @@ public class DistanceService {
         distanceRepository.deleteById(id);
     }
 
-    private Distance findOneDistanceById(Long id) {
-        return distanceRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("Distance with ID " + id + " is not found"));
-    }
-
+    /**
+     * Returns distance between order city and source city if exists, otherwise returns 0L.
+     * @param orderDestination order destination city
+     * @param orderSourceCity order source city
+     * @return distance
+     */
     public Long distanceBetweenCities(City orderDestination, City orderSourceCity) {
 
         return distanceRepository
                 .findDistanceBetweenCities(orderDestination.getId(), orderSourceCity.getId())
                 .orElse(0L);
+    }
+
+    private Distance findOneDistanceById(Long id) {
+        return distanceRepository.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("Distance with ID " + id + " is not found"));
     }
 }

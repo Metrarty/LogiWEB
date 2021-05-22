@@ -3,6 +3,9 @@ package com.metrarty.LogiWEB.service.validator;
 import com.metrarty.LogiWEB.service.exception.ValueIsInvalidException;
 import org.springframework.stereotype.Component;
 
+/**
+ * Truck validator.
+ */
 @Component
 public class TruckValidator {
 

@@ -1,10 +1,13 @@
 package com.metrarty.LogiWEB.service;
 
+import com.metrarty.LogiWEB.boundary.model.CityDto;
 import com.metrarty.LogiWEB.boundary.model.DistanceDto;
 import com.metrarty.LogiWEB.repository.DistanceRepository;
+import com.metrarty.LogiWEB.repository.entity.City;
 import com.metrarty.LogiWEB.repository.entity.Distance;
 import com.metrarty.LogiWEB.service.exception.EntityNotFoundException;
 import com.metrarty.LogiWEB.service.mapper.DistanceMapper;
+import com.metrarty.LogiWEB.service.validator.DistanceValidator;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,19 +33,24 @@ public class DistanceServiceTest {
     @Mock
     private DistanceMapper distanceMapper;
 
+    @Mock
+    private DistanceValidator distanceValidator;
+
     @Test
     public void testCreateDistance() {
         //prepare
         DistanceDto testDistanceDto = new DistanceDto();
-        testDistanceDto.setId(1L);
-        Distance testDistance = distanceMapper.toEntity(testDistanceDto);
+        testDistanceDto.setDistance(100L);
+        Distance testDistance = new Distance();
+        when(distanceMapper.toEntity(testDistanceDto)).thenReturn(testDistance);
 
         //run
         distanceService.createDistance(testDistanceDto);
 
         //test
+        verify(distanceValidator, times(1)).checkDistance(100L);
         verify(distanceRepository, times(1)).save(testDistance);
-        verifyNoMoreInteractions(distanceRepository);
+        verifyNoMoreInteractions(distanceRepository, distanceValidator);
     }
 
     @Test(expected = NullPointerException.class)
@@ -67,7 +75,8 @@ public class DistanceServiceTest {
         Assert.assertEquals("Must be equal", 1, actual.size());
         Assert.assertEquals("Must be equal", expectedDto, actual.get(0));
         verify(distanceRepository, times(1)).findAll();
-        verifyNoMoreInteractions(distanceRepository);
+        verify(distanceMapper, times(1)).toDto(distance);
+        verifyNoMoreInteractions(distanceRepository, distanceMapper);
     }
 
     @Test
@@ -83,7 +92,7 @@ public class DistanceServiceTest {
 
         Distance saved = new Distance();
         saved.setId(1L);
-        when(distanceRepository.save(saved)).thenReturn(saved);
+        when(distanceRepository.save(foundDistance)).thenReturn(saved);
 
         //run
         distanceService.editDistance(input, 1L);
@@ -91,10 +100,9 @@ public class DistanceServiceTest {
         //test
         verify(distanceMapper, times(1)).toEntity(input);
         verify(distanceRepository, times(1)).findById(1L);
-        verify(distanceRepository, times(1)).save(saved);
+        verify(distanceRepository, times(1)).save(foundDistance);
         verify(distanceMapper, times(1)).toDto(saved);
-        verifyNoMoreInteractions(distanceRepository);
-        verifyNoMoreInteractions(distanceMapper);
+        verifyNoMoreInteractions(distanceRepository, distanceMapper);
     }
 
     @Test(expected = EntityNotFoundException.class)
@@ -141,5 +149,43 @@ public class DistanceServiceTest {
     @Test(expected = NullPointerException.class)
     public void testDeleteDistanceById_WhenInputIsNull() {
         distanceService.deleteDistanceById(null);
+    }
+
+    @Test
+    public void prepareSuitableDistancesTest() {
+        //prepare
+        CityDto testCityOrderDto = new CityDto();
+
+        Distance distance = new Distance();
+        List<Distance> distances = Collections.singletonList(distance);
+        when(distanceRepository.findAll()).thenReturn(distances);
+        DistanceDto distanceDto = new DistanceDto();
+        distanceDto.setCity1(testCityOrderDto);
+        when(distanceMapper.toDto(distance)).thenReturn(distanceDto);
+        DistanceDto expectedDto = new DistanceDto();
+        expectedDto.setCity1(testCityOrderDto);
+        List<DistanceDto> expectedList = Collections.singletonList(expectedDto);
+        //run
+        List<DistanceDto> actual = distanceService.prepareSuitableDistances(testCityOrderDto);
+        //test
+        Assert.assertEquals("Must be equal", 1, actual.size());
+        Assert.assertEquals("Must be equal", expectedList.get(0), actual.get(0));
+        verify(distanceRepository, times(1)).findAll();
+        verify(distanceMapper, times(1)).toDto(distance);
+        verifyNoMoreInteractions(distanceRepository, distanceMapper);
+    }
+
+    @Test
+    public void findDistanceBetweenCitiesTest() {
+        //prepare
+        City orderDestination = new City();
+        orderDestination.setId(1L);
+        City orderSourceCity = new City();
+        orderSourceCity.setId(2L);
+        //run
+        distanceService.distanceBetweenCities(orderDestination, orderSourceCity);
+        //test
+        verify(distanceRepository, times(1)).findDistanceBetweenCities(1L, 2L);
+        verifyNoMoreInteractions(distanceRepository);
     }
 }

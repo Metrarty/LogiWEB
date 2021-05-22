@@ -33,6 +33,7 @@ public class CityMapper {
      * @return city
      */
     public City toEntity(CityDto cityDto) {
+        log.info("CityMapper.toEntity was called with {}", cityDto);
         City entity = new City();
         entity.setId(cityDto.getId());
         entity.setCityName(cityDto.getCityName());
@@ -45,7 +46,7 @@ public class CityMapper {
      * @return city
      */
     public City toEntityWithCreatedAt(@NonNull CityDto cityDto) {
-        log.info("CityMapper.toInitialEntity was called with {}", cityDto);
+        log.info("CityMapper.toEntityWithCreatedAt was called with {}", cityDto);
         City entity = toEntity(cityDto);
         entity.setCreatedAt(getNow());
         return entity;
@@ -57,7 +58,7 @@ public class CityMapper {
      * @return city
      */
     public City toEntityWithChangedAt(@NonNull CityDto cityDto) {
-        log.info("CityMapper.toUpdatedEntity was called with {}", cityDto);
+        log.info("CityMapper.toEntityWithChangedAt was called with {}", cityDto);
         City entity = toEntity(cityDto);
         entity.setChangedAt(getNow());
         return entity;

@@ -53,5 +53,4 @@ public class TruckMapper {
         entity.setTruckStatus(truckDto.getTruckStatus().toString());
         return entity;
     }
-
 }

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Cargo controller.
+ */
 @RestController
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Log4j2

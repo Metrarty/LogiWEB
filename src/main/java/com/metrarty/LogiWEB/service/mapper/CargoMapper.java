@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
+/**
+ * Cargo mapper.
+ */
 @Component
 @Log4j2
 public class CargoMapper {

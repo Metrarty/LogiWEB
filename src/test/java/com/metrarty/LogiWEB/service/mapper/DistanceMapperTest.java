@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,8 +36,8 @@ public class DistanceMapperTest {
 
         DistanceDto expected = new DistanceDto();
         expected.setId(distance.getId());
-        expected.setCity1(cityMapper.toDto(distance.getCity1()));
-        expected.setCity2(cityMapper.toDto(distance.getCity2()));
+        expected.setCity1(null);
+        expected.setCity2(null);
         expected.setDistance(distance.getDistance());
 
         //run
@@ -44,6 +45,9 @@ public class DistanceMapperTest {
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
+        Mockito.verify(cityMapper, Mockito.times(2)).toDto(city1);
+        Mockito.verify(cityMapper, Mockito.times(2)).toDto(city2);
+        Mockito.verifyNoMoreInteractions(cityMapper);
     }
 
     @Test
@@ -60,8 +64,8 @@ public class DistanceMapperTest {
 
         Distance expected = new Distance();
         expected.setId(distanceDto.getId());
-        expected.setCity1(cityMapper.toEntity(distanceDto.getCity1()));
-        expected.setCity2(cityMapper.toEntity(distanceDto.getCity2()));
+        expected.setCity1(null);
+        expected.setCity2(null);
         expected.setDistance(distanceDto.getDistance());
 
         //run
@@ -69,6 +73,9 @@ public class DistanceMapperTest {
 
         //test
         Assert.assertEquals("Must be equals", expected, actual);
+        Mockito.verify(cityMapper, Mockito.times(2)).toEntity(city1);
+        Mockito.verify(cityMapper, Mockito.times(2)).toEntity(city2);
+        Mockito.verifyNoMoreInteractions(cityMapper);
     }
 }
 
