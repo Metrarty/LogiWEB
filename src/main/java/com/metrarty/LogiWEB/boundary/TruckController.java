@@ -67,13 +67,13 @@ public class TruckController {
 
     /**
      * Find suitable truck that is in the order city, if absent - finds from nearest city.
-     * @param id order city DTO id
-     * @param size order size
+     * @param cityOrderId order city DTO ID
+     * @param orderSize order size
      * @return truck DTO
      */
-    @GetMapping("/truck/choose/{id}/{size}/")
-    public TruckDto chooseTruckToDeliver(@PathVariable Long id, @Valid @PathVariable Long size) {
-        log.info("TruckController.chooseTruckToDeliver was called with {} {}", id, size);
-        return truckService.chooseTruckToDeliver(id, size);
+    @GetMapping("/truck/choose/{cityOrderId}/{orderSize}/")
+    public TruckDto chooseTruckToDeliver(@PathVariable Long cityOrderId, @Valid @PathVariable Long orderSize) {
+        log.info("TruckController.chooseTruckToDeliver was called with {} {}", cityOrderId, orderSize);
+        return truckService.chooseTruckToDeliver(cityOrderId, orderSize);
     }
 }
