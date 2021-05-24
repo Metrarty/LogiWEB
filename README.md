@@ -54,7 +54,8 @@ The app defines following APIs:
 
 ## Application's features:
 
-**Truck selection:**
+**Truck selection**
+
 A suitable truck can be found through REST: truck/choose/{cityOrderId}/{orderSize}/
 
 Call parameters: city ID where truck should receive cargo and order size. 
@@ -63,7 +64,8 @@ Found truck will be selected following the next rules:
  - Truck is suitable by capacity;
 If suitable truck already in Order's city, it will be chosen. Otherwise, truck in the nearest city will be chosen.
 
-**Truck assigning to order:**
+**Truck assigning to order**
+
 A suitable truck is assigned to an order through REST: /order/{orderId}/assign/truck/{truckId}
 
 Call parameters: order ID and ID of suitable truck.
@@ -77,12 +79,14 @@ The following use cases are covered:
  - a truck is already assigned to an order.
 
 **Order status "Om the way"**
+
 Orders status is changed by REST: /order/{orderId}/set/status/ontheway
 
 Call parameter: order ID.
 Only orders with assigned trucks can get status "On the way". Otherwise, exception will be thrown.
 
 **Order cancellation:**
+
 Order status is changed by REST: /order/{orderId}/set/status/cancelled
 
 Call parameter: order ID.
@@ -95,6 +99,7 @@ Otherwise, it gets FREE status and returns to source destination.
 The status cannot be changed for an order that has already been canceled.
 
 **Order completion**
+
 Order status is changed by REST: /order/{orderId}/set/status/completed
 
 Call parameter: order ID.
@@ -105,6 +110,7 @@ Truck status will be changed to FREE.
 The status cannot be changed for an order that has already been completed.
 
 **Calculation of approximate delivery date**
+
 Calculation logic is based on distance between truck and cities of cargo location and final destination, and also on 
 truck's parameter _distancePerDay_.
 Integrated in order creation or editing, but only if truck assigned.
