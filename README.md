@@ -1,12 +1,16 @@
 # **LogiWEB**
 
 Logistics Restful CRUD application.
+
 Uses Spring Boot, Maven, JPA and Hibernate for setup and developing.
 
 Application after running creates in-memory tables with Cargos, Cities, Distances, Orders and Trucks.
 Using REST APIs new records in these tables can be created, edited, loaded or deleted.
+Application allows ro create orders, that include cities from where pick up cargo, and where to deliver,
+assign truck for delivery, calculate days for delivery according distances, trucks etc.
+Statuses for orders and trucks can be changed.
 
-The app defines following CRUD APIs:
+The app defines following APIs:
 
 ## Rest APIs for Cargos
 
@@ -51,40 +55,57 @@ The app defines following CRUD APIs:
 ## Application's features:
 
 ###Truck selection:
-A truck can be found through the method call in TruckService.
-Call parameter: FROM city, Size.
-Found truck will be fixed perfectly for the following criterias:
+A suitable truck can be found through REST: truck/choose/{cityOrderId}/{orderSize}/
 
-- is located nearest to FROM city;
-- can hold related SIZE.
+Call parameters: city ID where truck should receive cargo and order size. 
+Found truck will be selected following the next rules:
+ - Truck have "FREE" status;
+ - Truck is suitable by capacity;
+If suitable truck already in Order's city, it will be chosen. Otherwise, truck in the nearest city will be chosen.
 
 ###Truck assigning to order:
-Extend REST API (PATCH) to assign a truck to an order (Order API)
-Change Truck status to "ASSIGNED"
-Assigned trucks are not available in auto truck selection function
-Previously assigned truck will have FREE status and will be able in auto select function
-Truck status will be changed from FREE to ASSIGNED when order is created.
+A suitable truck is assigned to an order through REST: /order/{orderId}/assign/truck/{truckId}
+
+Call parameters: order ID and ID of suitable truck.
+Request changes Truck status to "ASSIGNED".
+Assigned trucks are not available in truck selection function.
+Previously assigned truck gets "FREE" status and will be able in truck selection function.
+Status of assigned truck will be changed from FREE to ASSIGNED.
 
 The following use cases are covered:
+ - new order is created with assigned truck;
+ - a truck is already assigned to an order.
 
- - new order is created with truck;
- - a truck is assigned to an order.
+###Order status "Om the way"
+Orders status is changed by REST: /order/{orderId}/set/status/ontheway
 
-###Order cancellation
-Set order status to CANCELLED.
-REST endpoint to cancel Order (PATCH HTTP method).
-Cancelled order cannot be changed via PUT request > throws new exception.
-Truck which was assigned to order reaches target destination and gets FREE status if it is quicker than goes back. 
-Otherwise, returns to source destination and gets FREE status.
+Call parameter: order ID.
+Only orders with assigned trucks can get status "On the way". Otherwise, exception will be thrown.
+
+###Order cancellation:
+Order status is changed by REST: /order/{orderId}/set/status/cancelled
+
+Call parameter: order ID.
+Request changes order status to "CANCELLED".
+Cancelled order cannot be changed via PUT request, otherwise exception will be thrown.
+Truck which was assigned to order gets FREE status and reaches target destination (gets new location)
+if this is quicker than go back. 
+Otherwise, it gets FREE status and returns to source destination.
+
+The status cannot be changed for an order that has already been canceled.
 
 ###Order completion
-When order is completed, the field completedAt is set.
-REST endpoint to complete order (PATCH).
+Order status is changed by REST: /order/{orderId}/set/status/completed
+
+Call parameter: order ID.
+Request changes order status to "COMPLETED".
 Completed order cannot be changed via PUT/PATCH.
-deliveredAt will be set in Cargo.
 Truck status will be changed to FREE.
 
-###logic to calculate approximate delivery date
-Calculation logic based on distance and truck.
-Integrated in order creation setting/calculation.
-DeliveryWorkingDays should be recalculated if another truck is assigned to order or order target/destination is changed
+The status cannot be changed for an order that has already been completed.
+
+###Calculation of approximate delivery date
+Calculation logic is based on distance between truck and cities of cargo location and final destination, and also on 
+truck's parameter _distancePerDay_.
+Integrated in order creation or editing, but only if truck assigned.
+Result is recalculated if another truck is assigned to order or order target/destination is changed.
